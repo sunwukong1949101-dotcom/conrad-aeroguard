@@ -209,6 +209,73 @@ blockquote{margin-top:28px;padding-left:20px;border-left:2px solid var(--accent)
 .phases span{font:500 10px/1 var(--sans);letter-spacing:.18em;color:var(--accent)}
 .phases b{display:block;margin-top:8px;font:500 14px/1.4 var(--serif)}
 
+/* Simulator & data */
+.cols.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.ctrl{margin-top:26px}
+.ctrl+.ctrl{margin-top:20px}
+.ctrl-h{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--muted)}
+.ctrl-h b{font:400 22px/1 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+.ctrl-h b small{margin-left:3px;font-size:.55em;font-weight:400;color:var(--muted)}
+.range{--p:20%;-webkit-appearance:none;appearance:none;display:block;width:100%;height:24px;margin-top:6px;background:none;cursor:pointer}
+.range:focus{outline:none}
+.range::-webkit-slider-runnable-track{height:4px;border-radius:9px;background:linear-gradient(var(--accent),var(--accent)) 0 0/var(--p) 100% no-repeat,rgba(17,26,21,.12)}
+.range::-moz-range-track{height:4px;border-radius:9px;background:rgba(17,26,21,.12)}
+.range::-moz-range-progress{height:4px;border-radius:9px;background:var(--accent)}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);box-shadow:0 2px 8px rgba(17,26,21,.18);transition:transform .2s,box-shadow .2s}
+.range::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);box-shadow:0 2px 8px rgba(17,26,21,.18)}
+.range:active::-webkit-slider-thumb{transform:scale(1.15)}
+.range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 5px rgba(47,106,74,.2)}
+.range:focus-visible::-moz-range-thumb{box-shadow:0 0 0 5px rgba(47,106,74,.2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips button{padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:none;font-size:12px;line-height:1.3;white-space:nowrap;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chips button:hover{border-color:var(--ink)}
+.chips button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.viz{border-radius:6px;background:var(--paper2);overflow:hidden}
+.viz svg,.chart svg{display:block;width:100%;height:auto;font-family:var(--sans);overflow:visible}
+#lab .specs{margin-top:22px}
+.specs .badge{margin-left:0;font-size:12px}
+.badge.x{background:#f3dcd6;color:#a3412f}
+.wind line{stroke:var(--muted);stroke-width:1;stroke-linecap:round;stroke-dasharray:16 26;animation:wind var(--dur,1.6s) linear infinite}
+@keyframes wind{to{stroke-dashoffset:-42}}
+.viz text{font-size:11px;fill:var(--muted)}
+.viz .s-b{font-size:13px;font-weight:500;fill:var(--ink)}
+.viz .s-a{font-size:12px;font-weight:500;fill:var(--accent)}
+.s-field{fill:rgba(47,106,74,.12)}.s-out{fill:rgba(214,148,86,.1)}
+.s-crop{stroke:#7fa58b;stroke-width:1.4;stroke-linecap:round}
+.s-ground{stroke:rgba(17,26,21,.3)}
+.s-edge{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 4}
+.s-h{stroke:var(--muted);stroke-width:1}
+.ghost{stroke:rgba(17,26,21,.16);stroke-width:1}
+.sel{stroke:var(--accent);stroke-width:2;stroke-dasharray:5 5}
+.land{fill:var(--accent)}.land.out{fill:#d69456}
+.drop{fill:var(--accent)}
+.d-arm{stroke:var(--ink);stroke-width:2;stroke-linecap:round}.d-body{fill:var(--ink)}.d-rot{fill:rgba(17,26,21,.25)}
+.chart{margin-top:26px}
+.chart text{font-size:11px;fill:var(--muted)}
+.chart .c-z{fill:#9a5b1e}
+.c-grid{stroke:rgba(17,26,21,.08)}
+.c-thr{stroke:var(--ink);stroke-width:1;stroke-dasharray:4 4}
+.c-area{fill:rgba(47,106,74,.08)}
+.c-line{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
+.c-cross{stroke:rgba(17,26,21,.35);stroke-dasharray:2 3}
+.c-pt{fill:var(--paper2);stroke:var(--accent);stroke-width:1.6}
+.c-pt.base,.c-pt.on{fill:var(--accent)}
+.c-tip rect{fill:var(--ink)}
+.chart .c-tip text{fill:var(--paper)}
+.chart .c-tip .c-tb{font-size:13px;font-weight:500}
+.dt-wrap{overflow-x:auto;scrollbar-width:thin}
+.dt{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.dt th{padding:0 8px 12px 0;border-bottom:1px solid var(--ink);text-align:left;font:500 11px/1.3 var(--sans);letter-spacing:.06em;color:var(--muted);white-space:nowrap;cursor:pointer;user-select:none;transition:color .2s}
+.dt th:hover,.dt th[aria-sort],.dt th.m{color:var(--ink)}
+.dt th[aria-sort=ascending]::after{content:" ↑"}.dt th[aria-sort=descending]::after{content:" ↓"}
+.dt td{padding:11px 8px 11px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.dt tbody tr{cursor:pointer;transition:background .2s}
+.dt tbody tr:hover,.dt tbody tr.on{background:rgba(47,106,74,.07)}
+.dt tbody tr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.dt tr.base td:first-child{font-weight:600}
+.dt td.m{color:var(--accent);font-weight:500;background:linear-gradient(90deg,rgba(47,106,74,.14) var(--b),transparent 0) no-repeat 0 50%/100% 56%}
+.dt .badge{margin-left:0}
+
 /* Bottom bar */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--bar);pointer-events:none}
 .dock .wrap{height:100%;display:flex;align-items:center;gap:24px}
@@ -243,6 +310,7 @@ body.on-dark .arrows button{border-color:rgba(255,255,255,.2);background:rgba(17
  .nav::-webkit-scrollbar{display:none}
  .lang{margin-left:auto}
  .cols{grid-template-columns:1fr;gap:36px}
+ .cols.even{grid-template-columns:1fr}
  .hero-img{height:auto;aspect-ratio:4/3}
  .panel{padding-top:calc(var(--hh) + 28px)}
  .panel::before{font-size:40vw}
@@ -281,6 +349,8 @@ body.on-dark .arrows button{border-color:rgba(255,255,255,.2);background:rgba(17
   <a href="#problem" data-en="Problem">问题</a>
   <a href="#solution" data-en="Solution">方案</a>
   <a href="#science" data-en="Science">科学</a>
+  <a href="#lab" data-en="Simulator">模拟</a>
+  <a href="#data" data-en="Data">数据</a>
   <a href="#results" data-en="Results">结果</a>
   <a href="#impact" data-en="Impact">影响</a>
   <a href="#team" data-en="Team">团队</a>
@@ -412,10 +482,73 @@ body.on-dark .arrows button{border-color:rgba(255,255,255,.2);background:rgba(17
  </div>
 </div></section>
 
-<!-- 04 结果 -->
-<section class="panel" id="results" data-no="04"><div class="wrap cols">
+<!-- 04 模拟 -->
+<section class="panel" id="lab" data-no="04"><div class="wrap cols">
  <div class="reveal">
-  <div class="kicker" data-en="04 · Results">04 · 结果</div>
+  <div class="kicker" data-en="04 · Drift simulator">04 · 飘移模拟</div>
+  <h2 data-en="Change the wind, <em>watch where spray goes.</em>">拖动风速，<em>看药液飘向哪里</em></h2>
+  <p class="lead" data-en="Pick a droplet size and flight conditions. Fall time = height ÷ terminal velocity; drift ≈ wind speed × fall time.">选择液滴粒径与作业条件：下落用时 = 高度 ÷ 终端速度，横向漂移 ≈ 风速 × 下落用时。</p>
+  <div class="ctrl">
+   <label class="ctrl-h" for="inWind"><span data-en="Crosswind">横风风速</span><b><span id="vWind">2.0</span><small>m/s</small></b></label>
+   <input class="range" type="range" id="inWind" min="0.5" max="8" step="0.1" value="2">
+   <div class="chips" id="presets">
+    <button type="button" data-w="0.5" data-en="Calm 0.5">微风 0.5</button>
+    <button type="button" data-w="2" data-en="Baseline 2.0">基线 2.0</button>
+    <button type="button" data-w="3" data-en="Tipping 3.0">临界 3.0</button>
+    <button type="button" data-w="5" data-en="Limit 5.0">上限 5.0</button>
+    <button type="button" data-w="8" data-en="Gale 8.0">大风 8.0</button>
+   </div>
+  </div>
+  <div class="ctrl">
+   <label class="ctrl-h" for="inH"><span data-en="Spray height">喷洒高度</span><b><span id="vH">2.5</span><small>m</small></b></label>
+   <input class="range" type="range" id="inH" min="1.5" max="4" step="0.1" value="2.5">
+  </div>
+  <div class="ctrl">
+   <div class="ctrl-h"><span data-en="Droplet size">液滴粒径</span><b><span id="vD">100</span><small>µm</small></b></div>
+   <div class="chips" id="sizes">
+    <button type="button" data-i="0">20 µm</button><button type="button" data-i="1">50 µm</button><button type="button" data-i="2">100 µm</button><button type="button" data-i="3">200 µm</button><button type="button" data-i="4">300 µm</button><button type="button" data-i="5">400 µm</button><button type="button" data-i="6">600 µm</button>
+   </div>
+  </div>
+ </div>
+ <div class="reveal d1">
+  <div class="viz"><svg id="sim" viewBox="0 0 600 320" role="img" aria-label="液滴飘移示意图"></svg></div>
+  <div class="specs">
+   <div><span data-en="Fall time">下落用时</span><b id="oT"></b></div>
+   <div><span data-en="Lateral drift">横向漂移</span><b id="oD"></b></div>
+   <div><span data-en="Off-field mass">出田质量</span><b id="oM"></b></div>
+   <div><span data-en="DB37/T 3940">行业建议</span><b id="oS"></b></div>
+  </div>
+  <p class="caveat" id="oNote"></p>
+ </div>
+</div></section>
+
+<!-- 05 数据 -->
+<section class="panel alt" id="data" data-no="05"><div class="wrap cols even">
+ <div class="reveal">
+  <div class="kicker" data-en="05 · Wind sweep">05 · 风速扫描</div>
+  <h2 data-en="Each step up in wind <em>has a visible cost.</em>">风每大一级，<em>代价都看得见</em></h2>
+  <p class="lead" data-en="Eight simulated wind speeds with the same route and spray settings. Switch the metric, hover the curve, or sort the table.">同一航线与喷洒参数下的 8 档风速仿真。切换指标、悬停曲线，或点击表头排序。</p>
+  <div class="chips" id="metrics">
+   <button type="button" data-k="in" aria-pressed="true" data-en="In-field mass">田内落点</button>
+   <button type="button" data-k="off" aria-pressed="false" data-en="Off-field mass">出田质量</button>
+   <button type="button" data-k="far" aria-pressed="false" data-en="Farthest landing">最远落点</button>
+   <button type="button" data-k="peak" aria-pressed="false" data-en="Peak deposition">峰值沉积</button>
+  </div>
+  <div class="chart"><svg id="chart" viewBox="0 0 520 290" role="img" aria-label="风速与仿真指标曲线"></svg></div>
+ </div>
+ <div class="reveal d1">
+  <div class="dt-wrap"><table class="dt" id="dt">
+   <thead><tr><th data-k="w" data-en="Wind">风速</th><th data-k="in" data-en="In-field">田内落点</th><th data-k="off" data-en="Off-field">出田质量</th><th data-k="far" data-en="Farthest">最远落点</th><th data-k="peak" data-en="Peak g/m²">峰值 g/m²</th><th data-k="db" data-en="DB37/T 3940">行业标准</th></tr></thead>
+   <tbody></tbody>
+  </table></div>
+  <p class="caveat" data-en="In-field share here counts landing-point mass (89.88% at 2.0 m/s), a different basis from the 88.98% deposition-grid figure. Farthest landing is a 20 µm, no-evaporation upper bound.">此处田内落点按液滴落点质量统计（2.0 m/s 为 89.88%），与按沉积网格计算的 88.98% 口径不同；最远落点为 20 µm、无蒸发假设上限。</p>
+ </div>
+</div></section>
+
+<!-- 06 结果 -->
+<section class="panel" id="results" data-no="06"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="06 · Results">06 · 结果</div>
   <h2 data-en="The baseline passes — <em>with room to improve.</em>">基线达标，<em>仍有优化空间</em></h2>
   <p class="lead" data-en="2.0 m/s crosswind, 2.5 m height, 3.0 m/s flight speed, 8 m swath. Targets: in-field deposition ≥ 85%, low-deposition blocks &lt; 25%.">2.0 m/s 横风、2.5 m 高度、3.0 m/s 航速、8 m 喷幅。判据：田内沉积 ≥ 85%，低沉积方块 &lt; 25%。</p>
   <div class="callout" data-en="<b>The tipping point:</b> at 3.0 m/s, in-field deposition falls to 84.40% — exactly the industry’s “fly with caution” line. That is the window AeroGuard aims to widen."><b>临界点：</b>风速升至 3.0 m/s 时，田内落点降至 84.40%，恰好是行业“慎飞”边界——这正是 AeroGuard 要拓宽的作业窗口。</div>
@@ -433,10 +566,10 @@ body.on-dark .arrows button{border-color:rgba(255,255,255,.2);background:rgba(17
  </div>
 </div></section>
 
-<!-- 05 影响 -->
-<section class="panel alt" id="impact" data-no="05"><div class="wrap cols">
+<!-- 07 影响 -->
+<section class="panel alt" id="impact" data-no="07"><div class="wrap cols">
  <div class="reveal">
-  <div class="kicker" data-en="05 · Impact">05 · 影响</div>
+  <div class="kicker" data-en="07 · Impact">07 · 影响</div>
   <h2 data-en="Less drift, <em>more protected.</em>">少一分飘移，<em>多一分守护</em></h2>
   <p class="lead" data-en="Precision spraying links directly to five UN Sustainable Development Goals — each benefit maps to something measurable in the field.">精准植保直接关联五项联合国可持续发展目标，每项收益都对应可在田间测量的指标。</p>
   <div class="sdgs">
@@ -465,10 +598,10 @@ body.on-dark .arrows button{border-color:rgba(255,255,255,.2);background:rgba(17
  </div>
 </div></section>
 
-<!-- 06 团队 -->
-<section class="panel" id="team" data-no="06"><div class="wrap cols">
+<!-- 08 团队 -->
+<section class="panel" id="team" data-no="08"><div class="wrap cols">
  <div class="reveal">
-  <div class="kicker" data-en="06 · Team">06 · 团队</div>
+  <div class="kicker" data-en="08 · Team">08 · 团队</div>
   <h2 data-en="The people <em>behind AeroGuard.</em>">AeroGuard <em>背后的团队</em></h2>
   <p class="lead" data-en="It started as a spray-parameter calculator and grew into a full tool for droplets, routes, drift and coverage.">项目从一个喷洒参数计算器起步，逐步扩展为涵盖液滴、航线、飘移与覆盖分析的完整工具。</p>
   <blockquote data-en="Protect every inch of green;<br>make every spray accountable.">护住每一寸绿意，<br>让每一次喷洒更有据可依。</blockquote>
@@ -515,7 +648,7 @@ document.getElementById('tot').textContent=pad(panels.length);
 // 语言切换
 const btn=document.getElementById('lang'),els=[...document.querySelectorAll('[data-en]')];
 els.forEach(e=>e.dataset.zh=e.innerHTML);
-const setLang=en=>{els.forEach(e=>e.innerHTML=en?e.dataset.en:e.dataset.zh);document.documentElement.lang=en?'en':'zh-CN';btn.textContent=en?'中文':'EN';btn.setAttribute('aria-label',en?'切换到中文':'Switch to English');try{localStorage.setItem('lang',en?'en':'zh')}catch(_){}};
+const setLang=en=>{els.forEach(e=>e.innerHTML=en?e.dataset.en:e.dataset.zh);document.documentElement.lang=en?'en':'zh-CN';btn.textContent=en?'中文':'EN';btn.setAttribute('aria-label',en?'切换到中文':'Switch to English');try{localStorage.setItem('lang',en?'en':'zh')}catch(_){};dispatchEvent(new Event('langchange'))};
 btn.addEventListener('click',()=>setLang(document.documentElement.lang!=='en'));
 try{if(localStorage.getItem('lang')==='en')setLang(true)}catch(_){}
 
@@ -574,6 +707,141 @@ if(ba){const hd=ba.querySelector('.ba-handle');let drag=false,pos=50;
  hd.addEventListener('keydown',e=>{const s=e.shiftKey?10:2,k=e.key;
   if(k==='ArrowLeft'||k==='ArrowDown')set(pos-s);else if(k==='ArrowRight'||k==='ArrowUp')set(pos+s);else if(k==='Home')set(0);else if(k==='End')set(100);else return;
   e.preventDefault()});
+}
+
+// 交互图表通用
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const L=(z,e)=>document.documentElement.lang==='en'?e:z;
+const NS='http://www.w3.org/2000/svg';
+const mk=(tag,at,p)=>{const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);if(p)p.appendChild(e);return e};
+const tx=(p,x,y,s,cls,anchor)=>{const t=mk('text',{x,y,'text-anchor':anchor||'start'},p);if(cls)t.setAttribute('class',cls);t.textContent=s;return t};
+const fmt=v=>v<10?v.toFixed(2):v<100?v.toFixed(1):String(Math.round(v));
+const WIND=[.5,1,2,3,4,5,6,8];
+const DATA={in:[96.68,94.66,89.88,84.40,79.03,74.58,69.29,60.45],off:[3.322,5.344,10.124,15.6,20.974,25.423,30.709,39.55],far:[136,241.3,451.9,662.5,873.1,1083.7,1294.3,1715.5],peak:[.3009,.3396,.3207,.3194,.297,.2642,.2474,.2512]};
+const interp=(xs,ys,x)=>{if(x<=xs[0])return ys[0];for(let i=1;i<xs.length;i++)if(x<=xs[i])return ys[i-1]+(x-xs[i-1])/(xs[i]-xs[i-1])*(ys[i]-ys[i-1]);return ys[ys.length-1]};
+const status=u=>u<2.95?['合规','OK','']:u<=3.05?['临界','Borderline','w']:u<=5?['慎飞','Caution','w']:['不宜作业','Unsuitable','x'];
+
+// 飘移模拟器
+const sim=document.getElementById('sim');
+if(sim){
+ const VT=[.0119,.0697,.2378,.6706,1.1167,1.5461,2.3472],SIZE=[20,50,100,200,300,400,600];
+ const G=270,X0=96,K=12,VK=42,EDGE=3,MAXM=(588-X0)/K;
+ const inW=document.getElementById('inWind'),inH=document.getElementById('inH');
+ const sizeBtns=[...document.querySelectorAll('#sizes button')],preBtns=[...document.querySelectorAll('#presets button')];
+ const $=id=>document.getElementById(id);
+ let di=2,dyn,windTxt,drops=[],path={x0:0,y0:0,x1:0,y1:0},run=false;
+ const build=()=>{sim.textContent='';
+  const xe=X0+EDGE*K;
+  mk('rect',{x:0,y:G,width:xe,height:50,class:'s-field'},sim);
+  mk('rect',{x:xe,y:G,width:600-xe,height:50,class:'s-out'},sim);
+  for(let x=6;x<xe;x+=9)mk('line',{x1:x,y1:G,x2:x,y2:G-7,class:'s-crop'},sim);
+  mk('line',{x1:0,y1:G,x2:600,y2:G,class:'s-ground'},sim);
+  mk('line',{x1:xe,y1:G-150,x2:xe,y2:G+26,class:'s-edge'},sim);
+  for(let m=0;m<=40;m+=10)tx(sim,X0+m*K,G+16,m?m+' m':'0','','middle');
+  tx(sim,8,G+40,L('← 田内','← Field'));
+  tx(sim,xe,G+40,L('田边 · 3 m','Edge · 3 m'),'s-b','middle');
+  tx(sim,192,G+40,L('田外 →','Off-field →'));
+  const w=mk('g',{class:'wind'},sim);
+  [[22,170],[36,250],[50,200]].forEach(([y,x])=>mk('line',{x1:x,y1:y,x2:592,y2:y},w));
+  windTxt=tx(sim,16,40,'','s-b');
+  dyn=mk('g',{},sim)};
+ const traj=(vt,U,H)=>{const t=H/vt,d=U*t,ny=G-H*VK;
+  if(d<=MAXM)return{t,d,x1:X0+d*K,y1:G,out:false};
+  return{t,d,x1:X0+MAXM*K,y1:ny+(G-ny)*MAXM/d,out:true}};
+ const render=()=>{const U=+inW.value,H=+inH.value,ny=G-H*VK;
+  [inW,inH].forEach(r=>r.style.setProperty('--p',(r.value-r.min)/(r.max-r.min)*100+'%'));
+  $('vWind').textContent=U.toFixed(1);$('vH').textContent=H.toFixed(1);$('vD').textContent=SIZE[di];
+  sizeBtns.forEach((b,i)=>b.setAttribute('aria-pressed',i===di));
+  preBtns.forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.w-U)<.05));
+  windTxt.textContent=L('风 ','Wind ')+U.toFixed(1)+' m/s →';
+  sim.style.setProperty('--dur',Math.max(.35,Math.min(6,3.2/U))+'s');
+  dyn.textContent='';
+  mk('line',{x1:30,y1:ny,x2:30,y2:G,class:'s-h'},dyn);
+  mk('line',{x1:26,y1:ny,x2:34,y2:ny,class:'s-h'},dyn);
+  tx(dyn,36,(ny+G)/2+4,'H '+H.toFixed(1)+' m');
+  VT.forEach((v,i)=>{if(i===di)return;const r=traj(v,U,H);mk('line',{x1:X0,y1:ny,x2:r.x1,y2:r.y1,class:'ghost'},dyn)});
+  const r=traj(VT[di],U,H);
+  mk('line',{x1:X0,y1:ny,x2:r.x1,y2:r.y1,class:'sel'},dyn);
+  if(r.out){mk('path',{d:`M${r.x1-8} ${r.y1-5}L${r.x1} ${r.y1}L${r.x1-8} ${r.y1+5}`,fill:'none',stroke:'#d69456','stroke-width':2},dyn);tx(dyn,r.x1-4,r.y1-12,'→ '+fmt(r.d)+' m','s-a','end')}
+  else{mk('circle',{cx:r.x1,cy:G,r:5,class:'land'+(r.d>EDGE?' out':'')},dyn);tx(dyn,Math.max(r.x1,X0+28),G-14,fmt(r.d)+' m','s-a','middle')}
+  const g=mk('g',{transform:`translate(${X0} ${ny})`},dyn);
+  mk('path',{d:'M-30 -18H30M0 -7V0',class:'d-arm'},g);
+  mk('ellipse',{cx:-30,cy:-21,rx:12,ry:2.5,class:'d-rot'},g);mk('ellipse',{cx:30,cy:-21,rx:12,ry:2.5,class:'d-rot'},g);
+  mk('rect',{x:-13,y:-17,width:26,height:10,rx:4,class:'d-body'},g);
+  path={x0:X0,y0:ny,x1:r.x1,y1:r.y1};
+  drops=[0,1,2,3,4].map(()=>mk('circle',{r:3,class:'drop'},dyn));
+  if(!run)tick(0);
+  const off=interp(WIND,DATA.off,U),[sz,se,sc]=status(U);
+  $('oT').innerHTML=fmt(r.t)+'<small>s</small>';
+  $('oD').innerHTML=fmt(r.d)+'<small>m</small>';
+  $('oM').innerHTML=off.toFixed(1)+'<small>%</small>';
+  $('oS').innerHTML=`<span class="badge ${sc}">${L(sz,se)}</span>`;
+  const over=r.d-EDGE;
+  $('oNote').innerHTML=L(`<b>最外侧航线距田边 3 m：</b>${SIZE[di]} µm 液滴${over>0?'越过田边约 '+fmt(over)+' m':'落在田内'}。出田质量按 8 档风速仿真插值；示意未计蒸发与湍流。`,`<b>Outermost pass is 3 m from the edge:</b> ${SIZE[di]} µm droplets ${over>0?'cross it by ~'+fmt(over)+' m':'land inside the field'}. Off-field mass is interpolated from 8 simulated wind speeds; evaporation and turbulence not shown.`)};
+ const tick=ts=>{const n=drops.length;drops.forEach((c,i)=>{const f=(ts/2400+i/n)%1;
+  c.setAttribute('cx',path.x0+(path.x1-path.x0)*f);c.setAttribute('cy',path.y0+(path.y1-path.y0)*f);c.setAttribute('opacity',Math.min(1,f/.08,(1-f)/.08))});
+  if(run)requestAnimationFrame(tick)};
+ inW.addEventListener('input',render);inH.addEventListener('input',render);
+ sizeBtns.forEach((b,i)=>b.addEventListener('click',()=>{di=i;render()}));
+ preBtns.forEach(b=>b.addEventListener('click',()=>{inW.value=b.dataset.w;render()}));
+ addEventListener('langchange',()=>{build();render()});
+ build();render();
+ if(!reduce&&'IntersectionObserver'in window)new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(tick)}else if(!v)run=false}).observe(sim);
+}
+
+// 风速扫描：曲线 + 表格
+const chart=document.getElementById('chart'),dt=document.getElementById('dt');
+if(chart&&dt){
+ const ST=[0,0,0,1,2,2,3,3],STC=['','w','w','x'],STZ=['合规','临界','慎飞','超国标'],STE=['OK','Borderline','Caution','Over limit'];
+ const M={in:{lo:50,hi:100,st:10,f:v=>v.toFixed(2)+'%',a:v=>v+'%',thr:85},
+  off:{lo:0,hi:45,st:15,f:v=>v.toFixed(3)+'%',a:v=>v+'%'},
+  far:{lo:0,hi:2000,st:500,f:v=>v.toFixed(1)+' m',a:v=>v},
+  peak:{lo:.2,hi:.36,st:.04,f:v=>v.toFixed(4)+' g/m²',a:v=>v.toFixed(2)}};
+ const PL=50,PR=504,PT=26,PB=244,X=w=>PL+w/8*(PR-PL);
+ const mBtns=[...document.querySelectorAll('#metrics button')],ths=[...dt.tHead.rows[0].cells],body=dt.tBodies[0];
+ let key='in',hl=2,sortK='w',dir=1,Y,pts=[],cross,tip,tipR,tipA,tipB;
+ const setHL=i=>{hl=i;const m=M[key],x=X(WIND[i]),y=Y(DATA[key][i]);
+  cross.setAttribute('x1',x);cross.setAttribute('x2',x);
+  pts.forEach((p,k)=>{p.classList.toggle('on',k===i);p.setAttribute('r',k===i?6:k===2?4.5:3.5)});
+  tipA.textContent=WIND[i].toFixed(1)+' m/s · '+L(STZ[ST[i]],STE[ST[i]]);tipB.textContent=m.f(DATA[key][i]);
+  const w=Math.max(tipA.getComputedTextLength(),tipB.getComputedTextLength())+20;
+  let px=x+12,py=y-52;if(px+w>PR+10)px=x-12-w;if(py<2)py=y+12;
+  tipR.setAttribute('width',w);tip.setAttribute('transform',`translate(${px} ${py})`);
+  [...body.rows].forEach(r=>r.classList.toggle('on',+r.dataset.i===i))};
+ const draw=()=>{const m=M[key];Y=v=>PB-(v-m.lo)/(m.hi-m.lo)*(PB-PT);chart.textContent='';
+  mk('rect',{x:X(3),y:PT,width:X(5)-X(3),height:PB-PT,fill:'rgba(214,148,86,.1)'},chart);
+  mk('rect',{x:X(5),y:PT,width:X(8)-X(5),height:PB-PT,fill:'rgba(214,148,86,.2)'},chart);
+  tx(chart,X(4),PT-9,L('慎飞','Caution'),'c-z','middle');tx(chart,X(6.5),PT-9,L('不宜作业','Unsuitable'),'c-z','middle');
+  for(let v=m.lo;v<=m.hi+1e-9;v+=m.st){const y=Y(v);mk('line',{x1:PL,x2:PR,y1:y,y2:y,class:'c-grid'},chart);tx(chart,PL-8,y+4,m.a(+v.toFixed(2)),'','end')}
+  for(let w=0;w<=8;w++)tx(chart,X(w),PB+18,w,'','middle');
+  tx(chart,PR,PB+38,L('横风风速 m/s','Crosswind m/s'),'','end');
+  if(m.thr){const y=Y(m.thr);mk('line',{x1:PL,x2:PR,y1:y,y2:y,class:'c-thr'},chart);tx(chart,PL+8,y+16,L('85% 达标线','85% target'))}
+  const d=WIND.map((w,i)=>(i?'L':'M')+X(w)+' '+Y(DATA[key][i])).join('');
+  mk('path',{d:d+`L${X(8)} ${PB}L${X(.5)} ${PB}Z`,class:'c-area'},chart);
+  const line=mk('path',{d,class:'c-line',pathLength:1},chart);
+  cross=mk('line',{y1:PT,y2:PB,class:'c-cross'},chart);
+  pts=WIND.map((w,i)=>mk('circle',{cx:X(w),cy:Y(DATA[key][i]),r:3.5,class:'c-pt'+(i===2?' base':'')},chart));
+  tip=mk('g',{class:'c-tip','pointer-events':'none'},chart);tipR=mk('rect',{rx:4,height:42},tip);
+  tipA=mk('text',{x:10,y:17},tip);tipB=mk('text',{x:10,y:33,class:'c-tb'},tip);
+  const ov=mk('rect',{x:PL-10,y:PT,width:PR-PL+20,height:PB-PT,fill:'transparent'},chart);
+  ov.addEventListener('pointermove',e=>{const r=chart.getBoundingClientRect(),w=((e.clientX-r.left)/r.width*520-PL)/(PR-PL)*8;
+   let b=0;WIND.forEach((x,i)=>{if(Math.abs(x-w)<Math.abs(WIND[b]-w))b=i});if(b!==hl)setHL(b)});
+  if(!reduce){line.style.transition='none';line.style.strokeDashoffset=1;line.getBoundingClientRect();line.style.transition='stroke-dashoffset 1.1s cubic-bezier(.2,.7,.2,1)';line.style.strokeDashoffset=0}
+  setHL(hl)};
+ const rows=()=>{const k=sortK==='w'||sortK==='db'?null:sortK;
+  const ord=WIND.map((_,i)=>i).sort((a,b)=>(k?DATA[k][a]-DATA[k][b]:a-b)*dir);
+  const col={in:1,off:2,far:3,peak:4}[key],mx=Math.max(...DATA[key]);
+  body.innerHTML=ord.map(i=>`<tr data-i="${i}" tabindex="0"${i===2?' class="base"':''}><td>${WIND[i].toFixed(1)} m/s</td><td>${DATA.in[i].toFixed(2)}%</td><td>${DATA.off[i].toFixed(3)}%</td><td>${DATA.far[i].toFixed(1)} m</td><td>${DATA.peak[i].toFixed(4)}</td><td><span class="badge ${STC[ST[i]]}">${L(STZ[ST[i]],STE[ST[i]])}</span></td></tr>`).join('');
+  [...body.rows].forEach(r=>{const c=r.cells[col];c.classList.add('m');c.style.setProperty('--b',DATA[key][+r.dataset.i]/mx*100+'%')});
+  ths.forEach(t=>{t.classList.toggle('m',t.dataset.k===key);if(t.dataset.k===sortK)t.setAttribute('aria-sort',dir>0?'ascending':'descending');else t.removeAttribute('aria-sort')});
+  setHL(hl)};
+ const pick=e=>{const r=e.target.closest('tr');if(r&&r.dataset.i&&+r.dataset.i!==hl)setHL(+r.dataset.i)};
+ body.addEventListener('pointerover',pick);body.addEventListener('focusin',pick);body.addEventListener('click',pick);
+ ths.forEach(t=>{t.tabIndex=0;const f=()=>{if(sortK===t.dataset.k)dir=-dir;else{sortK=t.dataset.k;dir=1}rows()};
+  t.addEventListener('click',f);t.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}})});
+ mBtns.forEach(b=>b.addEventListener('click',()=>{key=b.dataset.k;mBtns.forEach(x=>x.setAttribute('aria-pressed',x===b));draw();rows()}));
+ addEventListener('langchange',()=>{draw();rows()});
+ draw();rows();
 }
 })();
 </script>
