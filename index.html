@@ -3,753 +3,579 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f3f6f1">
-<meta name="description" content="康莱德挑战赛植保无人机项目：以液滴、航线与风场仿真评估田间覆盖和飘移风险。">
-<title>康莱德挑战赛 · 植保无人机</title>
-<style>
-:root{color-scheme:light;--forest:#071c17;--dark:#0c2c21;--mint:#51d898;--lime:#c9ef83;--paper:#f1f6ef;--ink:#153626;--muted:#688273;--line:rgba(19,81,50,.13)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font-family:"Inter","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}
-.header{height:66px;padding:0 clamp(18px,5vw,76px);display:flex;align-items:center;gap:12px;color:#eff9f0;background:#061b15;border-bottom:1px solid #244736;position:sticky;top:0;z-index:20}
-.leaf{width:29px;height:29px;position:relative}.leaf:before,.leaf:after{content:"";position:absolute;width:15px;height:23px;top:2px;background:linear-gradient(145deg,var(--lime),var(--mint));border-radius:100% 0 100% 0}.leaf:before{left:1px;transform:rotate(-15deg)}.leaf:after{right:1px;transform:rotate(75deg) scale(.86)}.brand{font-size:16px;font-weight:700;letter-spacing:.07em;white-space:nowrap}.divider{height:22px;width:1px;background:#496354;margin:0 3px}.project{font-size:15px;color:#bdcfc2;white-space:nowrap}.nav{margin-left:auto;display:flex;align-items:center;gap:clamp(12px,2vw,25px);font-size:15px;color:#c0d2c5}.nav a,.nav .later{padding:24px 0 22px;border-bottom:2px solid transparent;white-space:nowrap}.nav a:hover,.nav .current{color:white;border-color:var(--mint)}.nav .later{color:#71887a;cursor:default}.status{margin-left:clamp(12px,2vw,28px);font-size:13px;color:#a7c1b0;white-space:nowrap}.status:before{content:"";display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}
-.hero{padding:50px clamp(20px,5vw,76px) 45px;color:#f1f8f1;background:radial-gradient(ellipse at 78% 45%,rgba(47,132,79,.28),transparent 37%),linear-gradient(120deg,#0d3024,#071b16 72%);overflow:hidden}.hero-inner{max-width:1360px;margin:auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(35px,6vw,84px);align-items:center}.eyebrow{font-size:13px;color:var(--lime);font-weight:700;letter-spacing:.15em}.eyebrow:before{content:"";display:inline-block;width:24px;height:1px;margin:0 9px 3px 0;background:var(--mint);box-shadow:0 0 7px var(--mint)}h1{margin:20px 0 16px;font-size:clamp(42.6px,5vw,76.2px);line-height:1.18;letter-spacing:-.04em;font-weight:650}h1 em{color:var(--lime);font-style:normal}.intro{max-width:515px;margin:0;color:#b5cdbd;font-size:17px;line-height:1.95}.actions{display:flex;align-items:center;gap:17px;flex-wrap:wrap;margin-top:26px}.button{min-height:43px;padding:0 17px;display:inline-flex;align-items:center;gap:13px;border:1px solid #88eaa6;border-radius:6px;background:linear-gradient(105deg,#b7ec83,#5ce0a1);color:#123322;font-size:15px;font-weight:700;box-shadow:0 7px 24px #41c98025;transition:.2s}.button:hover{transform:translateY(-2px);box-shadow:0 10px 26px #41c98045}.button b{font-size:20px;font-weight:500}.proof{font-size:14px;color:#bdd1c3}.proof strong{color:#eff9e6;font-size:16px}.check{display:inline-grid;place-items:center;width:18px;height:18px;margin-right:6px;border:1px solid #459e6e;border-radius:50%;color:var(--mint)}.fineprint{margin:17px 0 0;color:#819b8b;font-size:13px}
-.map{overflow:hidden;border:1px solid #c0efce40;border-radius:12px;background:#0b2a20;box-shadow:0 22px 55px #0004}.maphead,.mapfoot{height:39px;padding:0 13px;display:flex;justify-content:space-between;align-items:center;background:#041a14b8;color:#d5e8d9;font-size:13px}.maphead{border-bottom:1px solid #d7ffe218}.maphead span:last-child{color:#a9d5b4}.maphead span:last-child:before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;background:var(--mint);border-radius:50%;box-shadow:0 0 8px var(--mint)}.field{height:clamp(245px,29vw,365px);position:relative;overflow:hidden;background:repeating-linear-gradient(89deg,transparent 0 27px,#d1ed851f 29px,transparent 31px),repeating-linear-gradient(2deg,#3261409c 0 38px,#9cba642d 40px,#1c5133ba 59px),linear-gradient(135deg,#244a31,#153b29)}.field:before{content:"";position:absolute;inset:-8% auto -8% -7%;width:18%;background:linear-gradient(90deg,#21535880,#4a8b8470,#154c4a88);transform:rotate(5deg);filter:blur(3px)}.field svg{position:absolute;inset:5% 6%;width:88%;height:90%}.field polygon{fill:#29b86520;stroke:#8ff4a8;stroke-width:2}.field .inner{fill:none;stroke:#d6f7d18a;stroke-width:1}.field .route{fill:none;stroke:#b5ffbd;stroke-width:2;stroke-dasharray:8 9;stroke-linecap:round;filter:drop-shadow(0 0 4px #85ffab);animation:flow 12s linear infinite}.field .route:nth-child(2n){animation-delay:-3s}.drone{position:absolute;left:59%;top:43%;width:68px;height:44px;filter:drop-shadow(0 0 10px #aaffc5);animation:hover 4s ease-in-out infinite}.drone svg{width:100%;height:100%}.tag{position:absolute;padding:6px 8px;border:1px solid #d1f2d133;border-radius:4px;background:#031b15b8;color:#e0f1df;font-size:12px;backdrop-filter:blur(8px)}.tag.a{left:13px;top:13px}.tag.b{right:12px;bottom:12px;color:var(--lime);border-color:#c9ef834d}.mapfoot{height:36px;color:#a8c0ad;font-size:12px;border-top:1px solid #d7ffe218}.legend{color:#d4e6d5}.legend:before{content:"";display:inline-block;width:15px;height:2px;margin:0 6px 3px 0;background:var(--mint);box-shadow:0 0 5px var(--mint)}
-.content{max-width:1512px;margin:auto;padding:40px clamp(20px,5vw,76px) 50px}.section-title{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}.kicker{font-size:12px;color:#218253;letter-spacing:.15em;font-weight:800}h2{margin:7px 0 0;font-size:clamp(24.6px,2.5vw,33.6px);letter-spacing:-.03em}.hint{max-width:380px;text-align:right;color:#708a7a;font-size:13px;line-height:1.7}.hint strong{color:#238251}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.metric{min-height:155px;padding:18px;border:1px solid var(--line);border-radius:9px;background:#fffffbdc;box-shadow:0 14px 35px #19472d0c;position:relative;overflow:hidden}.metric:after{content:"";position:absolute;width:90px;height:90px;right:-40px;top:-40px;border:1px solid #42a66924;border-radius:50%;box-shadow:0 0 0 12px #42a66909,0 0 0 25px #42a66906}.metric.primary{background:linear-gradient(135deg,#e7f5e7,#fffefa);border-color:#43a76540}.mlabel{color:#587466;font-size:14px}.mlabel:after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:#47b97c}.value{margin-top:15px;color:#163f2b;font-size:clamp(35.8px,3.6vw,49.3px);line-height:1;font-weight:680;letter-spacing:-.05em}.value small{margin-left:3px;color:#5c896f;font-size:18px;font-weight:500;letter-spacing:0}.meta{margin-top:11px;color:#718b7b;font-size:12px;line-height:1.6}.meta b{color:#218251}
-.lower{display:grid;grid-template-columns:1.05fr .95fr;gap:13px;margin-top:18px}.wind,.scenario{padding:20px;border:1px solid var(--line);border-radius:10px;background:#fffffbdc;box-shadow:0 14px 35px #19472d0c}.scenario{color:#eef8ef;background:linear-gradient(145deg,#0b3023,#0d241c);border-color:#267b503d}.cardtitle{font-size:17px;font-weight:700}.sub{margin-top:5px;color:#789181;font-size:12px;line-height:1.6}.scenario .sub{color:#9bb7a4}.legendtext{float:right;color:#6a8775;font-size:12px}.legendtext i{display:inline-block;width:6px;height:6px;margin:0 5px 1px 10px;border-radius:50%;background:#259565}.legendtext i:last-child{background:#dfa73c}.chart{height:115px;margin:17px 3px 24px;position:relative;border-bottom:1px solid #bfd2c2;background:repeating-linear-gradient(to bottom,transparent 0 36px,#256d4412 37px)}.threshold{position:absolute;top:58.3%;left:0;right:0;border-top:1px dashed #d7a743}.threshold span{position:absolute;right:0;top:-15px;padding:2px 4px;background:#fffdf5;color:#9c7228;font-size:11px}.bars{position:absolute;inset:0 12% 0 12%;display:flex;justify-content:space-around;align-items:end}.barbox{height:100%;width:65px;display:flex;flex-direction:column;align-items:center;justify-content:end;position:relative}.bar{width:34px;height:var(--h);border-radius:4px 4px 0 0;background:linear-gradient(#6bdd99,#198552);transform-origin:bottom;animation:grow .8s ease both}.barbox:last-child .bar{background:linear-gradient(#f0ce75,#d98c3e)}.barval{position:absolute;bottom:calc(var(--h) + 5px);font-size:13px;font-weight:700;color:#23754c}.barbox:last-child .barval{color:#a66d2b}.barlabel{position:absolute;top:100%;white-space:nowrap;padding-top:6px;color:#718878;font-size:12px}.summary{margin-top:14px;padding:9px 10px;border-radius:5px;background:#eff6ec;color:#506c5a;font-size:12px;line-height:1.6}.summary strong{color:#a96e27}.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin-top:15px}.scenario-item{padding:10px 0 8px;border-top:1px solid #d0f4d51c}.scenario-item span{display:block;color:#96b29e;font-size:12px}.scenario-item strong{display:block;margin-top:4px;color:#d4efca;font-size:20px;font-weight:620}.scenario-item small{font-size:12px;color:#acc6b1;font-weight:400}.scenario-note{margin-top:8px;color:#93a997;font-size:12px}.source{max-width:1360px;margin:16px auto 0;padding:0 clamp(20px,5vw,76px);color:#7f9586;font-size:12px;line-height:1.7}.footer{padding:16px clamp(20px,5vw,76px);color:#96ae9d;background:#071b15;font-size:12px}.footerin{max-width:1360px;margin:auto;display:flex;justify-content:space-between;gap:12px}
-.problem-section{padding:44px clamp(20px,5vw,76px) 48px;background:linear-gradient(135deg,#e6f0e4,#f3f6ef);border-top:1px solid var(--line)}.problem-inner{max-width:1360px;margin:auto}.problem-head{display:grid;grid-template-columns:1fr .9fr;align-items:end;gap:28px;margin-bottom:20px}.problem-kicker{color:#b6782c;font-size:12px;font-weight:800;letter-spacing:.15em}.problem-head h2{margin-top:8px}.problem-lead{max-width:470px;margin:0;color:#607a6a;font-size:14px;line-height:1.8}.problem-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:13px}.drift-card{padding:20px 22px;border-radius:10px;color:#eef8ee;background:linear-gradient(145deg,#0b3023,#0b2019);box-shadow:0 16px 36px #17432b18}.drift-top{display:flex;justify-content:space-between;align-items:start;gap:15px}.drift-title{font-size:17px;font-weight:700}.drift-sub{margin-top:5px;color:#9cb7a3;font-size:12px}.wind-range{padding:5px 8px;border:1px solid #c8ef8333;border-radius:4px;color:#c9ef83;font-size:12px;white-space:nowrap}.risk-list{display:grid;gap:12px;margin-top:22px}.risk-row{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:10px;color:#abc3af;font-size:12px}.risk-track{height:7px;border-radius:8px;background:#ffffff12;overflow:hidden}.risk-fill{height:100%;width:var(--w);border-radius:inherit;background:linear-gradient(90deg,#36bb79,#9de876);box-shadow:0 0 9px #4bdf8e45}.risk-row:last-child .risk-fill{background:linear-gradient(90deg,#d8ab4c,#f18d50)}.risk-row b{color:#e5f3e5;font-size:13px;text-align:right}.risk-note{margin:17px 0 0;padding-top:12px;border-top:1px solid #ffffff19;color:#8fa995;font-size:12px;line-height:1.7}.problem-side{display:grid;grid-template-rows:1fr 1fr;gap:13px}.problem-card{padding:17px 19px;border:1px solid rgba(26,100,59,.12);border-radius:9px;background:#fffffbdc;box-shadow:0 12px 30px #17432b0b}.problem-card h3{margin:5px 0 0;color:#183d29;font-size:16px}.problem-index{color:#2b8b59;font-size:11px;letter-spacing:.13em;font-weight:800}.drop-compare{display:flex;align-items:center;gap:14px;margin-top:10px}.drop-compare>div{display:grid;grid-template-columns:auto auto;align-items:baseline;column-gap:7px}.drop-compare span{color:#65806f;font-size:12px}.drop-compare strong{color:#1b7046;font-size:21px;letter-spacing:-.03em}.drop-compare small{grid-column:2;color:#839789;font-size:11px}.drop-compare i{color:#84a28c;font-style:normal}.problem-copy{margin:8px 0 0;color:#708777;font-size:12px;line-height:1.6}.count-mass{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.count-mass div{padding:8px 10px;border-radius:5px;background:#eef6ec}.count-mass span{display:block;color:#718b7a;font-size:11px}.count-mass strong{display:block;margin-top:3px;color:#1a7549;font-size:22px}.count-mass strong small{font-size:12px;font-weight:500}.problem-foot{margin-top:14px;padding:11px 14px;border-left:2px solid #40b978;border-radius:0 5px 5px 0;background:#ffffffa3;color:#52705d;font-size:13px;line-height:1.65}.problem-foot strong{color:#1a774b}
-.footer{padding:16px clamp(20px,5vw,76px);color:#96ae9d;background:#071b15;font-size:12px}.footerin{max-width:1360px;margin:auto;display:flex;justify-content:space-between;gap:12px}
-@keyframes flow{to{stroke-dashoffset:-180}}@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}@keyframes grow{from{transform:scaleY(.85);opacity:.6}to{transform:scaleY(1);opacity:1}}
-@media(max-width:900px){.hero-inner{grid-template-columns:.9fr 1.1fr;gap:28px}.metrics{grid-template-columns:repeat(2,1fr)}.status{display:none}.metric{min-height:145px}.problem-grid{grid-template-columns:1fr}.problem-side{grid-template-columns:1fr 1fr;grid-template-rows:auto}}
-@media(max-width:700px){.header{height:58px;padding:0 16px}.project,.divider{display:none}.nav{gap:13px;font-size:13px}.nav a,.nav .later{padding:21px 0 19px}.hero{padding:36px 18px 30px}.hero-inner{grid-template-columns:1fr;gap:27px}.hero-copy{max-width:590px}h1{font-size:clamp(42.6px,10vw,65px)}.field{height:270px}.content{padding:30px 18px 38px}.section-title{align-items:start;flex-direction:column;gap:7px}.hint{text-align:left}.lower{grid-template-columns:1fr}.source{padding:0 18px}.problem-section{padding:32px 18px}.problem-head{grid-template-columns:1fr;gap:8px}.problem-side{grid-template-columns:1fr;grid-template-rows:auto}.footer{padding-inline:18px}}
-@media(max-width:440px){.brand{font-size:14px}.leaf{transform:scale(.88);transform-origin:left center;width:26px}.nav{gap:10px}.nav a,.nav .later{font-size:12px}.intro{font-size:16px}.actions{align-items:flex-start;flex-direction:column;gap:14px}.field{height:235px}.metrics{gap:8px}.metric{min-height:139px;padding:14px 12px}.mlabel{font-size:12px}.value{font-size:38.1px}.value small{font-size:16px}.meta{font-size:11px}.wind,.scenario{padding:16px}.problem-card{padding:15px}.drift-card{padding:16px 14px}.risk-row{grid-template-columns:44px 1fr 43px;gap:7px}.footerin{flex-direction:column}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
-.chapter{padding:48px clamp(20px,5vw,76px);background:#f5f8f2;border-top:1px solid var(--line)}.chapter.alt{background:linear-gradient(135deg,#e8f1e7,#f5f7f0)}.chapter.dark{color:#eef7ed;background:radial-gradient(ellipse at 84% 18%,#1b583b70,transparent 34%),linear-gradient(125deg,#0c2d22,#071b16)}.chapter-inner{max-width:1360px;margin:auto}.chapter-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:21px}.chapter-kicker{color:#248253;font-size:12px;font-weight:800;letter-spacing:.15em}.dark .chapter-kicker{color:var(--lime)}.chapter-head h2{margin:7px 0 0}.dark .chapter-head h2{color:#eff8ed}.chapter-desc{max-width:490px;margin:0;color:#708879;font-size:13px;line-height:1.8}.dark .chapter-desc{color:#a9c5b0}
-.feature-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:9px;background:#fffffbdc;box-shadow:0 14px 35px #19472d0b}.feature-table{width:100%;min-width:690px;border-collapse:collapse;text-align:left;font-size:13px}.feature-table th{padding:12px 15px;color:#557565;background:#e9f3e7;font-weight:700;border-bottom:1px solid var(--line)}.feature-table td{padding:14px 15px;color:#607a69;line-height:1.7;border-bottom:1px solid #dce8dc}.feature-table tr:last-child td{border-bottom:0}.feature-table td:first-child{width:17%;color:#1e5939;font-weight:700;white-space:nowrap}.feature-table td:last-child{color:#23744b;font-weight:600}.innovation-callout{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.innovation-point{padding:13px 15px;border:1px solid #d5e5d4;border-radius:7px;background:#f8fbf5;color:#547260;font-size:12px;line-height:1.65}.innovation-point b{display:block;margin-bottom:4px;color:#1e7047;font-size:13px}.innovation-note{margin:14px 0 0;color:#7e9284;font-size:12px;line-height:1.6}
-.science-chain{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.chain-step{min-height:113px;padding:14px;border:1px solid #bce0c34a;border-radius:8px;background:#ffffff09;position:relative}.chain-step:not(:last-child):after{content:"›";position:absolute;right:-9px;top:38px;z-index:2;color:var(--mint);font-size:23.5px}.chain-no{color:var(--lime);font-size:11px;letter-spacing:.1em}.chain-step strong{display:block;margin-top:10px;color:#eff8ed;font-size:15px}.chain-step span{display:block;margin-top:5px;color:#a4c1aa;font-size:12px;line-height:1.5}.process-wall{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px}.process-card{min-height:148px;padding:15px;border:1px solid #d0efd51f;border-radius:8px;background:#ffffff08}.process-art{height:52px;display:flex;align-items:center;gap:7px;margin-bottom:12px;color:var(--mint)}.particle{width:9px;height:9px;border-radius:50%;background:#6de1a0;box-shadow:0 0 10px #53d98a80}.particle:nth-child(2n){width:6px;height:6px;opacity:.7}.route-art{width:100%;display:grid;gap:6px}.route-art i{height:2px;width:var(--w);border-radius:4px;background:linear-gradient(90deg,#58d891,#c8ee81)}.check-art{font-size:35.8px;font-weight:700;color:var(--lime);letter-spacing:-.05em}.process-card b{display:block;color:#edf7ec;font-size:14px}.process-card p{margin:5px 0 0;color:#9fb9a5;font-size:12px;line-height:1.6}.science-proof{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-top:14px;padding:12px 15px;border:1px solid #c1edcf24;border-radius:7px;background:#ffffff08;color:#a9c2ae;font-size:12px;line-height:1.6}.science-proof strong{color:var(--lime);font-size:20px;white-space:nowrap}.science-proof em{color:#d3e3d2;font-style:normal}
-.impact-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:14px}.sdg-panel,.pilot-panel{padding:20px;border:1px solid var(--line);border-radius:9px;background:#fffffbdc;box-shadow:0 14px 35px #19472d0b}.panel-title{color:#193c2a;font-size:16px;font-weight:700}.panel-sub{margin-top:5px;color:#789080;font-size:12px;line-height:1.6}.sdg-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:14px}.sdg-tile{min-height:48px;padding:5px 6px;display:flex;flex-direction:column;justify-content:space-between;border-radius:4px;background:var(--sdg);color:white;opacity:.42}.sdg-tile b{font-size:13px}.sdg-tile span{font-size:10px;line-height:1.2}.sdg-tile.related{opacity:1;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--sdg)}.sdg-related{margin-top:10px;color:#6d8776;font-size:12px;line-height:1.6}.sdg-related strong{color:#22784b}.pilot-panel{color:#eef8ef;background:linear-gradient(145deg,#0b3023,#0c241c);border-color:#2a83553d}.pilot-panel .panel-title{color:#eff8ed}.pilot-panel .panel-sub{color:#a0b9a7}.pilot-tag{display:inline-block;margin-top:12px;padding:5px 8px;border:1px solid #c9ef8340;border-radius:4px;color:var(--lime);font-size:11px}.pilot-steps{display:grid;gap:0;margin-top:12px}.pilot-step{display:grid;grid-template-columns:23px 1fr;gap:9px;padding:9px 0;border-top:1px solid #d1f4d41a}.pilot-step i{width:20px;height:20px;display:grid;place-items:center;border:1px solid #59ca8c68;border-radius:50%;color:#9decaa;font-size:11px;font-style:normal}.pilot-step b{display:block;color:#dceede;font-size:12px}.pilot-step span{display:block;margin-top:3px;color:#94ad9b;font-size:11px;line-height:1.5}.pilot-warning{margin-top:10px;padding-top:9px;border-top:1px solid #d1f4d41a;color:#9eb6a4;font-size:11px;line-height:1.6}
-.team-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.slogan-card{padding:23px;border-radius:10px;color:#eff8ed;background:linear-gradient(135deg,#0c3425,#0a2119);box-shadow:0 18px 40px #123b2819}.slogan-label{color:var(--lime);font-size:11px;font-weight:800;letter-spacing:.14em}.slogan-card blockquote{margin:14px 0 11px;color:#ecf6e7;font-size:clamp(23.5px,3vw,35.8px);line-height:1.45;font-weight:600;letter-spacing:-.03em}.slogan-card p{max-width:490px;margin:0;color:#a7c1ae;font-size:12px;line-height:1.8}.team-story{padding:21px;border:1px solid var(--line);border-radius:10px;background:#fffffbdc}.team-story h3{margin:0;color:#193d2a;font-size:16px}.team-story p{margin:9px 0 0;color:#6e8677;font-size:12px;line-height:1.8}.workstreams{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.workstream{padding:10px;border-radius:6px;background:#eef6ec;color:#52715e;font-size:11px}.workstream b{display:block;margin-bottom:4px;color:#258252;font-size:12px}.team-availability{margin-top:13px;padding:10px 12px;border-left:2px solid #45bd7a;background:#f1f7ed;color:#688273;font-size:11px;line-height:1.6}
-@media(max-width:900px){.science-chain{grid-template-columns:repeat(3,1fr)}.chain-step:nth-child(3):after{display:none}.impact-layout{grid-template-columns:1fr}.sdg-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media(max-width:700px){.chapter{padding:34px 18px}.chapter-head{align-items:start;flex-direction:column;gap:8px}.innovation-callout{grid-template-columns:1fr}.science-chain{grid-template-columns:repeat(2,1fr)}.chain-step:after{display:none!important}.process-wall{grid-template-columns:1fr}.process-card{min-height:0}.science-proof{align-items:start;flex-direction:column;gap:5px}.impact-layout,.team-layout{grid-template-columns:1fr}.sdg-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media(max-width:440px){.sdg-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.sdg-tile{min-height:45px}.feature-table{min-width:650px}.workstreams{gap:6px}}
-section[id],main[id]{scroll-margin-top:76px}
-.language-toggle{padding:6px 8px;border:1px solid #bdecc044;border-radius:4px;color:var(--lime);background:#ffffff08;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer;white-space:nowrap}.language-toggle:hover{color:#082116;background:var(--mint)}.nav{min-width:0}@media(max-width:700px){.nav{flex:1;gap:9px;font-size:12px;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}}@media(max-width:440px){.header{gap:6px;padding:0 10px}.nav{gap:6px}.nav a{font-size:11px}.language-toggle{padding:4px 5px;font-size:11px}}
-.impact-outcomes{margin-top:14px;padding:19px;border:1px solid var(--line);border-radius:9px;background:#fffffbdc;box-shadow:0 14px 35px #19472d0b}.impact-outcomes-head,.team-block-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:12px}.impact-outcomes h3,.team-block-head h3{margin:0;color:#193c2a;font-size:16px}.impact-outcomes-head span,.team-block-head span{color:#789080;font-size:11px;line-height:1.5;text-align:right}.impact-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.impact-metric{padding:13px;border:1px solid #dce9dc;border-radius:7px;background:linear-gradient(135deg,#f7fbf3,#fff)}.impact-metric b{display:block;color:#1d7248;font-size:26.9px;letter-spacing:-.04em}.impact-metric strong{display:block;margin-top:4px;color:#315b40;font-size:12px}.impact-metric span{display:block;margin-top:5px;color:#7b9081;font-size:11px;line-height:1.5}.impact-pathways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:9px}.impact-pathway{padding:11px 12px;border-left:2px solid #4ac17c;border-radius:0 6px 6px 0;background:#eff6ec}.impact-pathway b{display:block;color:#27784d;font-size:12px}.impact-pathway span{display:block;margin-top:4px;color:#6f8776;font-size:11px;line-height:1.55}.impact-caveat{margin:10px 0 0;color:#7c9182;font-size:11px;line-height:1.6}.team-roles{margin-top:14px;padding:19px;border:1px solid var(--line);border-radius:9px;background:#fffffbdc;box-shadow:0 14px 35px #19472d0b}.team-roles-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.team-role{min-height:126px;padding:13px;border:1px solid #dce9dc;border-radius:7px;background:linear-gradient(145deg,#f6faf3,#fff)}.team-role small{color:#3b9963;font-size:11px;font-weight:800;letter-spacing:.08em}.team-role b{display:block;margin-top:7px;color:#214d34;font-size:13px}.team-role p{margin:5px 0 0;color:#758b7b;font-size:11px;line-height:1.6}.team-role em{display:block;margin-top:8px;color:#98a99c;font-size:10px;font-style:normal}.team-roadmap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:9px}.team-phase{position:relative;padding:12px;border:1px solid #cfe5d2;border-radius:7px;background:#f2f8ef}.team-phase span{color:#35935e;font-size:11px;font-weight:800;letter-spacing:.08em}.team-phase b{display:block;margin-top:5px;color:#214d34;font-size:12px}.team-phase p{margin:4px 0 0;color:#758b7b;font-size:11px;line-height:1.55}@media(max-width:700px){.impact-metrics,.impact-pathways{grid-template-columns:1fr}.team-roles-grid,.team-roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}.impact-outcomes-head,.team-block-head{align-items:start;flex-direction:column;gap:5px}.impact-outcomes-head span,.team-block-head span{text-align:left}}@media(max-width:440px){.team-roles-grid,.team-roadmap{grid-template-columns:1fr}}
-.team-members-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.team-member{min-height:0;text-align:center}.member-avatar{width:64px;height:64px;margin:4px auto 10px;display:grid;place-items:center;border:1.5px dashed #9cc7a8;border-radius:50%;background:#eef6ec;color:#3b9963;font-size:15px;font-weight:800;overflow:hidden}.member-avatar img{width:100%;height:100%;object-fit:cover}
-@media(max-width:900px){.team-members-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:440px){.team-members-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-/* ===== AeroGuard 浅薄荷风格覆盖 ===== */
-:root{--ink:#0d3b2e;--deep:#0b3a2c;--mint-bg:#effcf5;--card:#f7fffb;--muted:#5b7c6d;--accent:#1f8a5b;--line:#cfe8db;--display:"Noto Serif SC","Source Han Serif SC","Songti SC",serif}
-body{background:var(--mint-bg);color:var(--ink)}
-h1,h2,h3,.value,.brand,blockquote{font-family:var(--display)}
-.header{height:72px;background:var(--mint-bg);color:var(--ink);border-bottom:3px solid var(--deep)}
-.brand{font-size:26.9px;font-weight:800;letter-spacing:0;color:var(--accent)}
-.leaf:before,.leaf:after{background:linear-gradient(145deg,#2fbf86,#0d3b2e)}
-.divider{background:#9cc3b0}.project{color:var(--muted)}
-.nav{color:var(--ink);font-size:18px;font-weight:600}
-.nav a,.nav .later{padding:25px 0 22px}
-.nav a:hover,.nav .current{color:var(--deep);border-color:var(--deep)}
-.status{color:var(--muted)}.status:before{background:var(--accent);box-shadow:none}
-.language-toggle{color:var(--deep);border-color:var(--deep);background:transparent}
-.language-toggle:hover{background:var(--deep);color:#fff}
-.hero{background:var(--mint-bg);color:var(--ink);padding:90px clamp(20px,5vw,76px) 80px;box-shadow:0 18px 30px -24px #0d3b2e30}
-.eyebrow{color:var(--muted)}.eyebrow:before{background:var(--deep);box-shadow:none}
-h1{color:var(--deep);font-weight:800;letter-spacing:.02em;text-shadow:2px 2px 0 #fff,4px 4px 0 #0d3b2e33}
-h1 em{color:var(--deep)}
-.intro{color:var(--muted);font-weight:600}
-.button{background:var(--deep);color:#effcf5;border:2px solid var(--deep);border-radius:4px;box-shadow:none}
-.button:hover{background:#fff;color:var(--deep);box-shadow:none}
-.proof,.fineprint{color:var(--muted)}.proof strong{color:var(--deep)}
-.check{border-color:var(--deep);color:var(--deep)}
-.map{background:var(--card);border:2px solid var(--deep);border-radius:6px;box-shadow:none}
-.maphead,.mapfoot{background:var(--mint-bg);color:var(--ink);border-color:var(--line)!important}
-.maphead span:last-child{color:var(--muted)}
-.field{background:repeating-linear-gradient(89deg,transparent 0 27px,#0d3b2e10 29px,transparent 31px),linear-gradient(135deg,#d9f3e6,#c4ead6)}
-.field:before{display:none}
-.field polygon{fill:#1f8a5b18;stroke:var(--deep)}.field .inner{stroke:#0d3b2e55}
-.field .route{stroke:var(--accent);filter:none}
-.drone{filter:none}.drone g[stroke]{stroke:var(--deep)}
-.tag{background:#ffffffd9;color:var(--ink);border-color:var(--line)}.tag.b{color:var(--accent);border-color:var(--line)}
-.legend{color:var(--ink)}
-.section-title,.problem-head,.chapter-head{padding-bottom:14px;border-bottom:3px solid var(--deep);margin-bottom:24px}
-h2{color:var(--deep);font-weight:800}
-.kicker,.problem-kicker,.chapter-kicker,.dark .chapter-kicker{color:var(--accent)}
-.hint,.problem-lead,.chapter-desc,.dark .chapter-desc{color:var(--muted)}
-.hint strong{color:var(--deep)}
-.content,.problem-section,.chapter,.chapter.alt,.chapter.dark{background:var(--mint-bg);color:var(--ink);border-top:0}
-.dark .chapter-head h2{color:var(--deep)}
-.metric,.metric.primary,.wind,.scenario,.drift-card,.problem-card,.feature-table-wrap,.sdg-panel,.pilot-panel,.slogan-card,.team-story,.impact-outcomes,.team-roles,.chain-step,.process-card,.science-proof{background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:6px;box-shadow:none}
-.metric:after{display:none}
-.metric.primary{border-color:var(--deep)}
-.value,.cardtitle,.drift-title,.panel-title,.pilot-panel .panel-title,.chain-step strong,.process-card b,.problem-card h3,.team-story h3{color:var(--deep)}
-.value small,.mlabel,.meta,.sub,.scenario .sub,.drift-sub,.panel-sub,.pilot-panel .panel-sub,.chain-step span,.process-card p,.science-proof,.risk-note,.pilot-step span,.pilot-warning,.slogan-card p,.risk-row{color:var(--muted)}
-.chain-no,.slogan-label,.pilot-tag,.wind-range,.check-art,.science-proof strong{color:var(--accent);border-color:var(--line)}
-.science-proof em{color:var(--deep)}
-.scenario-item,.pilot-step,.risk-note,.pilot-warning{border-color:var(--line)!important}
-.scenario-item span{color:var(--muted)!important}.scenario-item strong{color:var(--deep)!important}
-.scenario-note{color:var(--muted)!important;border-color:var(--line)!important}
-.risk-row b,.pilot-step b{color:var(--deep)}
-.risk-track{background:#0d3b2e14}
-.risk-fill,.risk-row:last-child .risk-fill{background:var(--accent);box-shadow:none}
-.pilot-step i{border-color:var(--deep);color:var(--deep)}
-.chain-step:not(:last-child):after{color:var(--deep)}
-.particle{background:var(--accent);box-shadow:none}
-.route-art i{background:var(--accent)}
-.bar{background:var(--accent)}.barval{color:var(--deep)}
-.summary,.workstream,.impact-pathway,.team-availability,.innovation-point{background:#e3f6ec}
-.feature-table th{background:var(--mint-bg);color:var(--deep);border-bottom:2px solid var(--deep)}
-.feature-table td:first-child{color:var(--deep)}
-.slogan-card blockquote{color:var(--deep);font-weight:800}
-.footer{background:var(--mint-bg);color:var(--ink);border-top:3px solid var(--deep);font-size:15px}
-/* ===== 过渡动画 ===== */
-:root{--ease:cubic-bezier(.22,.8,.24,1)}
-a,button,.metric,.wind,.scenario,.drift-card,.problem-card,.sdg-panel,.pilot-panel,.slogan-card,.team-story,.impact-outcomes,.team-roles,.chain-step,.process-card,.innovation-point,.impact-metric,.impact-pathway,.team-role,.workstream,.team-phase,.map,.sdg-tile,.feature-table tr{transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .35s,background-color .35s,color .25s,opacity .35s}
-.header{transition:height .35s var(--ease),box-shadow .35s,background-color .35s;backdrop-filter:blur(10px)}
-.header.scrolled{height:60px;background:#effcf5e6;box-shadow:0 8px 24px -14px #0d3b2e55}
-.nav a{position:relative;border-bottom-color:transparent!important}
-.nav a:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--deep);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
-.nav a:hover:after,.nav a.current:after{transform:scaleX(1);transform-origin:left}
-.metric:hover,.wind:hover,.scenario:hover,.drift-card:hover,.problem-card:hover,.sdg-panel:hover,.pilot-panel:hover,.slogan-card:hover,.team-story:hover,.chain-step:hover,.process-card:hover,.impact-metric:hover,.team-role:hover,.team-phase:hover,.innovation-point:hover{transform:translateY(-5px);border-color:var(--deep);box-shadow:0 18px 36px -20px #0d3b2e55}
-.impact-pathway:hover,.workstream:hover{transform:translateX(4px)}
-.map:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 26px 50px -26px #0d3b2e66}
-.sdg-tile:hover{transform:translateY(-3px) scale(1.06);opacity:1}
-.feature-table tbody tr:hover{background:#e3f6ec}
-.button{position:relative;overflow:hidden}
-.button:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffff55 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--ease)}
-.button:hover:before{transform:translateX(120%)}
-.button b{transition:transform .35s var(--ease)}.button:hover b{transform:translateX(5px)}
-.section-title,.problem-head,.chapter-head{position:relative;border-bottom-color:transparent!important}
-.section-title:after,.problem-head:after,.chapter-head:after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:3px;background:var(--deep);transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease) .15s}
-.in.section-title:after,.in.problem-head:after,.in.chapter-head:after{transform:scaleX(1)}
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
-.reveal.in{opacity:1;transform:none}
-.hero-inner>div:first-child>*{animation:rise .9s var(--ease) both}
-.hero-inner>div:first-child>*:nth-child(2){animation-delay:.12s}
-.hero-inner>div:first-child>*:nth-child(3){animation-delay:.24s}
-.hero-inner>div:first-child>*:nth-child(4){animation-delay:.36s}
-.hero-inner>div:first-child>*:nth-child(5){animation-delay:.48s}
-.hero .map{animation:rise 1.1s var(--ease) .3s both}
-.header{animation:drop .7s var(--ease) both}
-.risk-fill{transform:scaleX(0);transform-origin:left;transition:transform 1.2s var(--ease) .2s}
-.in .risk-fill{transform:scaleX(1)}
-.bar{animation:none;transform:scaleY(0);transition:transform 1s var(--ease) .2s}
-.in .bar{transform:scaleY(1)}
-@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
-@keyframes drop{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.risk-fill,.bar{transform:none}}
-/* ===== 高级配色：雾松绿 + 象牙白 + 香槟金点缀 ===== */
-:root{--ink:#16302a;--deep:#123128;--mint-bg:#f3f6f1;--card:#fbfcf8;--muted:#6b7d74;--accent:#3e7a62;--line:#dde6de;--gold:#b89a5e}
-body{background:radial-gradient(1200px 600px at 85% -10%,#e4eee6 0,transparent 60%),radial-gradient(900px 500px at -10% 30%,#eef1e8 0,transparent 55%),var(--mint-bg);background-attachment:fixed;color:var(--ink)}
-h1{text-shadow:0 1px 0 #fff,0 18px 40px #12312822}
-.header.scrolled{background:#f3f6f1d9;box-shadow:0 10px 30px -18px #12312866}
-.button{color:#f6f3ea}.button:hover{background:#1c4337;border-color:#1c4337}
-.summary,.workstream,.impact-pathway,.team-availability,.innovation-point{background:#ecf1ea}
-.feature-table tbody tr:hover{background:#eef2ec}
-.field{background:repeating-linear-gradient(89deg,transparent 0 27px,#12312810 29px,transparent 31px),linear-gradient(135deg,#e6ede5,#d3e0d5)}
-.field polygon{fill:#3e7a6218}
-.summary strong,.threshold span{color:var(--gold)}.threshold{border-top-color:var(--gold)}
-.bar{background:linear-gradient(#8fb9a3,#3e7a62)}.barbox:last-child .bar{background:linear-gradient(#dcc596,#b89a5e)}.barval{color:var(--accent)}.barbox:last-child .barval{color:#9a7d45}
-.nav a:after{background:var(--gold)!important}
-::selection{background:#b89a5e44;color:var(--deep)}
-/* ===== 横向平移单页 ===== */
-html,body{height:100%;overflow:hidden}
-.header{position:fixed!important;top:0;left:0;right:0;z-index:50}
-main#home{position:fixed;left:0;right:0;top:var(--hh,72px);bottom:0;overflow:hidden;margin:0;padding:0;max-width:none}
-.h-track{display:flex;height:100%;will-change:transform;transition:transform .85s cubic-bezier(.77,0,.18,1)}
-.h-panel{flex:0 0 100vw;width:100vw;height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#12312833 transparent}
-.h-panel>section{min-height:100%}
-.h-panel>.footer{margin-top:40px}
-.h-panel>*{transition:opacity .6s ease,transform .85s cubic-bezier(.77,0,.18,1)}
-.h-panel:not(.active)>*{opacity:.35;transform:scale(.97)}
-.h-dots{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:10px;z-index:60;padding:8px 14px;border-radius:999px;background:#f3f6f1cc;backdrop-filter:blur(8px);box-shadow:0 8px 24px -14px #12312866}
-.h-dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:#12312833;cursor:pointer;transition:width .4s cubic-bezier(.77,0,.18,1),background .3s}
-.h-dots button.on{width:26px;background:var(--deep)}
-.h-arrow{position:fixed;top:50%;z-index:60;width:44px;height:44px;margin-top:-22px;border:1px solid var(--line);border-radius:50%;background:#fbfcf8d9;backdrop-filter:blur(8px);color:var(--deep);font-size:21px;cursor:pointer;transition:transform .3s,opacity .3s,background .3s}
-.h-arrow:hover{background:var(--deep);color:#f6f3ea;transform:scale(1.08)}
-.h-arrow[disabled]{opacity:0;pointer-events:none}
-.h-prev{left:18px}.h-next{right:18px}
-.h-progress{position:fixed;left:0;top:var(--hh,72px);height:2px;background:var(--gold,#b89a5e);z-index:55;transition:width .85s cubic-bezier(.77,0,.18,1)}
-@media(max-width:720px){.h-arrow{display:none}}
-@media(prefers-reduced-motion:reduce){.h-track,.h-panel>*{transition:none}}
-/* ===== 导航自适应（中英切换防重叠） ===== */
-.header>*{flex-shrink:0}
-.header .nav{flex:0 1 auto;min-width:0;margin-left:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
-.header .nav::-webkit-scrollbar{display:none}
-.header .nav a{flex-shrink:0}
-.header.c1 .status{display:none}
-.header.c2 .project,.header.c2 .divider{display:none}
-.header.c3 .nav{font-size:16.5px;gap:16px}
-.header.c4 .brand{font-size:22.4px}.header.c4 .nav{font-size:15.5px;gap:12px}
-.header.c5 .nav{-webkit-mask:linear-gradient(90deg,#000 88%,transparent);mask:linear-gradient(90deg,#000 88%,transparent)}
-.ops-block{margin-top:30px}.ops-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:14px}.ops-head h3{margin:7px 0 0;color:var(--ink);font-size:clamp(20px,1.8vw,24.6px);letter-spacing:-.02em}.ops-head p{max-width:490px;margin:0;color:var(--muted);font-size:13px;line-height:1.8}
-.ops-console{overflow:hidden;border:1.5px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font-size:13px}
-.ops-top{display:flex;align-items:center;gap:14px;height:44px;padding:0 16px;background:var(--deep);color:#e9efe6}.ops-brand{display:flex;align-items:center;gap:8px;white-space:nowrap}.ops-brand b{font-family:var(--display);font-size:17px}.ops-brand span{padding-left:8px;border-left:1px solid #ffffff30;color:#a9bdb2;font-size:12px}.ops-tabs{display:flex;align-self:stretch;margin-left:10px}.ops-tabs span{display:flex;align-items:center;padding:0 15px;border-bottom:2px solid transparent;color:#a9bdb2;white-space:nowrap}.ops-tabs .on{color:#fff;background:#ffffff10;border-bottom-color:var(--gold);font-weight:700}.ops-top-r{display:flex;align-items:center;gap:12px;margin-left:auto;color:#b9cabf;font-size:12px;white-space:nowrap}.ops-pill{padding:4px 9px;border:1px solid var(--gold);border-radius:3px;background:#b89a5e26;color:#e8d4a2;font-weight:700}.ops-live:before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;background:#7fd39a;box-shadow:0 0 0 3px #7fd39a33}
-.ops-body{display:grid;grid-template-columns:minmax(0,1fr) 292px}.ops-main{min-width:0;padding:14px 16px 12px}.ops-task{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:10px}.ops-task b{font-family:var(--display);font-size:18px}.ops-task .muted{color:var(--muted)}.ops-rec{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border:1px solid #e6d6b2;border-radius:3px;background:#f6efe0;color:#7c5f27;font-weight:700}.ops-rec:before{content:"";width:7px;height:7px;border-radius:50%;background:#c58b2a;animation:opsBlink 1.6s infinite}.ops-time{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}.ops-time b{font-family:inherit;font-size:14px;color:var(--ink)}
-.ops-map{position:relative;aspect-ratio:960/500;overflow:hidden;border-radius:4px;background:#1d3a2c}.ops-map>svg{position:absolute;inset:0;display:block;width:100%;height:100%}.ops-layer{transition:opacity .4s var(--ease)}.ops-layer.off{opacity:0}.ops-map.focus .ops-layer[data-layer=route],.ops-map.focus .ops-hot,.ops-map.focus .ops-bands{opacity:.25}.ops-map.focus .ops-drift{animation:opsBlink 1.4s ease-in-out infinite}
-.ops-layers{position:absolute;left:1.6%;top:3%;display:flex;gap:2px;padding:3px;border-radius:4px;background:#0f2a21d1;backdrop-filter:blur(6px)}.ops-layers button{padding:5px 11px;border:0;border-radius:3px;background:transparent;color:#cfdcd3;font:inherit;font-size:12px;cursor:pointer}.ops-layers button.on{background:var(--accent);color:#fff}.ops-layers button:not(.on){text-decoration:line-through;text-decoration-color:#cfdcd380}
-.ops-wind{position:absolute;left:46.9%;top:4%;transform:translateX(-50%);padding:5px 10px;border-radius:4px;background:#0f2a21c4;color:#f3f6f1;font-size:13px;white-space:nowrap}.ops-wind b{margin-left:6px;color:#e8d4a2}
-.ops-tag{position:absolute;transform:translate(-50%,-50%);padding:4px 8px;border:1px solid var(--line);border-radius:3px;background:#fbfcf8e8;color:var(--ink);font-size:12px;white-space:nowrap}.ops-tag.gold{border-color:var(--gold);background:#f6efe0f0;color:#7c5f27;font-weight:700}
-.ops-legend{position:absolute;left:1.6%;bottom:3.5%;padding:8px 10px;border-radius:4px;background:#0f2a21d9;color:#dfe9e2;font-size:12px;line-height:1.5;width:max-content;white-space:nowrap}.ops-legend .bar{display:flex;align-items:center;gap:6px;margin:4px 0;width:auto;height:auto;border-radius:0;background:none;transform:none;animation:none}.ops-legend i{display:block;flex:none;width:84px;height:7px;border-radius:2px;background:linear-gradient(90deg,#2f6b4e,#8be0a8)}.ops-legend .sw{display:inline-block;width:12px;height:9px;margin-right:6px;vertical-align:-1px;background:#d9a441}
-.ops-scale{position:absolute;right:2.2%;bottom:10%;width:14.583%;color:#eef3ef;font-size:11px}.ops-scale div{display:flex;justify-content:space-between}.ops-scale i{display:block;height:5px;margin-top:2px;border:1.5px solid #eef3ef;border-top:0;background:linear-gradient(90deg,transparent 49%,#eef3ef 49% 51%,transparent 51%) no-repeat 0 0/100% 60%}.ops-note{position:absolute;right:2.2%;bottom:3.5%;color:#d5e1d8;font-size:11px}
-.ops-read{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;margin-top:10px;padding:2px 0 10px;border-bottom:1px solid var(--line)}.ops-read>span{padding:0 14px;border-left:1px solid var(--line);color:var(--muted);white-space:nowrap}.ops-read>span:first-child{margin-right:4px;padding:3px 8px;border:0;border-radius:3px;background:#ecf1ea;color:var(--accent);font-weight:700}.ops-read>span:nth-child(2){border-left:0}.ops-read b{margin-left:6px;color:var(--ink);font-family:var(--display);font-size:18px}.ops-read small{margin-left:2px;font-size:12px}
-.ops-chart{margin-top:10px;padding:10px 12px 4px;border:1.5px solid var(--line);border-radius:4px;background:#fff}.ops-chart-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;color:var(--muted);font-size:12px}.ops-chart-h b{color:var(--ink);font-size:13px}.ops-chart-h .std{margin-left:auto}.ops-key:before{content:"";display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:var(--accent)}.ops-key.g:before{background:var(--gold)}.ops-chart svg{display:block;width:100%;height:auto;margin-top:2px;font-size:10px}.ops-chart text{fill:var(--muted)}
-.ops-side{display:flex;flex-direction:column;gap:14px;padding:14px;border-left:1.5px solid var(--line);background:#f5f8f2}.ops-sec-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}.ops-sec-h h4{margin:0;color:var(--ink);font-family:var(--display);font-size:17px}.ops-ok{color:var(--accent);font-size:12px;white-space:nowrap}.ops-ok:before{content:"✓";display:inline-grid;place-items:center;width:13px;height:13px;margin-right:4px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px}
-.ops-rows{margin:0;padding:0;list-style:none}.ops-rows li{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:6px;padding:7px 2px;border-bottom:1px solid var(--line);color:var(--muted)}.ops-rows li>b{color:var(--ink);font-size:14px;font-weight:600}.ops-badge{padding:2px 6px;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--muted);font-size:11px;white-space:nowrap}.ops-badge.ok{border-color:#c5dccb;background:#e3efe6;color:var(--accent)}.ops-badge.warn{border-color:#e6d6b2;background:#f6efe0;color:#7c5f27}
-.ops-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:8px 10px;border:1.5px solid var(--deep);border-radius:4px;background:transparent;color:var(--deep);font:inherit;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer}.ops-btn:hover{background:var(--deep);color:#f6f3ea}.ops-btn.gold{border-color:var(--gold);background:#fffaf0;color:#7c5f27}.ops-btn.gold:hover,.ops-btn.gold.on{background:var(--gold);color:#fff}
-.ops-risk{padding:11px 12px;border:1.5px solid #e6d6b2;border-radius:5px;background:#fbf6ea}.ops-risk .ops-sec-h h4{display:flex;align-items:center;gap:7px;color:#7c5f27}.ops-risk .ops-sec-h h4:before{content:"!";display:grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--gold);color:#fff;font-family:inherit;font-size:14px}.ops-risk p{margin:6px 0 0;color:#5b5236;font-size:13px;line-height:1.6}.ops-risk p b{color:#7c5f27}.ops-link{display:flex;justify-content:space-between;margin-top:9px;color:var(--ink);font-weight:700;text-decoration:none}.ops-link:hover{color:var(--accent)}.ops-fine{margin:4px 0 0;color:var(--muted);font-size:11px}
-.ops-meter{margin-top:9px}.ops-meter div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:var(--muted)}.ops-meter b{color:var(--ink);font-family:var(--display);font-size:16px}.ops-meter i{display:block;position:relative;height:5px;margin-top:4px;border-radius:3px;background:#e2e9e2}.ops-meter i:before{content:"";position:absolute;inset:0 auto 0 0;width:var(--v);border-radius:inherit;background:var(--accent)}.ops-meter i:after{content:"";position:absolute;top:-3px;bottom:-3px;left:var(--t);width:2px;background:var(--gold)}.ops-meter.warn i:before{background:var(--gold)}.ops-meter.warn i:after{display:none}
-.ops-foot{padding:8px 16px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;text-align:center}.ops-foot a{color:inherit}
-@keyframes opsBlink{50%{opacity:.35}}
-@media(max-width:1000px){.ops-body{grid-template-columns:1fr}.ops-side{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));align-items:start;border-left:0;border-top:1.5px solid var(--line)}}
-@media(max-width:700px){.ops-head{flex-direction:column;align-items:start;gap:8px}.ops-tabs span:not(.on),.ops-live,.ops-brand span,.ops-legend,.ops-tag.opt,.ops-chart-h .std{display:none}.ops-main{padding:12px}.ops-read>span{padding:0 9px}.ops-time{margin-left:0}}
-@media(prefers-reduced-motion:reduce){.ops-console *{animation:none!important}}
-.dpanel{margin-top:16px;padding:16px 18px;background:var(--card);border:1.5px solid var(--line);border-radius:6px}.dpanel-h{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px;padding-bottom:10px;border-bottom:1.5px solid var(--line)}.dpanel-h .kicker{color:var(--accent);font-size:11.5px;font-weight:800;letter-spacing:.14em}.dpanel-h h3{margin:4px 0 0;font-size:18px;color:var(--ink)}.dpanel-h p{max-width:460px;margin:0;color:var(--muted);font-size:12px;line-height:1.7;text-align:right}.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.dgroup{margin:2px 0 8px;color:var(--ink);font-size:13px;font-weight:800}.dgroup small{margin-left:6px;color:var(--muted);font-weight:500}.dscroll{overflow-x:auto}.dtable{width:100%;border-collapse:collapse;font-size:13px;color:var(--ink)}.dtable th{padding:6px 8px;border-bottom:2px solid var(--deep);color:var(--muted);font-size:11.5px;font-weight:700;text-align:left;white-space:nowrap}.dtable td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.dtable .n{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.dtable tr.base td{background:#eef4ec}.dtable tr.base td:first-child{box-shadow:inset 3px 0 0 var(--accent)}.dbar{display:flex;align-items:center;gap:6px;min-width:96px}.dbar i{position:relative;flex:1;min-width:28px;height:6px;border-radius:3px;background:#e6ede5;overflow:hidden}.dbar i:after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:3px;background:var(--accent)}.dbar.g i:after{background:var(--gold)}.dbar.m i:after{background:#9fb8a8}.dbar b{min-width:44px;text-align:right;font-variant-numeric:tabular-nums}.dbar.low b{color:#8a6d33}.st{display:inline-block;padding:1px 6px;border-radius:3px;font-size:11.5px;font-weight:700;white-space:nowrap}.st.ok{background:#e3efe6;color:#2f6b4e}.st.part{background:#f6ecd6;color:#8a6d33}.st.bad{background:#f3e1db;color:#9a4a3a}.dkv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.dkv.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.dkv>div{padding:10px 11px;border:1px solid var(--line);border-radius:4px;background:#fff}.dkv span{display:block;color:var(--muted);font-size:11.5px}.dkv strong{display:block;margin-top:3px;color:var(--deep);font-family:var(--display);font-size:clamp(16px,1.5vw,20px);line-height:1.2;overflow-wrap:anywhere}.dkv strong small{margin-left:2px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:500}.dkv em{display:block;margin-top:2px;color:var(--muted);font-size:11px;font-style:normal}.dsplit{display:flex;height:24px;margin:4px 0 12px;border-radius:4px;overflow:hidden;font-size:12px;font-weight:700}.dsplit span{display:flex;align-items:center;padding:0 9px;color:#fff;white-space:nowrap;overflow:hidden}.dsplit .a{background:var(--accent)}.dsplit .b{background:var(--gold)}.dchips{display:flex;flex-wrap:wrap;gap:6px}.dchips span{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line);border-radius:4px;background:#fff;font-size:12px;color:var(--ink)}.dnote{margin:10px 0 0;color:var(--muted);font-size:11.5px;line-height:1.7}.dir{display:inline-block;width:16px;color:var(--accent);font-weight:800;text-align:center}.dpos{position:relative;min-width:90px;height:6px;border-radius:3px;background:linear-gradient(90deg,#e6ede5,#dfe9df)}.dpos:after{content:"";position:absolute;top:-3px;left:calc(var(--p) - 6px);width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px #fff}
-@media(max-width:900px){.dgrid{grid-template-columns:1fr}.dkv,.dkv.c3{grid-template-columns:repeat(2,minmax(0,1fr))}.dpanel-h{flex-direction:column;align-items:start}.dpanel-h p{text-align:left}}
-/* ===== 商业级交互升级：双 CTA / 数字滚动 / 3D 倾斜 / 概念图 / 前后对比 ===== */
-.cta-group{display:flex;flex-wrap:wrap;gap:12px}
-.button.ghost{background:transparent;color:var(--deep);border:2px solid var(--deep)}
-.button.ghost:hover{background:var(--deep);color:#f6f3ea;border-color:var(--deep)}
-.button.ghost .play{font-size:11px;transition:transform .35s var(--ease)}
-.button.ghost:hover .play{transform:scale(1.25)}
-.count-up{font-variant-numeric:tabular-nums}
-.hero .map{position:relative}
-.hero .map.tilt-on{animation:none}
-.map.tilt-on,.metric.tilt-on.in{will-change:transform;transition:transform .2s ease-out,box-shadow .45s var(--ease),border-color .35s,opacity .8s var(--ease)}
-.visual-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:16px}
-.visual-card{margin:0;min-width:0}
-.visual-cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:8px;color:var(--muted);font-size:12px}
-.visual-cap b{color:var(--accent);font-size:11px;letter-spacing:.14em;white-space:nowrap}
-.concept-frame{position:relative;aspect-ratio:16/9;display:grid;place-items:center;overflow:hidden;border:1.5px dashed #b9cbbd;border-radius:6px;background:repeating-linear-gradient(45deg,transparent 0 14px,#12312808 14px 15px),linear-gradient(135deg,#eef3ec,#e2ebe2);text-align:center}
-.concept-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.concept-frame span{max-width:86%;padding:10px 16px;border:1px solid var(--line);border-radius:4px;background:#fbfcf8e6;color:var(--deep);font-family:var(--display);font-size:clamp(14px,1.4vw,18px);font-weight:700;line-height:1.5}
-.ba-compare{--pos:50%;position:relative;aspect-ratio:16/9;overflow:hidden;border:1.5px solid var(--line);border-radius:6px;background:var(--card);cursor:ew-resize;touch-action:pan-y;user-select:none;-webkit-user-select:none}
-.ba-layer{position:absolute;inset:0}
-.ba-layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
-.ba-after{background:repeating-linear-gradient(90deg,#3e7a6224 0 18px,transparent 18px 30px),linear-gradient(135deg,#dfece2,#cfe2d4)}
-.ba-before{clip-path:inset(0 calc(100% - var(--pos)) 0 0);background:radial-gradient(circle,#b89a5e66 0 2px,transparent 3px) 0 0/22px 22px,linear-gradient(90deg,#ece3cb,#f2ead6 60%,#f6f1e2)}
-.ba-label{position:absolute;top:12px;left:12px;z-index:1;padding:5px 10px;border-left:3px solid var(--gold);border-radius:3px;background:#fbfcf8eb;color:var(--deep);font-size:12.5px;font-weight:700;white-space:nowrap;box-shadow:0 4px 12px -6px #12312855}
-.ba-label.r{left:auto;right:12px;border-left:0;border-right:3px solid var(--accent)}
-.ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);z-index:2;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px #12312833;outline:none}
-.ba-handle span{position:absolute;top:50%;left:50%;width:40px;height:40px;display:grid;place-items:center;transform:translate(-50%,-50%);border:2px solid #fff;border-radius:50%;background:var(--deep);color:#f6f3ea;font-size:15px;box-shadow:0 6px 18px -6px #12312899;transition:transform .25s var(--ease)}
-.ba-handle span:before{content:"‹ ›";letter-spacing:2px}
-.ba-compare:hover .ba-handle span,.ba-compare.dragging .ba-handle span{transform:translate(-50%,-50%) scale(1.1)}
-.ba-handle:focus-visible span{box-shadow:0 0 0 3px var(--gold)}
-@media(max-width:900px){.visual-row{grid-template-columns:1fr}}
-@media(max-width:440px){.actions .cta-group{width:100%}.cta-group .button{flex:1 1 100%;justify-content:center}.ba-label{top:8px;left:8px;font-size:11px}.ba-label.r{right:8px}.ba-handle span{width:34px;height:34px}}
-/* 首页 Hero：雾松绿 + 象牙白 + 香槟金（与全站统一） */
-.hero{position:relative;isolation:isolate;overflow:hidden;min-height:calc(100vh - var(--hh,72px));display:flex;flex-direction:column;justify-content:center;padding:clamp(56px,8vh,96px) clamp(20px,5vw,76px) clamp(84px,12vh,120px);color:var(--ink);box-shadow:none;background:radial-gradient(640px circle at var(--mx,72%) var(--my,40%),rgba(62,122,98,.10),transparent 62%),radial-gradient(820px 480px at 6% 0%,rgba(184,154,94,.12),transparent 62%),linear-gradient(180deg,#f6f8f3 0%,var(--mint-bg) 60%,#eef3ec 100%)}
-.hero:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(18,49,40,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(18,49,40,.055) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 60% 45%,#000 20%,transparent 78%);mask-image:radial-gradient(ellipse 75% 70% at 60% 45%,#000 20%,transparent 78%)}
-.hero:after{content:"";position:absolute;left:clamp(20px,5vw,76px);right:clamp(20px,5vw,76px);bottom:0;height:3px;background:var(--deep);pointer-events:none}
-.hero-fx{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
-.hero-glow{position:absolute;z-index:-1;pointer-events:none;width:min(44vw,600px);aspect-ratio:1;right:5%;top:50%;translate:0 -50%;border-radius:50%;background:radial-gradient(circle,rgba(184,154,94,.16),rgba(62,122,98,.10) 45%,transparent 70%);filter:blur(34px);animation:glowPulse 8s ease-in-out infinite}
-.hero .hero-inner{position:relative;width:100%;grid-template-columns:1fr 1.05fr}
-.hero .eyebrow{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 11px;border:1.5px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;background:var(--card);color:var(--accent);font-size:11.5px;font-weight:800;letter-spacing:.16em}
-.hero .eyebrow:before{display:none}
-.eyebrow-dot{position:relative;width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.eyebrow-dot:after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--gold);animation:dotPing 2.2s var(--ease) infinite}
-.hero h1{margin:26px 0 0;color:var(--deep);font-size:clamp(44px,5.2vw,80px);font-weight:800;line-height:1.1;letter-spacing:-.01em;text-shadow:none}
-.hero h1 em{position:relative;display:inline-block;font-style:normal;color:var(--accent)}
-.hero h1 em:after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.14em;z-index:-1;background:linear-gradient(90deg,rgba(184,154,94,.55),rgba(184,154,94,.18));transform:scaleX(0);transform-origin:left;animation:underline 1.1s var(--ease) .9s forwards}
-.hero .intro{max-width:540px;margin-top:24px;color:var(--muted);font-size:clamp(15px,1.15vw,17px);font-weight:500;line-height:1.85}
-.hero .actions{margin-top:34px}
-.hero .button{padding:15px 24px;border-radius:4px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s,border-color .35s,color .35s}
-.hero .button:not(.ghost){box-shadow:0 14px 30px -14px rgba(18,49,40,.55),inset 0 -2px 0 var(--gold)}
-.hero .button:hover{transform:translateY(-2px)}
-.hero .button b{display:inline-block;color:#e2c98f;transition:transform .35s var(--ease)}
-.hero .button:hover b{transform:translateX(4px)}
-.hero .button.ghost{background:rgba(251,252,248,.7)}
-.hero .button.ghost .play{color:var(--gold)}
-.hero-stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0;margin-top:40px;padding-top:22px;border-top:1.5px solid var(--line)}
-.hero-stat{position:relative;padding:2px 30px 2px 0;margin-right:30px}
-.hero-stat:not(:last-child):after{content:"";position:absolute;right:0;top:8%;bottom:8%;width:1.5px;background:var(--line)}
-.hero-stat b{display:block;font-family:var(--display);font-size:clamp(24px,2.2vw,34px);font-weight:700;line-height:1.1;color:var(--deep);white-space:nowrap}
-.hero-stat b small{margin-left:2px;font-size:.55em;color:var(--gold)}
-.hero-stat span{display:block;margin-top:6px;color:var(--muted);font-size:12px;letter-spacing:.06em}
-.hero .fineprint{margin-top:22px;color:var(--muted);font-size:12px}
-.hero-visual{position:relative;padding:58px 0}
-.hero .map{position:relative;overflow:hidden;border:2px solid var(--deep);border-radius:6px;background:var(--card);box-shadow:14px 14px 0 -2px rgba(184,154,94,.22),0 34px 70px -34px rgba(18,49,40,.45)}
-.hero .map:hover{transform:none}
-.hero .field{position:relative}
-.hero .field:after{content:"";position:absolute;left:0;right:0;top:0;height:26%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(62,122,98,.07) 85%,rgba(62,122,98,.16));border-bottom:1px solid rgba(62,122,98,.35);animation:scan 6s ease-in-out infinite}
-.hero .field .route{stroke:var(--gold)}
-.hero .drone:before{content:"";position:absolute;left:50%;top:50%;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;border:1px solid rgba(18,49,40,.4);animation:ping 2.8s var(--ease) infinite;pointer-events:none}
-.hero-float{position:absolute;z-index:3;display:flex;align-items:center;gap:12px;padding:11px 18px 11px 11px;border:1.5px solid var(--deep);border-radius:6px;background:var(--card);box-shadow:0 18px 36px -18px rgba(18,49,40,.45);animation:rise 1s var(--ease) .9s both,floatY 6s ease-in-out 2s infinite}
-.hero-float.f1{left:-28px;top:0}
-.hero-float.f2{right:-22px;bottom:0;animation-delay:1.1s,2.6s}
-.hero-float small{display:block;color:var(--muted);font-size:11px;letter-spacing:.08em}
-.hero-float b{display:block;margin-top:2px;color:var(--deep);font-family:var(--display);font-size:19px;line-height:1.1}
-.hf-ico{display:grid;place-items:center;width:38px;height:38px;border-radius:4px;color:#f6f3ea;font-size:20px;font-weight:800;background:var(--deep);box-shadow:inset 0 -2px 0 var(--gold)}
-.hf-ring{width:38px;height:38px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),#e3eae2 0);-webkit-mask:radial-gradient(circle,transparent 12px,#000 13px);mask:radial-gradient(circle,transparent 12px,#000 13px)}
-.hero-scroll{position:absolute;left:50%;bottom:clamp(54px,7vh,72px);translate:-50% 0;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;letter-spacing:.1em;text-decoration:none;transition:color .3s;animation:rise 1s var(--ease) 1.3s both}
-.hero-scroll:hover{color:var(--deep)}
-.hero-scroll i{position:relative;width:20px;height:30px;border:1.5px solid currentColor;border-radius:12px}
-.hero-scroll i:after{content:"";position:absolute;left:50%;top:6px;width:3px;height:6px;margin-left:-1.5px;border-radius:2px;background:var(--gold);animation:wheel 1.8s ease-in-out infinite}
-.hero-inner>div:first-child>:nth-child(6){animation-delay:.6s}
-@keyframes underline{to{transform:scaleX(1)}}
-@keyframes dotPing{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
-@keyframes glowPulse{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
-@keyframes ping{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.6);opacity:0}}
-@keyframes scan{0%{transform:translateY(-100%)}60%,100%{transform:translateY(380%)}}
-@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@keyframes wheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(9px);opacity:0}100%{opacity:0}}
-@media(max-width:1100px){.hero-float.f1{left:-8px}.hero-float.f2{right:-6px}}
-@media(max-width:1000px){.hero .hero-inner{grid-template-columns:1fr}.hero-visual{max-width:640px}.hero-scroll{display:none}.hero{padding-bottom:72px}}
-@media(max-width:700px){.hero{min-height:0;padding:44px 18px 64px}.hero:after{left:18px;right:18px}.hero h1{font-size:clamp(36px,10vw,48px);margin-top:20px}.hero-stats{grid-template-columns:repeat(3,1fr);margin-top:30px;padding-top:18px}.hero-stat{padding:0 10px 0 0;margin-right:10px}.hero-stat b{font-size:22px}.hero-stat span{font-size:11px;letter-spacing:0}.hero-float{padding:8px 12px 8px 8px;gap:9px}.hero-float b{font-size:15px}.hf-ico,.hf-ring{width:30px;height:30px}.hero-visual{padding:46px 0}.hf-ring{-webkit-mask:radial-gradient(circle,transparent 9px,#000 10px);mask:radial-gradient(circle,transparent 9px,#000 10px)}.hero-float.f1{left:-4px;top:0}.hero-float.f2{right:-4px;bottom:0}.hero .map{box-shadow:8px 8px 0 -2px rgba(184,154,94,.22),0 24px 50px -30px rgba(18,49,40,.45)}}
-@media(max-width:440px){.hero .eyebrow{font-size:10px;letter-spacing:.1em}.hero-stat b{font-size:19px}.hero .button{padding:14px 20px}}
-@media(prefers-reduced-motion:reduce){.hero-glow,.eyebrow-dot:after,.hero .field:after,.hero .drone:before,.hero-float,.hero-scroll i:after{animation:none!important}.hero h1 em:after{animation:none;transform:none}}
-</style>
-
+<meta name="theme-color" content="#f5f3ee">
+<meta name="description" content="AeroGuard · 康莱德挑战赛植保无人机项目：预测药液飘移，并主动把它引回田里。">
+<title>AeroGuard · 康莱德挑战赛 · 植保无人机</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f5f3ee;--paper2:#ecebe4;--ink:#111a15;--muted:#6d746d;--line:rgba(17,26,21,.12);--accent:#2f6a4a;--lime:#c9dd8f;--serif:"Noto Serif SC",Georgia,serif;--sans:Inter,"Noto Sans SC",system-ui,sans-serif;--hh:68px;--bar:64px;--wrap:min(1240px,calc(100% - 96px))}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--paper);color:var(--ink);font:400 15px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+em{font-style:normal;color:var(--accent)}
+.wrap{width:var(--wrap);margin:0 auto}
 
+/* Header */
+.header{position:fixed;inset:0 0 auto;z-index:50;height:var(--hh);background:rgba(245,243,238,.95);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid var(--line)}
+.header .wrap{height:100%;display:flex;align-items:center;gap:16px}
+.logo{flex:none;width:56px;height:50px;mix-blend-mode:multiply;background:url(assets/4a169dfc13903b837bfc3b4f829729b2.png) no-repeat -49px -17px/152px auto}
+.brand{flex:none;font:600 15px/1 var(--sans);letter-spacing:.02em}
+.brand small{display:block;margin-top:5px;font-weight:400;font-size:11px;color:var(--muted);letter-spacing:.08em}
+.nav{margin-left:auto;display:flex;gap:4px;font-size:14px;color:var(--muted)}
+.nav a{position:relative;padding:8px 14px;border-radius:99px;white-space:nowrap;transition:color .25s,background .25s}
+.nav a:hover{color:var(--ink)}
+.nav a.current{color:var(--paper);background:var(--ink)}
+.lang{flex:none;margin-left:10px;border:1px solid var(--line);background:none;border-radius:99px;padding:7px 14px;font:500 12px/1 var(--sans);letter-spacing:.08em;cursor:pointer;transition:background .2s,color .2s}
+.lang:hover{background:var(--ink);color:var(--paper)}
+
+/* Horizontal track */
+.track{position:fixed;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.track::-webkit-scrollbar{display:none}
+.panel{position:relative;flex:0 0 100vw;width:100vw;height:100%;display:flex;overflow-x:hidden;overflow-y:auto;scroll-snap-align:start;scroll-snap-stop:always;padding:calc(var(--hh) + 36px) 0 calc(var(--bar) + 28px);scrollbar-width:thin}
+.panel>.wrap{margin:auto;position:relative;z-index:1}
+.panel::before{content:attr(data-no);position:absolute;right:3vw;bottom:calc(var(--bar) - 2vw);font:200 min(26vw,34vh)/1 var(--sans);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(17,26,21,.07);pointer-events:none}
+.dark{background:var(--ink);color:#e9ece6}
+.dark::before{-webkit-text-stroke-color:rgba(255,255,255,.06)}
+.alt{background:var(--paper2)}
+
+/* Common */
+.cols{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,6vw,96px);align-items:center}
+.kicker{display:flex;align-items:center;gap:14px;font:500 12px/1 var(--sans);letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:24px}
+.kicker::before{content:"";width:28px;height:1px;background:currentColor}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.2}
+h2{font-size:clamp(30px,3.3vw,48px)}
+h3{font-size:17px;font-weight:500;line-height:1.45}
+.lead{margin-top:20px;max-width:30em;font-size:16px;color:var(--muted);font-weight:300}
+.num{font:300 clamp(34px,3.4vw,52px)/1 var(--sans);letter-spacing:-.03em}
+.num small{font-size:.42em;margin-left:4px;color:var(--muted)}
+.label{margin-top:10px;font-size:13px;color:var(--muted)}
+.tag{font:500 11px/1 var(--sans);letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.dark .kicker,.dark .lead,.dark .label,.dark .num small,.dark .tag{color:#9aa59c}
+.dark em{color:var(--lime)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.grid3>*{padding:24px 22px 0 0}
+.grid3>*+*{padding-left:22px;border-left:1px solid var(--line)}
+.grid3 p{margin-top:8px;font-size:13px;color:var(--muted)}
+.dark .grid3,.dark .grid3>*+*{border-color:rgba(255,255,255,.12)}
+.dark .grid3 p{color:#9aa59c}
+
+/* Hero */
+.hero h1{font-size:clamp(40px,4.8vw,72px)}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:36px}
+.cta{display:inline-flex;align-items:center;gap:12px;padding:15px 26px;border-radius:99px;background:var(--ink);color:var(--paper);font-size:14px;font-weight:500;transition:transform .25s,background .25s}
+.cta:hover{background:var(--accent);transform:translateY(-2px)}
+.cta b{font-weight:400;transition:transform .25s}
+.cta:hover b{transform:translateX(4px)}
+.hint{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.hint i{width:36px;height:1px;background:currentColor;position:relative;overflow:hidden}
+.hint i::after{content:"";position:absolute;inset:0;background:var(--ink);transform:translateX(-100%);animation:slide 2.2s infinite}
+@keyframes slide{to{transform:translateX(100%)}}
+.hero .grid3{margin-top:48px}
+.hero .num{font-size:clamp(28px,2.8vw,46px);white-space:nowrap}
+.note{margin-top:20px;font-size:12px;color:var(--muted)}
+.hero-img{position:relative;height:min(64vh,620px);border-radius:4px;overflow:hidden;background:var(--paper2)}
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:55% 55%;transform:scale(1.06);transition:transform 1.8s cubic-bezier(.2,.7,.2,1)}
+.hero-img.in img{transform:scale(1)}
+.chip{position:absolute;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;background:rgba(245,243,238,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.12);font-size:12px;color:var(--muted)}
+.chip b{display:block;font:500 18px/1.2 var(--sans);color:var(--ink)}
+.chip.c1{left:20px;top:20px}.chip.c2{right:20px;bottom:20px}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+
+/* Problem */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
+.duo>div{padding:20px;background:var(--paper);border-radius:6px;transition:transform .35s,box-shadow .35s}
+.duo>div:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(17,26,21,.08)}
+.duo .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.duo .tag+.row{margin-top:14px}
+.duo .tag{text-transform:none}
+.duo .row span{font-size:12px;color:var(--muted);white-space:nowrap}
+.duo .row b{font:300 21px/1 var(--sans);color:var(--ink);white-space:nowrap}
+.duo .row.em b{color:var(--accent);font-weight:400}
+.bars{display:grid;gap:16px}
+.bars .tag{display:flex;justify-content:space-between;margin-bottom:6px}
+.bar-row{display:grid;grid-template-columns:72px 1fr 70px;align-items:center;gap:20px;font-size:13px;color:var(--muted)}
+.bar-row b{font:400 17px/1 var(--sans);color:var(--ink);text-align:right}
+.track-l{height:6px;border-radius:9px;background:var(--paper);position:relative}
+.fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:9px;background:#9fb4a6;transition:width 1.4s cubic-bezier(.2,.7,.2,1)}
+.bars.in .fill{width:var(--w)}
+.bar-row.hl,.bar-row.hl b{color:var(--accent)}.bar-row.hl .fill{background:var(--accent)}
+.bar-row.warn .fill{background:#d69456}
+.bar-row.warn b{color:#9a5b1e}
+.bars-note{display:flex;gap:18px;margin-top:2px;font-size:12px;color:var(--muted)}
+.bars-note i{display:inline-block;width:10px;height:6px;margin-right:6px;border-radius:9px;background:var(--accent)}
+.bars-note i.w{background:#d69456}
+#problem .grid3{margin-top:40px}
+
+/* Spec strip */
+.specs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:32px;border-top:1px solid var(--line)}
+.specs>div{padding:16px 14px 0 0}
+.specs>div+div{padding-left:14px;border-left:1px solid var(--line)}
+.specs span{display:block;font-size:12px;color:var(--muted)}
+.specs b{display:block;margin-top:6px;font:400 19px/1.1 var(--sans);letter-spacing:-.01em;white-space:nowrap}
+.specs b small{font-size:.62em;margin-left:3px;color:var(--muted);font-weight:400}
+.specs.two{grid-template-columns:repeat(2,1fr)}
+.specs.two>div:nth-child(3){padding-left:0;border-left:0}
+.specs.two>div:nth-child(n+3){margin-top:16px}
+.caveat{margin-top:20px;font-size:12px;color:var(--muted)}
+.caveat b{color:var(--ink);font-weight:500}
+
+/* Solution */
+.steps{margin-top:32px;border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:44px 1fr;gap:4px 10px;padding:14px 0;border-bottom:1px solid var(--line)}
+.step span{grid-row:span 2;font:500 12px/1.9 var(--sans);letter-spacing:.14em;color:var(--muted)}
+.step b{font:500 16px/1.5 var(--serif)}
+.step p{font-size:13px;color:var(--muted)}
+.ba{--pos:50%;position:relative;aspect-ratio:16/10;max-height:52vh;width:100%;border-radius:4px;overflow:hidden;cursor:ew-resize;user-select:none;touch-action:pan-y;background:var(--paper2)}
+.ba-layer,.ba-layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba-before{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.ba-tag{position:absolute;top:18px;padding:7px 13px;border-radius:99px;background:rgba(17,26,21,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:12px;white-space:nowrap}
+.ba-before .ba-tag{left:18px}.ba-after .ba-tag{right:18px}
+.ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);width:1px;background:#fff;outline:none}
+.ba-handle::after{content:"‹ ›";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;font-size:17px;letter-spacing:4px;box-shadow:0 6px 24px rgba(0,0,0,.2);transition:transform .2s}
+.ba-handle:focus-visible::after,.ba.dragging .ba-handle::after{transform:translate(-50%,-50%) scale(1.1)}
+.ba-cap{display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--muted)}
+.points{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:26px}
+.points b{display:block;font:500 15px/1.4 var(--serif);margin-bottom:4px}
+.points p{font-size:13px;color:var(--muted)}
+
+/* Science */
+.chain{display:grid;grid-template-columns:repeat(5,1fr);counter-reset:c}
+.link{padding:22px 16px 0 0;border-top:1px solid var(--ink)}
+.link::before{counter-increment:c;content:"0" counter(c);display:block;font:500 11px/1 var(--sans);letter-spacing:.18em;color:var(--muted);margin-bottom:12px}
+.link b{display:block;font:500 16px/1.4 var(--serif)}
+.link span{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+.card{padding:22px;background:var(--paper);border-radius:6px;transition:transform .35s,box-shadow .35s}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(17,26,21,.08)}
+.card .tag{display:block;margin-bottom:14px}
+.card p{margin-top:8px;font-size:13px;color:var(--muted)}
+.proof{display:flex;align-items:baseline;gap:18px;margin-top:36px;padding-top:24px;border-top:1px solid var(--line)}
+.proof p{font-size:13px;color:var(--muted);max-width:22em}
+
+/* Results */
+.meters{display:grid;gap:30px}
+.meter{display:grid;grid-template-columns:minmax(150px,.7fr) 1.3fr;gap:28px;align-items:end;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.meter .num{color:var(--ink)}
+.meter h3{margin-bottom:4px}
+.meter p{font-size:13px;color:var(--muted)}
+.gauge{position:relative;height:6px;margin-top:28px;border-radius:9px;background:var(--paper2)}
+.gauge i{position:absolute;inset:0 auto 0 0;width:0;border-radius:9px;background:var(--accent);transition:width 1.4s cubic-bezier(.2,.7,.2,1)}
+.meters.in .gauge i{width:var(--v)}
+.gauge s{position:absolute;top:-6px;bottom:-6px;left:var(--t);width:1px;background:var(--ink)}
+.gauge s::after{content:attr(data-l);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap;text-decoration:none}
+.meter.warn .gauge i{background:#d69456}
+.badge{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:99px;font:500 11px/1.4 var(--sans);vertical-align:middle;background:#e2eedf;color:var(--accent)}
+.badge.w{background:#f6e7d6;color:#9a5b1e}
+.callout{margin-top:30px;padding:18px 22px;border-left:2px solid var(--accent);background:var(--paper2);font-size:14px;color:var(--muted)}
+.callout b{color:var(--ink);font-weight:500}
+
+/* Impact */
+.sdgs{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+.sdg{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border:1px solid var(--line);border-radius:99px;font-size:13px;background:var(--paper)}
+.sdg b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--c);color:#fff;font:600 12px/1 var(--sans)}
+.paths{display:grid;gap:0;border-top:1px solid var(--line)}
+.path{display:grid;grid-template-columns:160px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
+.path b{font:500 15px/1.5 var(--serif)}
+.path p{font-size:13px;color:var(--muted)}
+.pilot{margin-top:34px}
+.pilot .tag{display:block;margin-bottom:16px;color:var(--accent)}
+.pilot-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:p}
+.pilot-steps div{padding:18px;background:var(--paper);border-radius:6px;font-size:13px;color:var(--muted)}
+.pilot-steps div::before{counter-increment:p;content:counter(p);display:grid;place-items:center;width:26px;height:26px;margin-bottom:12px;border-radius:50%;background:var(--ink);color:var(--paper);font:500 12px/1 var(--sans)}
+.pilot-steps b{display:block;margin-bottom:4px;color:var(--ink);font:500 14px/1.45 var(--serif)}
+
+/* Team */
+blockquote{margin-top:28px;padding-left:20px;border-left:2px solid var(--accent);font:500 clamp(18px,1.7vw,22px)/1.6 var(--serif)}
+.team{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.member{text-align:center}
+.avatar{aspect-ratio:1;width:min(120px,100%);margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:var(--paper2);color:var(--muted);font:300 20px/1 var(--sans);overflow:hidden;transition:transform .4s}
+.member:hover .avatar{transform:translateY(-4px)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.member b{display:block;font:500 16px/1.4 var(--serif)}
+.member span{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
+.streams{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line)}
+.streams div{padding:18px 16px 0 0;font-size:13px;color:var(--muted)}
+.streams div+div{padding-left:16px;border-left:1px solid var(--line)}
+.streams b{display:block;margin-bottom:4px;color:var(--ink);font:500 14px/1.45 var(--serif)}
+.foot{margin-top:40px;font-size:12px;color:var(--muted)}
+.phases{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:30px}
+.phases div{padding:14px 16px;border:1px solid var(--line);border-radius:6px;transition:border-color .25s}
+.phases div:hover{border-color:var(--accent)}
+.phases span{font:500 10px/1 var(--sans);letter-spacing:.18em;color:var(--accent)}
+.phases b{display:block;margin-top:8px;font:500 14px/1.4 var(--serif)}
+
+/* Bottom bar */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--bar);pointer-events:none}
+.dock .wrap{height:100%;display:flex;align-items:center;gap:24px}
+.count{font:500 12px/1 var(--sans);letter-spacing:.16em;color:var(--muted);min-width:64px}
+.count b{color:var(--ink);font-weight:500}
+.prog{flex:1;height:1px;background:var(--line);position:relative}
+.prog i{position:absolute;inset:0 auto 0 0;width:0;background:var(--ink);transition:width .2s linear}
+.arrows{display:flex;gap:8px;pointer-events:auto}
+.arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(245,243,238,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;font-size:16px;transition:background .2s,color .2s,opacity .2s}
+.arrows button:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+.arrows button:disabled{opacity:.3;cursor:default}
+body.on-dark .count,body.on-dark .count b{color:#c7cec6}
+body.on-dark .prog{background:rgba(255,255,255,.15)}body.on-dark .prog i{background:#e9ece6}
+body.on-dark .arrows button{border-color:rgba(255,255,255,.2);background:rgba(17,26,21,.5);color:#e9ece6}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateX(40px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
+
+@media (max-width:1100px){
+ .brand small{display:none}
+ .nav a{padding:7px 10px}
+}
+@media (max-width:900px){
+ :root{--hh:108px;--bar:58px;--wrap:calc(100% - 44px)}
+ .header .wrap{flex-wrap:wrap;align-content:center;gap:4px 12px}
+ .logo{width:44px;height:40px;background-position:-39px -14px;background-size:122px auto}
+ .brand small{display:block}
+ .nav{order:3;width:100%;margin:0 -6px;overflow-x:auto;scrollbar-width:none;font-size:13px}
+ .nav::-webkit-scrollbar{display:none}
+ .lang{margin-left:auto}
+ .cols{grid-template-columns:1fr;gap:36px}
+ .hero-img{height:auto;aspect-ratio:4/3}
+ .panel{padding-top:calc(var(--hh) + 28px)}
+ .panel::before{font-size:40vw}
+ .pilot-steps{grid-template-columns:repeat(2,1fr)}
+ .chain{grid-template-columns:repeat(3,1fr);row-gap:24px}
+ .team{grid-template-columns:repeat(3,1fr);row-gap:28px}
+ .streams{grid-template-columns:repeat(2,1fr);row-gap:20px}
+ .streams div:nth-child(3){padding-left:0;border-left:0}
+ .ba{max-height:none}
+}
+@media (max-width:560px){
+ .grid3,.cards,.points,.duo{grid-template-columns:1fr}
+ .specs{grid-template-columns:repeat(2,1fr)}
+ .specs>div:nth-child(3){padding-left:0;border-left:0}
+ .specs>div:nth-child(n+3){margin-top:16px}
+ .grid3>*+*{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+ .dark .grid3>*+*{border-color:rgba(255,255,255,.12)}
+ .grid3>*{padding:18px 0}
+ .chain{grid-template-columns:repeat(2,1fr)}
+ .team{grid-template-columns:repeat(2,1fr)}
+ .path{grid-template-columns:1fr;gap:4px}
+ .meter{grid-template-columns:1fr;gap:6px}
+ .bar-row{grid-template-columns:60px 1fr 58px;gap:12px}
+ .ba-tag{font-size:11px;top:10px;padding:5px 9px}.ba-before .ba-tag{left:10px}.ba-after .ba-tag{right:10px}
+ .hint{display:none}
+}
+</style>
 </head>
 <body>
-<header class="header"><div class="logo" role="img" aria-label="AeroGuard" style="flex:none;width:56px;height:50px;mix-blend-mode:multiply;background:url(assets/4a169dfc13903b837bfc3b4f829729b2.png) no-repeat -49px -17px/152px auto"></div><div class="brand">康莱德挑战赛</div><div class="divider"></div><div class="project">植保无人机</div><nav class="nav" aria-label="网站分类"><a class="current" aria-current="page" href="#home">首页</a><a href="#problem">问题</a><a href="#innovation">创新</a><a href="#science">科学</a><a href="#impact">影响</a><a href="#team">团队</a></nav><button class="language-toggle" id="language-toggle" type="button" aria-label="Switch to English">EN</button><div class="status">模型读数校验通过</div></header>
-<main id="home">
-<section class="hero"><canvas class="hero-fx" aria-hidden="true"></canvas><div class="hero-glow" aria-hidden="true"></div><div class="hero-inner">
-<div class="hero-copy"><div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>PRECISION AGRICULTURE · CONRAD CHALLENGE</div><h1>让每一滴药液，<br><em>精准落在田间</em></h1><p class="intro">AeroGuard 帮植保无人机对抗风的干扰：先算出药液会飘到哪里，再主动把它引回田里——目标是少浪费、少污染，扩大可安全作业的风速窗口。</p><div class="actions"><div class="cta-group"><a class="button" href="#innovation">探索 AeroGuard 方案 <b>→</b></a><a class="button ghost" href="#ops-console"><span class="play" aria-hidden="true">▶</span>查看作业监控界面</a></div></div><div class="hero-stats"><div class="hero-stat"><b>88.98<small>%</small></b><span>田内沉积占比</span></div><div class="hero-stat"><b>12,000</b><span>代表液滴数</span></div><div class="hero-stat"><b>26 / 26</b><span>关键读数独立复核</span></div></div><p class="fineprint">以下为 2.0 m/s 横风基线仿真 · 作为衡量 AeroGuard 效果的参照组</p></div>
-<div class="hero-visual"><div class="map"><div class="maphead"><span>基线作业场景</span><span>路线规划示意</span></div><div class="field"><svg viewBox="0 0 760 490" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="rows" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M0 0H18" stroke="#c2ed8a" stroke-opacity=".15" stroke-width="4"/></pattern></defs><polygon points="104,42 735,72 692,444 65,403"/><polygon class="inner" points="116,55 721,84 680,430 79,391"/><g fill="url(#rows)"><path d="M104 42 735 72 692 444 65 403Z"/></g><path class="route" d="M137 84 703 108 696 143 128 119ZM126 147 696 171 690 207 118 183ZM115 211 689 235 682 270 107 247ZM104 275 681 299 674 335 96 311ZM93 339 673 362 667 399 85 374Z"/></svg><div class="tag a">60 × 40 m 模拟田块</div><div class="tag b">10 趟往复航线 · 6 m 间距</div><div class="drone"><svg viewBox="0 0 180 110" fill="none" aria-hidden="true"><g stroke="#efffed" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M68 52 31 27M112 52l37-25M68 61 31 84M112 61l37 23M22 26h20M138 26h20M22 85h20M138 85h20"/><ellipse cx="90" cy="57" rx="24" ry="12" fill="#287c51"/><path d="m80 68-7 15h34l-7-15M84 54h12M90 48v17"/></g><g fill="#c9ef83"><circle cx="31" cy="27" r="3"/><circle cx="149" cy="27" r="3"/><circle cx="31" cy="84" r="3"/><circle cx="149" cy="84" r="3"/></g></svg></div></div><div class="mapfoot"><span>往复喷洒轨迹</span><span class="legend">计划航线</span><span>喷幅 8.0 m</span></div></div>
-<div class="hero-float f1"><span class="hf-ico" aria-hidden="true">≋</span><div><small>定常横风</small><b>2.0 m/s</b></div></div><div class="hero-float f2"><span class="hf-ring" style="--p:10.12" aria-hidden="true"></span><div><small>出田质量</small><b>10.12%</b></div></div></div>
-</div><a class="hero-scroll" href="#results"><i aria-hidden="true"></i><span>向下查看核心仿真结果</span></a></section>
-<section class="content" id="results"><div class="section-title"><div><div class="kicker">BASELINE SIMULATION · 01</div><h2>核心仿真结果</h2></div><div class="hint">覆盖判据：田内沉积占比 <strong>≥85%</strong>，漏喷块率 <strong>&lt;25%</strong>。以下为 2.0 m/s 基线工况的模型输出。</div></div>
-<div class="metrics">
-<article class="metric primary"><div class="mlabel">田内沉积占比</div><div class="value">88.98<small>%</small></div><div class="meta"><b>达到设定判据</b> · 目标 ≥85%<br>按 0.3 m 网格沉积量计算</div></article>
-<article class="metric"><div class="mlabel">漏喷块率</div><div class="value">12.69<small>%</small></div><div class="meta"><b>低于设定上限</b> · 33 / 260 块<br>按 3 m 作业尺度方块判定</div></article>
-<article class="metric"><div class="mlabel">出田质量占比</div><div class="value">10.12<small>%</small></div><div class="meta">模型估算的田外落点质量<br>飘移风险随风速上升而增加</div></article>
-<article class="metric"><div class="mlabel">剂量变异系数 CV</div><div class="value">45.9<small>%</small></div><div class="meta">3 m 方块剂量离散程度<br>下一轮均匀性优化的重点</div></article>
-</div>
-<div class="lower"><article class="wind" id="wind"><div class="cardtitle">风速变化如何影响田内落点</div><div class="sub">风速扫描口径：田内落点质量占比（与上方网格沉积占比为不同指标） <span class="legendtext"><i></i>田内落点 <i></i>85%经验线</span></div><div class="chart" role="img" aria-label="风速2米每秒时田内落点质量占比89.88%，3米每秒时84.40%，低于85%经验线"><div class="threshold"><span>85% 经验线</span></div><div class="bars"><div class="barbox" style="--h:82%"><span class="barval">89.88%</span><div class="bar"></div><span class="barlabel">2.0 m/s</span></div><div class="barbox" style="--h:37%"><span class="barval">84.40%</span><div class="bar"></div><span class="barlabel">3.0 m/s</span></div></div></div><div class="summary">模型显示，风速升至 3.0 m/s 时，田内落点质量占比降至 <strong>84.40%</strong>，首次低于项目设定的 85% 经验判据。</div></article>
-<article class="scenario"><div class="cardtitle">基线工况参数</div><div class="sub">本项目仿真模型采用的参考工况</div><div class="scenario-grid"><div class="scenario-item"><span>田块尺寸</span><strong>60 × 40 <small>m</small></strong></div><div class="scenario-item"><span>定常横风</span><strong>2.0 <small>m/s</small></strong></div><div class="scenario-item"><span>喷洒高度</span><strong>2.5 <small>m</small></strong></div><div class="scenario-item"><span>喷幅 / 航线</span><strong>8 / 10 <small>m / 趟</small></strong></div><div class="scenario-item"><span>航线间距</span><strong>6.0 <small>m</small></strong></div><div class="scenario-item"><span>代表液滴数</span><strong>12,000 <small>颗</small></strong></div></div><div class="scenario-note">仿真结果，非田间实测</div></article></div>
-<div class="dpanel"><div class="dpanel-h"><div><div class="kicker">DEPOSITION FIELD · READOUTS</div><h3>沉积场完整读数</h3></div><p>2.0 m/s 基线工况；视窗 120 × 80 m，0.3 m 网格（400 × 267 格），高斯核 σ = 0.45 m。</p></div>
-<div class="dgroup">田内沉积场 <small>8 项读数</small></div>
-<div class="dkv"><div><span>峰值沉积</span><strong>0.3207<small>g/m²</small></strong><em>位置 (8.25, 7.45) m</em></div><div><span>田内沉积总量</span><strong>73.443<small>g</small></strong><em>Σ沉积密度 × 单格面积 0.09 m²</em></div><div><span>沉积均匀度 P95/P50</span><strong>4.36</strong><em>越接近 1 越均匀</em></div><div><span>药带宽度</span><strong>51.3<small>m</small></strong><em>沉积剖面半高宽</em></div><div><span>出田滴数</span><strong>41.81<small>%</small></strong><em>按液滴个数统计</em></div><div><span>出田质量</span><strong>10.124<small>%</small></strong><em>按液滴质量统计</em></div><div><span>最远漂移</span><strong>451.86<small>m</small></strong><em>20 µm、无蒸发假设上限</em></div><div><span>守恒校验</span><strong>0.999973</strong><em>差值为视窗边缘截断</em></div></div>
-<div class="dgroup" style="margin-top:14px">药液质量去向 <small>田内 73.443 g · 田外 8.278 g</small></div>
-<div class="dsplit"><span class="a" style="width:89.88%">田内落点 89.88%</span><span class="b" style="width:10.12%">10.12%</span></div>
-<div class="dkv"><div><span>漂移沉积总量</span><strong>8.278<small>g</small></strong><em>粒子法统计</em></div><div><span>漂移占施药量</span><strong>10.12<small>%</small></strong><em>与网格法 10.124% 一致</em></div><div><span>漂移最远点</span><strong>452.1<small>m</small></strong><em>由谱截断下限 20 µm 决定</em></div><div><span>漂移覆盖面积</span><strong>7,925.0<small>m²</small></strong><em>漂移落点 5,017 颗（41.81%）</em></div></div></div>
-<p class="source">数据来源：团队自研喷洒仿真模型。仿真用于方案分析，实际效果仍需田间试验验证。</p>
-</section>
-<section class="problem-section" id="problem">
-<div class="problem-inner">
-<div class="problem-head"><div><div class="problem-kicker">THE PROBLEM · 02</div><h2>喷出去的药液，未必留在目标田块</h2></div><p class="problem-lead">风会把细小液滴吹离作物，落进土壤、水体和周边植物——既污染环境，又白白浪费药液。液滴越细，越容易被吹走。</p></div>
-<div class="problem-grid">
-<article class="drift-card"><div class="drift-top"><div><div class="drift-title">风速升高，出田质量随之增加</div><div class="drift-sub">模拟田块外的落点质量占总落点质量比例</div></div><span class="wind-range">风速扫描</span></div>
-<div class="risk-list" role="img" aria-label="风速0.5米每秒时出田质量3.322%，2米每秒时10.124%，3米每秒时15.600%，8米每秒时39.550%">
-<div class="risk-row"><span>0.5 m/s</span><div class="risk-track"><div class="risk-fill" style="--w:8.4%"></div></div><b>3.32%</b></div>
-<div class="risk-row"><span>2.0 m/s</span><div class="risk-track"><div class="risk-fill" style="--w:25.6%"></div></div><b>10.12%</b></div>
-<div class="risk-row"><span>3.0 m/s</span><div class="risk-track"><div class="risk-fill" style="--w:39.5%"></div></div><b>15.60%</b></div>
-<div class="risk-row"><span>8.0 m/s</span><div class="risk-track"><div class="risk-fill" style="--w:100%"></div></div><b>39.55%</b></div></div>
-<p class="risk-note">风速从 2.0 升到 3.0 m/s，飘出田外的药液从 10.12% 增至 15.60%。</p></article>
-<div class="problem-side">
-<article class="problem-card"><div class="problem-index">01 / DROPLET DRIFT</div><h3>极细液滴滞空更久，更容易受风影响</h3><div class="drop-compare"><div><span>20 µm</span><strong>210.6 s</strong><small>落下 2.5 m</small></div><i>→</i><div><span>400 µm</span><strong>1.62 s</strong><small>落下 2.5 m</small></div></div><p class="problem-copy">按液滴下落模型计算，最细液滴为理论值。</p></article>
-<article class="problem-card"><div class="problem-index">02 / MEASUREMENT</div><h3>出田滴数占比，不等于出田质量占比</h3><div class="count-mass"><div><span>田外液滴数量占比</span><strong>41.81<small>%</small></strong></div><div><span>田外液滴质量占比</span><strong>10.12<small>%</small></strong></div></div><p class="problem-copy">飘出去的多是细小液滴：数量多，药量却少，两者要分开看。</p></article>
-</div></div>
-<div class="dpanel"><div class="dpanel-h"><div><div class="kicker">WIND SWEEP · 8 CASES</div><h3>风速扫描与液滴滞空：完整模型输出</h3></div><p>同一航线、喷头与滴谱，仅改变定常横风；“田内落点质量” = 100% − 出田质量，与网格口径的田内沉积占比不同。</p></div>
-<div class="dgrid"><div><div class="dgroup">风速扫描 <small>高亮行为 2.0 m/s 基线</small></div><div class="dscroll"><table class="dtable"><thead><tr><th>风速</th><th>田内落点质量</th><th>出田质量</th><th>最远落点</th><th class="n">峰值 g/m²</th><th>DB37/T 3940</th></tr></thead><tbody>
-<tr><td class="n">0.5 m/s</td><td><div class="dbar"><i style="--w:96.68%"></i><b>96.68%</b></div></td><td><div class="dbar g"><i style="--w:8.3%"></i><b>3.322%</b></div></td><td><div class="dbar m"><i style="--w:7.9%"></i><b>136.0 m</b></div></td><td class="n">0.3009</td><td><span class="st ok">合规</span></td></tr>
-<tr><td class="n">1.0 m/s</td><td><div class="dbar"><i style="--w:94.66%"></i><b>94.66%</b></div></td><td><div class="dbar g"><i style="--w:13.4%"></i><b>5.344%</b></div></td><td><div class="dbar m"><i style="--w:14.1%"></i><b>241.3 m</b></div></td><td class="n">0.3396</td><td><span class="st ok">合规</span></td></tr>
-<tr class="base"><td class="n">2.0 m/s</td><td><div class="dbar"><i style="--w:89.88%"></i><b>89.88%</b></div></td><td><div class="dbar g"><i style="--w:25.3%"></i><b>10.124%</b></div></td><td><div class="dbar m"><i style="--w:26.3%"></i><b>451.9 m</b></div></td><td class="n">0.3207</td><td><span class="st ok">合规</span></td></tr>
-<tr><td class="n">3.0 m/s</td><td><div class="dbar low"><i style="--w:84.40%"></i><b>84.40%</b></div></td><td><div class="dbar g"><i style="--w:39%"></i><b>15.600%</b></div></td><td><div class="dbar m"><i style="--w:38.6%"></i><b>662.5 m</b></div></td><td class="n">0.3194</td><td><span class="st part">临界</span></td></tr>
-<tr><td class="n">4.0 m/s</td><td><div class="dbar low"><i style="--w:79.03%"></i><b>79.03%</b></div></td><td><div class="dbar g"><i style="--w:52.4%"></i><b>20.974%</b></div></td><td><div class="dbar m"><i style="--w:50.9%"></i><b>873.1 m</b></div></td><td class="n">0.2970</td><td><span class="st part">慎飞</span></td></tr>
-<tr><td class="n">5.0 m/s</td><td><div class="dbar low"><i style="--w:74.58%"></i><b>74.58%</b></div></td><td><div class="dbar g"><i style="--w:63.6%"></i><b>25.423%</b></div></td><td><div class="dbar m"><i style="--w:63.2%"></i><b>1083.7 m</b></div></td><td class="n">0.2642</td><td><span class="st part">慎飞</span></td></tr>
-<tr><td class="n">6.0 m/s</td><td><div class="dbar low"><i style="--w:69.29%"></i><b>69.29%</b></div></td><td><div class="dbar g"><i style="--w:76.8%"></i><b>30.709%</b></div></td><td><div class="dbar m"><i style="--w:75.5%"></i><b>1294.3 m</b></div></td><td class="n">0.2474</td><td><span class="st bad">超国标</span></td></tr>
-<tr><td class="n">8.0 m/s</td><td><div class="dbar low"><i style="--w:60.45%"></i><b>60.45%</b></div></td><td><div class="dbar g"><i style="--w:98.9%"></i><b>39.550%</b></div></td><td><div class="dbar m"><i style="--w:100%"></i><b>1715.5 m</b></div></td><td class="n">0.2512</td><td><span class="st bad">超国标</span></td></tr>
-</tbody></table></div><p class="dnote">风越大，留在田内的药液越少、飘得越远；3.0 m/s 时跌破 85% 达标线，恰好是 DB37/T 3940-2020 的“慎飞”边界。</p></div>
-<div><div class="dgroup">液滴粒径与滞空时间 <small>喷洒高度 2.5 m</small></div><div class="dscroll"><table class="dtable"><thead><tr><th>粒径</th><th class="n">终端速度</th><th>落下 2.5 m 用时（对数刻度）</th><th class="n">2.0 m/s 风下漂移</th></tr></thead><tbody>
-<tr><td class="n">20 µm</td><td class="n">0.0119 m/s</td><td><div class="dbar g"><i style="--w:100%"></i><b>210.599 s</b></div></td><td class="n">≈ 421.2 m</td></tr>
-<tr><td class="n">50 µm</td><td class="n">0.0697 m/s</td><td><div class="dbar g"><i style="--w:66.9%"></i><b>35.847 s</b></div></td><td class="n">≈ 71.7 m</td></tr>
-<tr class="base"><td class="n">100 µm</td><td class="n">0.2378 m/s</td><td><div class="dbar g"><i style="--w:44%"></i><b>10.514 s</b></div></td><td class="n">≈ 21.0 m</td></tr>
-<tr><td class="n">200 µm</td><td class="n">0.6706 m/s</td><td><div class="dbar g"><i style="--w:24.6%"></i><b>3.728 s</b></div></td><td class="n">≈ 7.5 m</td></tr>
-<tr><td class="n">300 µm</td><td class="n">1.1167 m/s</td><td><div class="dbar g"><i style="--w:15.1%"></i><b>2.239 s</b></div></td><td class="n">≈ 4.5 m</td></tr>
-<tr><td class="n">400 µm</td><td class="n">1.5461 m/s</td><td><div class="dbar g"><i style="--w:9%"></i><b>1.617 s</b></div></td><td class="n">≈ 3.2 m</td></tr>
-<tr><td class="n">600 µm</td><td class="n">2.3472 m/s</td><td><div class="dbar g"><i style="--w:3%"></i><b>1.065 s</b></div></td><td class="n">≈ 2.1 m</td></tr>
-</tbody></table></div><p class="dnote">漂移距离 = 风速 × 下落时间（不计蒸发）；高亮行接近平均粒径。</p>
-<div class="dgroup" style="margin-top:12px">作业条件合规判定 <small>DB37/T 3940-2020</small></div>
-<div class="dchips"><span>风速 2.0 m/s <b class="st ok">合规</b></span><span>风速 3.5 m/s <b class="st part">超部分标准</b></span><span>风速 5.5 m/s <b class="st bad">超国标</b></span><span>风速 8.0 m/s <b class="st bad">超国标</b></span><span>温度 3.0 ℃ <b class="st bad">超国标</b></span><span>温度 15.0 ℃ <b class="st ok">合规</b></span><span>温度 25.0 ℃ <b class="st ok">合规</b></span><span>温度 38.0 ℃ <b class="st bad">超国标</b></span></div></div></div></div>
-<div class="problem-foot"><strong>问题核心：</strong>飘移有三重代价：污染水体、伤害野生动植物；推高农户药费；只能等无风天作业。AeroGuard 正为解决这些问题而来。</div>
+
+<header class="header"><div class="wrap">
+ <div class="logo" role="img" aria-label="AeroGuard"></div>
+ <div class="brand">AeroGuard<small data-en="CONRAD CHALLENGE · CROP DRONES">康莱德挑战赛 · 植保无人机</small></div>
+ <nav class="nav" id="nav" aria-label="网站分类">
+  <a href="#home" data-en="Home">首页</a>
+  <a href="#problem" data-en="Problem">问题</a>
+  <a href="#solution" data-en="Solution">方案</a>
+  <a href="#science" data-en="Science">科学</a>
+  <a href="#results" data-en="Results">结果</a>
+  <a href="#impact" data-en="Impact">影响</a>
+  <a href="#team" data-en="Team">团队</a>
+ </nav>
+ <button class="lang" id="lang" type="button" aria-label="Switch to English">EN</button>
+</div></header>
+
+<main class="track" id="track">
+
+<!-- 00 首页 -->
+<section class="panel hero" id="home" data-no="00"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="Conrad Challenge · Precision spraying">Conrad Challenge · 精准植保</div>
+  <h1 data-en="Every droplet,<br><em>right on target.</em>">让每一滴药液，<br><em>精准落在田间</em></h1>
+  <p class="lead" data-en="AeroGuard helps crop-spraying drones fight the wind: it predicts where spray will drift, then actively guides it back onto the field — less waste, less pollution, and a wider safe-to-fly wind window.">AeroGuard 帮植保无人机对抗风的干扰：先算出药液会飘到哪里，再主动把它引回田里——少浪费、少污染，扩大可安全作业的风速窗口。</p>
+  <div class="ctas"><a class="cta" href="#solution"><span data-en="Explore the solution">了解方案</span> <b>→</b></a><span class="hint"><i></i><span data-en="Scroll or swipe sideways">滚动或横滑浏览</span></span></div>
+  <div class="grid3">
+   <div><div class="num">88.98<small>%</small></div><div class="label" data-en="In-field deposition">田内沉积占比</div></div>
+   <div><div class="num">12,000</div><div class="label" data-en="Simulated droplets">代表液滴仿真</div></div>
+   <div><div class="num">26<small>/ 26</small></div><div class="label" data-en="Readings cross-checked">关键读数独立复核</div></div>
+  </div>
+  <p class="note" data-en="Baseline simulation at 2.0 m/s crosswind; field validation pending.">2.0 m/s 横风基线仿真结果，尚待田间验证。</p>
+ </div>
+ <figure class="hero-img reveal d1"><img src="assets/after.jpg" alt="植保无人机在田间喷洒作业" fetchpriority="high">
+  <div class="chip c1"><i></i><div><span data-en="Steady crosswind">定常横风</span><b>2.0 m/s</b></div></div>
+  <div class="chip c2"><div><span data-en="Off-field mass">出田质量</span><b>10.12%</b></div></div>
+ </figure>
 </div></section>
-<section class="chapter" id="innovation">
-<div class="chapter-inner"><div class="chapter-head"><div><div class="chapter-kicker">INNOVATION · 03</div><h2>AeroGuard：主动把药液拉回田里</h2></div><p class="chapter-desc">加装在植保无人机上的轻量模块：感知风向 → 计算修正 → 偏转喷嘴 → 液滴回到目标。目前已完成仿真与航线规划，用来量化飘移、指导修正。</p></div>
-<div class="visual-row" id="concept-demo">
-<figure class="visual-card"><div class="concept-frame"><!-- 替换为：<img src="assets/aeroguard-3d.jpg" alt="AeroGuard 导流件 3D 概念图"> 并删除下方 span --><span>AeroGuard 导流件 3D 概念图</span></div><figcaption class="visual-cap"><b>CONCEPT RENDER · 16:9</b><span>导流件结构设计方案</span></figcaption></figure>
-<figure class="visual-card"><div class="ba-compare" id="ba-compare">
-<div class="ba-layer ba-after"><img src="assets/after.jpg" alt="植保无人机喷雾经气流导向后垂直压向作物" style="object-position:55% 60%" draggable="false"><span class="ba-label r">加装后（设计目标）：引导回田</span></div>
-<div class="ba-layer ba-before"><img src="assets/before.jpg" alt="植保无人机细雾被侧风吹散飘出田外" style="object-position:30% 60%" draggable="false"><span class="ba-label">无导流（基线仿真）：出田 10.12%</span></div>
-<div class="ba-handle" role="slider" tabindex="0" aria-labelledby="ba-hint" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span aria-hidden="true"></span></div>
-</div><figcaption class="visual-cap"><b>BEFORE / AFTER</b><span id="ba-hint">拖动中线对比沉积效果</span></figcaption></figure>
-</div>
-<div class="feature-table-wrap"><table class="feature-table"><thead><tr><th>作业环节</th><th>方案方法</th><th>基线工况输出</th></tr></thead><tbody>
-<tr><td>航线规划</td><td>根据喷幅自动算出最少趟数，均匀铺设往复航线。</td><td>喷幅 8 m · 10 趟 · 实际间距 6 m · 实际重叠 25%</td></tr>
-<tr><td>液滴与风漂</td><td>模拟上万颗液滴在风中的下落与飘移。</td><td>12,000 颗代表液滴 · 横风 2.0 m/s · 出田质量 10.124%</td></tr>
-<tr><td>沉积评估</td><td>统计田内落药量，找出漏喷区域，检查喷得是否均匀。</td><td>田内沉积 88.98% · 漏喷块率 12.69% · CV 45.9%</td></tr>
-<tr><td>结果校核</td><td>两种独立方法交叉核对，26 项读数按显示精度一致。</td><td>26 / 26 项显示值一致 · 两种路径出田质量均为 10.124%</td></tr>
-</tbody></table></div>
-<div class="innovation-callout"><div class="innovation-point"><b>贴近真实</b>液滴大小、阵风、喷杆晃动分别建模，可逐项分析误差来源。</div><div class="innovation-point"><b>漏喷看得见</b>细网格看落药，大方块找漏喷，结果直接对应田间作业。</div><div class="innovation-point"><b>标准清晰</b>项目达标线与行业风速标准分开标注，一目了然。</div></div>
-<div class="dpanel"><div class="dpanel-h"><div><div class="kicker">ROUTE PLAN · 10 PASSES</div><h3>航线规划明细</h3></div><p>航线自东向西推进，首末趟压住田界、喷洒不越界，两端各留 3 m 掉头。</p></div>
-<div class="dgrid"><div><div class="dscroll"><table class="dtable"><thead><tr><th>趟号</th><th class="n">横向位置 x</th><th>田块内位置（西 → 东）</th><th>飞行方向</th><th>喷洒长度</th></tr></thead><tbody>
-<tr><td class="n">01</td><td class="n">+27.0 m</td><td><div class="dpos" style="--p:95%"></div></td><td><span class="dir">↑</span>近端 → 远端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">02</td><td class="n">+21.0 m</td><td><div class="dpos" style="--p:85%"></div></td><td><span class="dir">↓</span>远端 → 近端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">03</td><td class="n">+15.0 m</td><td><div class="dpos" style="--p:75%"></div></td><td><span class="dir">↑</span>近端 → 远端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">04</td><td class="n">+9.0 m</td><td><div class="dpos" style="--p:65%"></div></td><td><span class="dir">↓</span>远端 → 近端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">05</td><td class="n">+3.0 m</td><td><div class="dpos" style="--p:55%"></div></td><td><span class="dir">↑</span>近端 → 远端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">06</td><td class="n">−3.0 m</td><td><div class="dpos" style="--p:45%"></div></td><td><span class="dir">↓</span>远端 → 近端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">07</td><td class="n">−9.0 m</td><td><div class="dpos" style="--p:35%"></div></td><td><span class="dir">↑</span>近端 → 远端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">08</td><td class="n">−15.0 m</td><td><div class="dpos" style="--p:25%"></div></td><td><span class="dir">↓</span>远端 → 近端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">09</td><td class="n">−21.0 m</td><td><div class="dpos" style="--p:15%"></div></td><td><span class="dir">↑</span>近端 → 远端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-<tr><td class="n">10</td><td class="n">−27.0 m</td><td><div class="dpos" style="--p:5%"></div></td><td><span class="dir">↓</span>远端 → 近端</td><td><div class="dbar"><i style="--w:100%"></i><b>40.0 m</b></div></td></tr>
-</tbody></table></div></div>
-<div><div class="dgroup">航线参数 <small>喷幅 + 目标重叠率 → 趟数与间距</small></div>
-<div class="dkv"><div><span>喷幅</span><strong>8.0<small>m</small></strong><em>喷头标定值</em></div><div><span>目标重叠 → 有效步进</span><strong>20%<small>→ 6.40 m</small></strong><em>反推最少趟数</em></div><div><span>实际间距</span><strong>6.000<small>m</small></strong><em>60 m 均匀铺 10 趟</em></div><div><span>实际重叠</span><strong>2.000<small>m · 25%</small></strong><em>高于目标 20%</em></div><div><span>几何覆盖率</span><strong>106.7<small>%</small></strong><em>≥100% 即几何铺满</em></div><div><span>作业跨度 LROUTE</span><strong>46.0<small>m</small></strong><em>40 m + 2 × 田头 3 m</em></div><div><span>喷洒里程</span><strong>400.0<small>m</small></strong><em>10 趟 × 40 m</em></div><div><span>飞行里程</span><strong>460.0<small>m</small></strong><em>含田头只飞不喷段</em></div></div>
-<div class="dgroup" style="margin-top:14px">作业时间轴 <small>作业速度 3.0 m/s</small></div>
-<table class="dtable"><tbody><tr><td>作业时长 tTask</td><td><div class="dbar"><i style="--w:38.8%"></i><b>133.333 s</b></div></td></tr><tr><td>99% 质量落地 t99</td><td><div class="dbar"><i style="--w:39.4%"></i><b>135.481 s</b></div></td></tr><tr><td>最后一颗落地 t100</td><td><div class="dbar g"><i style="--w:100%"></i><b>343.709 s</b></div></td></tr></tbody></table>
-<p class="dnote">最后 1% 的药液来自极细液滴，要飘 200 秒以上才落地。</p></div></div></div>
-<div class="ops-block" id="ops-console">
-<div class="ops-head"><div><div class="chapter-kicker">OPERATION CONSOLE · CONCEPT</div><h3>从仿真结果到作业界面</h3></div><p>以 2.0 m/s 风速为例，把航线、飘移预测和达标判断放进一块飞手一眼看懂的面板。</p></div>
-<div class="ops-console" aria-label="作业监控概念界面">
-<div class="ops-top"><div class="ops-brand"><b>植保无人机</b><span>作业监控台</span></div><div class="ops-tabs"><span class="on">作业监控</span><span>喷头标定</span><span>历史记录</span></div><div class="ops-top-r"><span class="ops-pill">仿真模式</span><span class="ops-live">模型在线</span><span>基线工况</span></div></div>
-<div class="ops-body">
-<div class="ops-main">
-<div class="ops-task"><b>任务</b><b>SIM-01 · 田块 A</b><span class="ops-rec">回放中</span><span class="ops-time"><span>航程回放</span> <b id="ops-clock">00:00</b> / 02:33</span></div>
-<div class="ops-map" id="ops-map">
-<svg viewBox="0 0 960 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-<defs>
-<clipPath id="opsClip"><rect x="160" y="155" width="420" height="280"/></clipPath>
-<linearGradient id="opsDrift" x1="0" x2="1"><stop offset="0" stop-color="#d9a441" stop-opacity=".75"/><stop offset=".5" stop-color="#d9a441" stop-opacity=".34"/><stop offset="1" stop-color="#d9a441" stop-opacity="0"/></linearGradient>
-<linearGradient id="opsDep" x1="0" x2="1"><stop offset="0" stop-color="#3f9c6c" stop-opacity=".34"/><stop offset="1" stop-color="#8be0a8" stop-opacity=".5"/></linearGradient>
-<radialGradient id="opsHot"><stop offset="0" stop-color="#c4f7d2" stop-opacity=".7"/><stop offset="1" stop-color="#c4f7d2" stop-opacity="0"/></radialGradient>
-<radialGradient id="opsPlume" cx=".3" cy=".5" r=".7"><stop offset="0" stop-color="#e3ffe9" stop-opacity=".9"/><stop offset="1" stop-color="#9df0b8" stop-opacity="0"/></radialGradient>
-<marker id="opsArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#f3f6f1"/></marker>
-</defs>
-<image href="assets/ops-field.jpg" x="0" y="0" width="960" height="500" preserveAspectRatio="xMidYMid slice"/>
-<path d="M0 0H960V500H0Z M160 155V435H580V155Z" fill="#0b1f17" fill-opacity=".36" fill-rule="evenodd"/>
-<g class="ops-layer" data-layer="dep">
-<g class="ops-bands" clip-path="url(#opsClip)" fill="url(#opsDep)"><rect x="531" y="155" width="56" height="280"/><rect x="489" y="155" width="56" height="280"/><rect x="447" y="155" width="56" height="280"/><rect x="405" y="155" width="56" height="280"/><rect x="363" y="155" width="56" height="280"/><rect x="321" y="155" width="56" height="280"/><rect x="279" y="155" width="56" height="280"/><rect x="237" y="155" width="56" height="280"/><rect x="195" y="155" width="56" height="280"/><rect x="153" y="155" width="56" height="280"/></g>
-<ellipse class="ops-hot" cx="428" cy="383" rx="64" ry="42" fill="url(#opsHot)" clip-path="url(#opsClip)"/>
-<g class="ops-drift"><rect x="580" y="146" width="132" height="298" fill="url(#opsDrift)"/><line x1="580" y1="148" x2="580" y2="442" stroke="#e8bd5c" stroke-width="2.5" stroke-dasharray="8 6"/></g>
-</g>
-<g class="ops-layer" data-layer="bound"><rect x="160" y="155" width="420" height="280" fill="none" stroke="#c8f5d2" stroke-width="2.5"/><g fill="#fbfcf8"><circle cx="160" cy="155" r="4"/><circle cx="580" cy="155" r="4"/><circle cx="580" cy="435" r="4"/><circle cx="160" cy="435" r="4"/></g></g>
-<g class="ops-layer" data-layer="route">
-<path id="opsRoute" d="M559 456L559 134A21 21 0 0 0 517 134L517 456A21 21 0 0 1 475 456L475 134A21 21 0 0 0 433 134L433 456A21 21 0 0 1 391 456L391 134A21 21 0 0 0 349 134L349 456A21 21 0 0 1 307 456L307 134A21 21 0 0 0 265 134L265 456A21 21 0 0 1 223 456L223 134A21 21 0 0 0 181 134L181 456" fill="none" stroke="#eef7f0" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="6 6"/>
-<path d="M559 456L559 134A21 21 0 0 0 517 134L517 456A21 21 0 0 1 475 456L475 134A21 21 0 0 0 433 134L433 456A21 21 0 0 1 391 456L391 134A21 21 0 0 0 349 134L349 456A21 21 0 0 1 307 456L307 134A21 21 0 0 0 265 134L265 456A21 21 0 0 1 223 456L223 134A21 21 0 0 0 181 134L181 456" pathLength="1000" fill="none" stroke="#a6f2bf" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1000" stroke-dashoffset="1000"><animate attributeName="stroke-dashoffset" from="1000" to="0" dur="46s" repeatCount="indefinite"/></path>
-<g fill="#f3f6f1"><polygon points="553,301 559,290 565,301"/><polygon points="511,290 517,301 523,290"/><polygon points="469,301 475,290 481,301"/><polygon points="427,290 433,301 439,290"/><polygon points="385,301 391,290 397,301"/><polygon points="343,290 349,301 355,290"/><polygon points="301,301 307,290 313,301"/><polygon points="259,290 265,301 271,290"/><polygon points="217,301 223,290 229,301"/><polygon points="175,290 181,301 187,290"/></g>
-</g>
-<g stroke="#f3f6f1" stroke-width="2" marker-end="url(#opsArrow)" opacity=".9"><line x1="330" y1="90" x2="382" y2="90"/><line x1="424" y1="90" x2="476" y2="90"/><line x1="518" y1="90" x2="570" y2="90"/></g>
-<g><animateMotion dur="46s" repeatCount="indefinite"><mpath href="#opsRoute"/></animateMotion><ellipse cx="22" cy="0" rx="32" ry="13" fill="url(#opsPlume)"/><g stroke="#f7faf6" stroke-width="2.2"><line x1="-9" y1="-9" x2="9" y2="9"/><line x1="9" y1="-9" x2="-9" y2="9"/></g><g fill="#12312866" stroke="#f7faf6" stroke-width="1.6"><circle cx="-10" cy="-10" r="5"/><circle cx="10" cy="-10" r="5"/><circle cx="-10" cy="10" r="5"/><circle cx="10" cy="10" r="5"/></g><rect x="-4" y="-4" width="8" height="8" rx="2" fill="#123128" stroke="#f7faf6" stroke-width="1.6"/></g>
-</svg>
-<div class="ops-layers" role="group" aria-label="图层"><button class="on" type="button" data-layer="dep" aria-pressed="true">沉积预测</button><button class="on" type="button" data-layer="route" aria-pressed="true">航线</button><button class="on" type="button" data-layer="bound" aria-pressed="true">田界</button></div>
-<div class="ops-wind"><span>风向：西风 → 东</span><b>2.0 m/s</b></div>
-<span class="ops-tag gold" style="left:68.5%;top:40%">预测漂移区</span>
-<span class="ops-tag" style="left:60.4%;top:72%">下风侧边界</span>
-<span class="ops-tag opt" style="left:90%;top:10.4%">水渠</span>
-<span class="ops-tag opt" style="left:84%;top:25%">机耕路</span>
-<span class="ops-tag opt" style="left:88%;top:58%">相邻田块</span>
-<div class="ops-legend"><div>预测沉积 · 相对值</div><div class="bar"><span>低</span><i></i><span>高</span></div><div><span class="sw"></span><span>预测漂移区</span></div></div>
-<div class="ops-scale"><div><span>0</span><span>10</span><span>20 m</span></div><i></i></div>
-<div class="ops-note">预测不代表实测结果。</div>
-</div>
-<div class="ops-read"><span>仿真</span><span>风速<b>2.0</b><small>m/s</small></span><span>作业速度<b>3.0</b><small>m/s</small></span><span>喷洒高度<b>2.5</b><small>m</small></span><span>出田质量<b>10.12</b><small>%</small></span><span>田内沉积<b>88.98</b><small>%</small></span></div>
-<div class="ops-chart"><div class="ops-chart-h"><b>风速扫描 · 仿真</b><span class="ops-key">田内落点质量 (%)</span><span class="ops-key g">出田质量 (%)</span><span class="std">DB37/T 3940-2020：>3 m/s 慎飞，>5 m/s 不宜作业</span></div>
-<svg viewBox="0 0 800 172" role="img" aria-label="风速扫描：田内落点质量与出田质量随风速变化">
-<rect x="312.5" y="20" width="175" height="120" fill="#b89a5e" fill-opacity=".1"/><rect x="487.5" y="20" width="262.5" height="120" fill="#b89a5e" fill-opacity=".2"/>
-<g stroke="#dde6de" stroke-width="1"><line x1="50" y1="20" x2="750" y2="20"/><line x1="50" y1="50" x2="750" y2="50"/><line x1="50" y1="80" x2="750" y2="80"/><line x1="50" y1="110" x2="750" y2="110"/><line x1="50" y1="140" x2="750" y2="140" stroke="#b9c8bd"/></g>
-<g text-anchor="end"><text x="42" y="24">100</text><text x="42" y="54">75</text><text x="42" y="84">50</text><text x="42" y="114">25</text><text x="42" y="144">0</text></g>
-<g text-anchor="middle"><text x="50" y="156">0</text><text x="137.5" y="156">1</text><text x="225" y="156">2</text><text x="312.5" y="156">3</text><text x="400" y="156">4</text><text x="487.5" y="156">5</text><text x="575" y="156">6</text><text x="662.5" y="156">7</text><text x="750" y="156">8</text></g>
-<text x="750" y="170" text-anchor="end">风速 (m/s)</text>
-<line x1="50" y1="38" x2="750" y2="38" stroke="#3e7a62" stroke-width="1.2" stroke-dasharray="5 4"/><text x="746" y="33" text-anchor="end" style="fill:#3e7a62">85% 经验线</text>
-<line x1="312.5" y1="20" x2="312.5" y2="140" stroke="#b89a5e" stroke-width="1.5" stroke-dasharray="4 3"/>
-<text x="400" y="134" text-anchor="middle" style="fill:#8a6d33">慎飞</text><text x="618.75" y="134" text-anchor="middle" style="fill:#8a6d33">不宜作业</text>
-<line x1="225" y1="14" x2="225" y2="140" stroke="#123128" stroke-width="1" stroke-dasharray="2 3"/><text x="231" y="13" style="fill:#123128">基线 2.0 m/s</text>
-<polyline points="93.75,23.98 137.5,26.41 225,32.14 312.5,38.72 400,45.16 487.5,50.5 575,56.85 750,67.46" fill="none" stroke="#3e7a62" stroke-width="2.2" stroke-linejoin="round"/>
-<polyline points="93.75,136.01 137.5,133.59 225,127.85 312.5,121.28 400,114.83 487.5,109.49 575,103.15 750,92.54" fill="none" stroke="#b89a5e" stroke-width="2.2" stroke-linejoin="round"/>
-<g fill="#fff" stroke="#3e7a62" stroke-width="1.8"><circle cx="93.75" cy="23.98" r="3"/><circle cx="137.5" cy="26.41" r="3"/><circle cx="225" cy="32.14" r="4" fill="#3e7a62"/><circle cx="312.5" cy="38.72" r="3"/><circle cx="400" cy="45.16" r="3"/><circle cx="487.5" cy="50.5" r="3"/><circle cx="575" cy="56.85" r="3"/><circle cx="750" cy="67.46" r="3"/></g>
-<g fill="#fff" stroke="#b89a5e" stroke-width="1.8"><circle cx="93.75" cy="136.01" r="3"/><circle cx="137.5" cy="133.59" r="3"/><circle cx="225" cy="127.85" r="4" fill="#b89a5e"/><circle cx="312.5" cy="121.28" r="3"/><circle cx="400" cy="114.83" r="3"/><circle cx="487.5" cy="109.49" r="3"/><circle cx="575" cy="103.15" r="3"/><circle cx="750" cy="92.54" r="3"/></g>
-<text x="233" y="54" style="fill:#3e7a62;font-weight:700">89.88%</text><text x="217" y="122" text-anchor="end" style="fill:#8a6d33;font-weight:700">10.12%</text><text x="320" y="56" style="fill:#8a6d33;font-weight:700">84.40%</text>
-</svg></div>
-</div>
-<aside class="ops-side">
-<div><div class="ops-sec-h"><h4>作业参数</h4><span class="ops-ok">26/26 读数已校核</span></div>
-<ul class="ops-rows"><li><span>喷幅</span><b>8.0 m</b><span class="ops-badge ok">已设定</span></li><li><span>航线</span><b>10 趟 · 间距 6.0 m</b><span class="ops-badge ok">自动规划</span></li><li><span>重叠</span><b>2.0 m · 25%</b><span class="ops-badge">实际值</span></li><li><span>高度</span><b>2.5 m</b><span class="ops-badge">手动输入</span></li><li><span>速度</span><b>3.0 m/s</b><span class="ops-badge">手动输入</span></li><li><span>作业时长</span><b>133.3 s</b><span class="ops-badge">计算值</span></li></ul>
-<a class="ops-btn" href="#results">查看核心仿真数据</a></div>
-<div class="ops-risk"><div class="ops-sec-h"><h4>风险提示（预测）</h4><span class="ops-badge warn">仿真预警</span></div>
-<p>下风侧（东）为相邻田块与机耕路</p><p><b>基线出田质量 10.12%</b></p><p>风速升至 3.0 m/s 时，田内落点降至 84.40%，低于 85% 经验线</p>
-<button class="ops-btn gold" type="button" id="ops-drift-btn" aria-pressed="false">查看漂移区</button>
-<a class="ops-link" href="#problem"><span>比较风速方案</span><span>›</span></a>
-<p class="ops-fine">调整方案需人工确认。</p></div>
-<div><div class="ops-sec-h"><h4>作业评估</h4><span class="ops-badge">仿真判定</span></div>
-<div class="ops-meter"><div><span>田内沉积 ≥ 85%</span><span><b>88.98%</b> <span class="ops-badge ok">达标</span></span></div><i style="--v:88.98%;--t:85%"></i></div>
-<div class="ops-meter"><div><span>低沉积方块 &lt; 25%</span><span><b>12.69%</b> <span class="ops-badge ok">达标</span></span></div><i style="--v:12.69%;--t:25%"></i></div>
-<div class="ops-meter warn"><div><span>变异系数 CV</span><span><b>45.9%</b> <span class="ops-badge warn">优化重点</span></span></div><i style="--v:45.9%"></i></div>
-</div>
-</aside>
-</div>
-<div class="ops-foot"><span>概念效果图 · 数据来自项目仿真模型基线工况 · 底图：</span><a href="https://commons.wikimedia.org/wiki/File:D%C3%BClmen,_Merfeld,_Felder_--_2024_--_0089.jpg" target="_blank" rel="noopener">Dietmar Rabich / Wikimedia Commons</a> · CC BY-SA 4.0</div>
-</div>
-</div>
-<p class="innovation-note">已完成：仿真模型与参数计算器。下一阶段：导流件样机与实机挂载测试。</p></div>
-</section>
-<section class="chapter dark" id="science">
-<div class="chapter-inner"><div class="chapter-head"><div><div class="chapter-kicker">SCIENCE · 04</div><h2>从液滴物理到田间沉积</h2></div><p class="chapter-desc">用连续的物理因果链解释飘移，再用沉积网格和独立核算路径检查模型输出。</p></div>
-<div class="science-chain">
-<div class="chain-step"><div class="chain-no">01 · PARTICLE</div><strong>粒径决定终端速度</strong><span>阻力模型求解 vₜ</span></div>
-<div class="chain-step"><div class="chain-no">02 · FALL TIME</div><strong>高度决定滞空时间</strong><span>t = H / vₜ</span></div>
-<div class="chain-step"><div class="chain-no">03 · WIND DRIFT</div><strong>风速推动水平位移</strong><span>漂移距离 ≈ U × t</span></div>
-<div class="chain-step"><div class="chain-no">04 · DEPOSITION</div><strong>落点累积为沉积场</strong><span>单滴质量 ∝ D³</span></div>
-<div class="chain-step"><div class="chain-no">05 · COVERAGE</div><strong>按作业尺度检查覆盖</strong><span>0.3 m 网格 / 3 m 方块</span></div>
-</div>
-<div class="process-wall"><article class="process-card"><div class="process-art"><i class="particle"></i><i class="particle"></i><i class="particle"></i><i class="particle"></i><i class="particle"></i><i class="particle"></i><i class="particle"></i></div><b>参数化液滴模型</b><p>固定随机种子和独立随机流，抽样粒径、发射时刻与阵风，形成可重复的基线模拟。</p></article>
-<article class="process-card"><div class="process-art"><div class="route-art"><i style="--w:96%"></i><i style="--w:83%"></i><i style="--w:91%"></i><i style="--w:75%"></i></div></div><b>航线与沉积场</b><p>喷幅和重叠率自动生成往复航线，再把液滴落点映射到沉积网格。</p></article>
-<article class="process-card"><div class="process-art"><div class="check-art">26/26</div></div><b>计算口径交叉核对</b><p>仿真模型与参数计算器的 26 项读数按显示精度一致；粒子法和网格法的出田质量互相吻合。</p></article></div>
-<div class="dpanel"><div class="dpanel-h"><div><div class="kicker">MODEL INPUTS · CHECKS</div><h3>滴谱、随机流与网格设定</h3></div><p>Gamma 分布抽样 12,000 颗代表液滴，随机种子 7；发射时刻、阵风、喷杆偏移各用一条独立随机流。</p></div>
-<div class="dkv"><div><span>滴谱均值 μ</span><strong>132.25<small>µm</small></strong><em>理论 132.02 µm</em></div><div><span>滴谱变异系数 CV</span><strong>0.6373</strong><em>理论 0.6483</em></div><div><span>粒径范围</span><strong>20 – 600<small>µm</small></strong><em>下界截断 259 颗（2.16%），上界 5 颗</em></div><div><span>单颗质量</span><strong>7.608e-7<small>g 中位</small></strong><em>最大 1.131e-4 g（质量 ∝ D³）</em></div><div><span>发射时刻均值</span><strong>0.4965</strong><em>U(0,1) 理论 0.5</em></div><div><span>阵风序列</span><strong>0.0015<small>/ 0.9925</small></strong><em>均值 / 标准差，理论 0 / 1</em></div><div><span>沉积网格</span><strong>400 × 267</strong><em>DX 0.3 m · 共 106,800 格</em></div><div><span>高斯核</span><strong>σ 0.45<small>m</small></strong><em>核宽 11 格（3σ / DX）</em></div></div></div>
-<div class="dpanel"><div class="dpanel-h"><div><div class="kicker">CROSS-CHECK · 26 / 26</div><h3>26 项读数逐项核对</h3></div><p>独立计算值与页面显示值按显示精度逐项比较，不一致项 0 / 26。</p></div>
-<div class="dgrid"><div class="dscroll"><table class="dtable"><thead><tr><th>读数</th><th class="n">独立计算</th><th class="n">页面显示</th><th>判定</th></tr></thead><tbody>
-<tr><td>趟数 N</td><td class="n">10</td><td class="n">10</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>实际间距 d [m]</td><td class="n">6</td><td class="n">6.000</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>实际重叠 ov [m]</td><td class="n">2</td><td class="n">2.000</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>作业跨度 LROUTE [m]</td><td class="n">46</td><td class="n">46.0</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>喷洒里程 Ltot [m]</td><td class="n">400</td><td class="n">400.0</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>飞行里程 flyLen [m]</td><td class="n">460</td><td class="n">460.0</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>作业时长 tTask [s]</td><td class="n">133.33333</td><td class="n">133.333</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>t99 [s]</td><td class="n">135.48133</td><td class="n">135.481</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>t100 [s]</td><td class="n">343.70882</td><td class="n">343.709</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>峰值沉积 [g/m²]</td><td class="n">0.32071031</td><td class="n">0.3207</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>田内沉积总量 [g]</td><td class="n">73.443211</td><td class="n">73.443</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>均匀度 P95/P50</td><td class="n">4.3606816</td><td class="n">4.36</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>药带宽度 [m]</td><td class="n">51.3</td><td class="n">51.3</td><td><span class="st ok">OK</span></td></tr>
-</tbody></table></div><div class="dscroll"><table class="dtable"><thead><tr><th>读数</th><th class="n">独立计算</th><th class="n">页面显示</th><th>判定</th></tr></thead><tbody>
-<tr><td>出田滴数 [%]</td><td class="n">41.808333</td><td class="n">41.81</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>出田质量 [%]</td><td class="n">10.124105</td><td class="n">10.124</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>最远漂移 [m]</td><td class="n">451.86193</td><td class="n">451.86</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>守恒校验</td><td class="n">0.99997336</td><td class="n">0.999973</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>漂移沉积总量 [g]</td><td class="n">8.2784261</td><td class="n">8.278</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>漂移占施药量 [%]</td><td class="n">10.124105</td><td class="n">10.12</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>漂移最远点 [m]</td><td class="n">452.13555</td><td class="n">452.1</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>漂移覆盖面积 [m²]</td><td class="n">7925.04</td><td class="n">7925.0</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>田内沉积占比 [%]</td><td class="n">88.983381</td><td class="n">88.98</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>漏喷块 [%]</td><td class="n">12.692308</td><td class="n">12.69</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>漏喷块数</td><td class="n">33</td><td class="n">33</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>田内总块数</td><td class="n">260</td><td class="n">260</td><td><span class="st ok">OK</span></td></tr>
-<tr><td>均匀度 CV [%]</td><td class="n">45.902775</td><td class="n">45.9</td><td><span class="st ok">OK</span></td></tr>
-</tbody></table></div></div><p class="dnote">漏喷块判据：3 m 方块剂量低于中位数 0.28385 g 的 0.5 倍。覆盖达标线：田内沉积 ≥85% 且漏喷块 &lt;25%，基线工况两项均达标。</p></div>
-<div class="science-proof"><span>校核说明：数值复现与代码路径核对验证的是模型实现一致性，<em>不等同于田间效果验证</em>。田间效果将通过第 05 章的试点方案检验。</span><strong>10.124% = 10.124%</strong></div>
-</div>
-</section>
-<section class="chapter alt" id="impact">
-<div class="chapter-inner"><div class="chapter-head"><div><div class="chapter-kicker">IMPACT · 05</div><h2>把精准植保连接到可持续发展</h2></div><p class="chapter-desc">精准植保直接关联多项联合国可持续发展目标，每项收益都对应可在田间测量的指标。</p></div>
-<div class="impact-layout"><article class="sdg-panel"><div class="panel-title">17 项可持续发展目标</div><div class="panel-sub">高亮为本项目直接关联的 5 项目标。</div>
-<div class="sdg-grid">
-<div class="sdg-tile" style="--sdg:#e5243b"><b>1</b><span>无贫穷</span></div><div class="sdg-tile related" style="--sdg:#dda63a"><b>2</b><span>零饥饿</span></div><div class="sdg-tile related" style="--sdg:#4c9f38"><b>3</b><span>健康福祉</span></div><div class="sdg-tile" style="--sdg:#c5192d"><b>4</b><span>优质教育</span></div><div class="sdg-tile" style="--sdg:#ff3a21"><b>5</b><span>性别平等</span></div><div class="sdg-tile related" style="--sdg:#26bde2"><b>6</b><span>清洁饮水</span></div>
-<div class="sdg-tile" style="--sdg:#fcc30b"><b>7</b><span>清洁能源</span></div><div class="sdg-tile" style="--sdg:#a21942"><b>8</b><span>体面工作</span></div><div class="sdg-tile" style="--sdg:#fd6925"><b>9</b><span>产业创新</span></div><div class="sdg-tile" style="--sdg:#dd1367"><b>10</b><span>减少不平等</span></div><div class="sdg-tile" style="--sdg:#fd9d24"><b>11</b><span>可持续城市</span></div><div class="sdg-tile related" style="--sdg:#bf8b2e"><b>12</b><span>负责任生产</span></div>
-<div class="sdg-tile" style="--sdg:#3f7e44"><b>13</b><span>气候行动</span></div><div class="sdg-tile" style="--sdg:#0a97d9"><b>14</b><span>水下生物</span></div><div class="sdg-tile related" style="--sdg:#56c02b"><b>15</b><span>陆地生物</span></div><div class="sdg-tile" style="--sdg:#00689d"><b>16</b><span>和平正义</span></div><div class="sdg-tile" style="--sdg:#19486a"><b>17</b><span>伙伴关系</span></div></div>
-<p class="sdg-related"><strong>直接关联：</strong>SDG 2 粮食生产、SDG 3 健康、SDG 6 水资源、SDG 12 负责任生产、SDG 15 陆地生态。</p></article>
-<article class="pilot-panel"><div class="panel-title">从仿真走向田间验证</div><div class="panel-sub">田间试点方案 · 四步闭环验证</div><span class="pilot-tag">下一阶段</span><div class="pilot-steps">
-<div class="pilot-step"><i>1</i><div><b>确定田块与作物</b><span>记录地点、作物类型、生育期与田块边界。</span></div></div>
-<div class="pilot-step"><i>2</i><div><b>同步记录作业条件</b><span>记录风速风向、喷头、飞行高度、速度和航线参数。</span></div></div>
-<div class="pilot-step"><i>3</i><div><b>测量田内外沉积</b><span>按网格布点，比较田内覆盖、漏喷区域与边界外飘移。</span></div></div>
-<div class="pilot-step"><i>4</i><div><b>用实测结果回校模型</b><span>比较模拟与测量误差，再调整参数并重复验证。</span></div></div></div>
-<div class="pilot-warning">试点沿用 60 × 40 m 田块尺寸，测量结果可与仿真逐项对比。</div></article></div>
-<article class="impact-outcomes"><div class="impact-outcomes-head"><h3>可追踪的项目指标 · 基线仿真</h3><span>来源：项目仿真模型 · 模型输出，非田间实测</span></div><div class="impact-metrics"><div class="impact-metric"><b>88.98%</b><strong>田内沉积占比</strong><span>超过 85% 达标线。</span></div><div class="impact-metric"><b>12.69%</b><strong>低沉积作业块率</strong><span>260 块中仅 33 块落药偏少。</span></div><div class="impact-metric"><b>10.124%</b><strong>出田质量占比</strong><span>2.0 m/s 风速下飘出田外的药液比例。</span></div></div><div class="impact-pathways"><div class="impact-pathway"><b>SDG 2 · 粮食生产与作业质量</b><span>观测指标：作物落药量、漏喷区域与每亩用药量。</span></div><div class="impact-pathway"><b>SDG 3 / 6 · 健康与水资源</b><span>观测指标：田外落药、邻近水体与作业人员暴露。</span></div><div class="impact-pathway"><b>SDG 12 / 15 · 负责任生产与陆地生态</b><span>观测指标：药液利用率、飘移量与周边土壤。</span></div></div><p class="impact-caveat">环境、健康与减药收益将以对照田间试验数据为准进行报告。</p></article></div>
-</section>
-<section class="chapter" id="team">
-<div class="chapter-inner"><div class="chapter-head"><div><div class="chapter-kicker">TEAM · 06</div><h2>让每一滴药液，都更有依据地落下</h2></div><p class="chapter-desc">共同目标：让植保喷洒更透明、可复核，并经得起田间检验。</p></div>
-<div class="team-layout"><article class="slogan-card"><div class="slogan-label">OUR SLOGAN · 项目口号</div><blockquote>护住每一寸绿意，<br>让每一次喷洒更有据可依。</blockquote><p>用透明的模型把液滴、风和航线连起来，让每次喷洒都能看见覆盖、比较风险。</p></article>
-<article class="team-story"><h3>项目从哪里开始</h3><p>项目从一个喷洒参数计算器起步，逐步扩展为涵盖液滴、航线、飘移与覆盖分析的完整工具，并用独立计算交叉核对。</p><div class="workstreams"><div class="workstream"><b>01 · 液滴物理</b>粒径抽样与终端速度</div><div class="workstream"><b>02 · 航线规划</b>喷幅、重叠和边界保护</div><div class="workstream"><b>03 · 沉积分析</b>漂移质量与覆盖均匀性</div><div class="workstream"><b>04 · 模型校核</b>显示读数与双路径核验</div></div></article></div>
-<article class="team-roles"><div class="team-block-head"><h3>团队成员</h3><span>5 名成员 · 信息待补充</span></div><div class="team-members-grid"><div class="team-role team-member"><div class="member-avatar" aria-hidden="true">01</div><small>MEMBER 01</small><b>姓名</b><p>职责待定</p></div><div class="team-role team-member"><div class="member-avatar" aria-hidden="true">02</div><small>MEMBER 02</small><b>姓名</b><p>职责待定</p></div><div class="team-role team-member"><div class="member-avatar" aria-hidden="true">03</div><small>MEMBER 03</small><b>姓名</b><p>职责待定</p></div><div class="team-role team-member"><div class="member-avatar" aria-hidden="true">04</div><small>MEMBER 04</small><b>姓名</b><p>职责待定</p></div><div class="team-role team-member"><div class="member-avatar" aria-hidden="true">05</div><small>MEMBER 05</small><b>姓名</b><p>职责待定</p></div></div></article>
-<article class="team-roles"><div class="team-block-head"><h3>核心工作分工</h3><span>按项目工作流划分的四项核心职能</span></div><div class="team-roles-grid"><div class="team-role"><small>01 · COORDINATION</small><b>项目统筹与作物场景</b><p>明确作物、目标问题、试验边界、合作方和阶段交付。</p></div><div class="team-role"><small>02 · MODEL & DATA</small><b>仿真与数据分析</b><p>维护模型参数、沉积指标、风速扫描和结果复核记录。</p></div><div class="team-role"><small>03 · FLIGHT OPERATIONS</small><b>航线与作业验证</b><p>整理喷幅、航线间距、飞行参数及合规安全的试验流程。</p></div><div class="team-role"><small>04 · IMPACT & STORY</small><b>影响评估与展示</b><p>维护试点记录、SDG 证据链、双语材料和阶段汇报。</p></div></div></article>
-<article class="team-roles"><div class="team-block-head"><h3>项目推进路线</h3><span>分阶段推进 · 每阶段完成后复盘</span></div><div class="team-roadmap"><div class="team-phase"><span>PHASE 01</span><b>核对模型与问题定义</b><p>确认基线参数、指标口径和当前证据边界。</p></div><div class="team-phase"><span>PHASE 02</span><b>比较可执行方案</b><p>围绕风速、粒径和航线参数做敏感性分析。</p></div><div class="team-phase"><span>PHASE 03</span><b>设计小范围验证</b><p>完善安全、采样、对照与数据记录方案后再开展试验。</p></div><div class="team-phase"><span>PHASE 04</span><b>复盘并迭代</b><p>用实测误差更新模型，汇报效果与未解决问题。</p></div></div></article></div>
-</section>
+
+<!-- 01 问题 -->
+<section class="panel alt" id="problem" data-no="01"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="01 · The problem">01 · 问题</div>
+  <h2 data-en="Spray that leaves the nozzle <em>doesn't always stay.</em>">喷出去的药液，<em>未必留在田里</em></h2>
+  <p class="lead" data-en="Wind blows fine droplets into soil, water and neighbouring plants — polluting the environment and wasting product. The finer the droplet, the further it drifts.">风把细小液滴吹进土壤、水体和周边植物——既污染环境，又浪费药液。液滴越细，飘得越远。</p>
+  <div class="duo">
+   <div><span class="tag" data-en="Time to fall 2.5 m">下落 2.5 m 用时</span>
+    <div class="row"><span>400 µm</span><b>1.62 s</b></div>
+    <div class="row"><span>100 µm</span><b>10.51 s</b></div>
+    <div class="row em"><span>20 µm</span><b>210.6 s</b></div></div>
+   <div><span class="tag" data-en="Off-field share">出田占比</span>
+    <div class="row"><span data-en="By count">按液滴数量</span><b>41.81%</b></div>
+    <div class="row em"><span data-en="By mass">按药液质量</span><b>10.12%</b></div>
+    <div class="row"><span data-en="Max drift">最远漂移</span><b>451.9 m</b></div></div>
+  </div>
+  <p class="caveat" data-en="Fine droplets are many but light: count and mass must be read separately. Max drift is a 20 µm, no-evaporation upper bound.">飘出去的多是细小液滴：数量多、药量少，两者要分开看。最远漂移为 20 µm、无蒸发假设上限。</p>
+ </div>
+ <div class="reveal d1">
+  <div class="bars" role="img" aria-label="风速与出田药液比例">
+   <div class="tag"><span data-en="Crosswind">横风风速</span><span data-en="Off-field mass">出田质量</span></div>
+   <div class="bar-row"><span>0.5 m/s</span><div class="track-l"><div class="fill" style="--w:8.4%"></div></div><b>3.32%</b></div>
+   <div class="bar-row"><span>1.0 m/s</span><div class="track-l"><div class="fill" style="--w:13.5%"></div></div><b>5.34%</b></div>
+   <div class="bar-row hl"><span>2.0 m/s</span><div class="track-l"><div class="fill" style="--w:25.6%"></div></div><b>10.12%</b></div>
+   <div class="bar-row warn"><span>3.0 m/s</span><div class="track-l"><div class="fill" style="--w:39.5%"></div></div><b>15.60%</b></div>
+   <div class="bar-row warn"><span>5.0 m/s</span><div class="track-l"><div class="fill" style="--w:64.3%"></div></div><b>25.42%</b></div>
+   <div class="bar-row warn"><span>8.0 m/s</span><div class="track-l"><div class="fill" style="--w:100%"></div></div><b>39.55%</b></div>
+   <div class="bars-note"><span><i></i><span data-en="Baseline 2.0 m/s">基线 2.0 m/s</span></span><span><i class="w"></i><span data-en="Below the 85% in-field line">田内落点低于 85%</span></span></div>
+  </div>
+  <div class="grid3">
+   <div><div class="num">3.0<small>m/s</small></div><p data-en="In-field deposition drops to 84.40% — below the 85% line.">田内落点降至 84.40%，跌破 85% 达标线。</p></div>
+   <div><div class="num">&gt;5<small>m/s</small></div><p data-en="DB37/T 3940-2020: fly with caution above 3 m/s, unsuitable above 5 m/s.">DB37/T 3940-2020：>3 m/s 慎飞，>5 m/s 不宜作业。</p></div>
+   <div><div class="num">3<small>×</small></div><p data-en="Three costs: polluted water and habitats, higher input costs, lost flying days.">三重代价：污染水体生态、推高药费、只能等无风天。</p></div>
+  </div>
+ </div>
+</div></section>
+
+<!-- 02 方案 -->
+<section class="panel" id="solution" data-no="02"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="02 · The solution">02 · 方案</div>
+  <h2 data-en="AeroGuard <em>pulls spray back</em> on target.">AeroGuard，<em>把药液拉回田里</em></h2>
+  <p class="lead" data-en="A lightweight module mounted on crop-spraying drones. Simulation and route planning are complete.">加装在植保无人机上的轻量模块，目前已完成仿真与航线规划。</p>
+  <div class="steps">
+   <div class="step"><span>01</span><b data-en="Sense the wind">感知风向</b><p data-en="Read wind speed and direction during flight.">作业中获取风速与风向。</p></div>
+   <div class="step"><span>02</span><b data-en="Compute the correction">计算修正</b><p data-en="The model predicts where droplets will land and how far they drift.">用模型预测液滴落点与偏移量。</p></div>
+   <div class="step"><span>03</span><b data-en="Steer the airflow">偏转导流</b><p data-en="Deflect the nozzle airflow to counter the drift.">偏转喷嘴与气流，抵消飘移。</p></div>
+   <div class="step"><span>04</span><b data-en="Land on target">落回目标</b><p data-en="Droplets return to the crop instead of leaving the field.">液滴回到目标作物，而不是飘出田外。</p></div>
+  </div>
+ </div>
+ <div class="reveal d1">
+  <div class="ba" id="ba">
+   <div class="ba-layer ba-after"><img src="assets/after.jpg" alt="喷雾经气流导向后垂直压向作物" style="object-position:55% 60%" draggable="false"><span class="ba-tag" data-en="With AeroGuard (design goal)">加装 AeroGuard（设计目标）</span></div>
+   <div class="ba-layer ba-before"><img src="assets/before.jpg" alt="细雾被侧风吹散飘出田外" style="object-position:30% 60%" draggable="false"><span class="ba-tag" data-en="Without · 10.12% drift">无导流 · 出田 10.12%</span></div>
+   <div class="ba-handle" role="slider" tabindex="0" aria-label="对比滑块" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></div>
+  </div>
+  <div class="ba-cap"><span>BEFORE / AFTER</span><span data-en="Drag to compare">拖动中线对比</span></div>
+  <div class="points">
+   <div><b data-en="True to life">贴近真实</b><p data-en="Droplet size, gusts and boom sway are modelled separately.">液滴大小、阵风、喷杆晃动分别建模。</p></div>
+   <div><b data-en="Gaps made visible">漏喷看得见</b><p data-en="Fine grid for deposition, 3 m blocks for missed spots.">细网格看落药，大方块找漏喷。</p></div>
+   <div><b data-en="Clear standards">标准清晰</b><p data-en="Project targets and industry wind limits shown side by side.">项目达标线与行业风速标准分开标注。</p></div>
+  </div>
+  <div class="specs">
+   <div><span data-en="Route">航线</span><b>10 <small data-en="passes">趟</small></b></div>
+   <div><span data-en="Pass spacing">间距</span><b>6.0<small>m</small></b></div>
+   <div><span data-en="Overlap">重叠</span><b>25<small>%</small></b></div>
+   <div><span data-en="Task time">作业时长</span><b>133.3<small>s</small></b></div>
+  </div>
+ </div>
+</div></section>
+
+<!-- 03 科学 -->
+<section class="panel alt" id="science" data-no="03"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="03 · The science">03 · 科学</div>
+  <h2 data-en="From one droplet <em>to the whole field.</em>">从一颗液滴，<em>到整片田</em></h2>
+  <p class="lead" data-en="A continuous physical chain explains drift; a deposition grid and an independent calculation check the output.">用连续的物理因果链解释飘移，再用沉积网格和独立核算检查模型输出。</p>
+  <div class="proof"><div class="num">12,000</div><p data-en="representative droplets, sampled from a Gamma distribution with a fixed random seed — fully reproducible.">颗代表液滴，按 Gamma 分布抽样、固定随机种子，结果可完整复现。</p></div>
+  <div class="specs two">
+   <div><span data-en="Mean droplet size">滴谱均值</span><b>132.25<small>µm</small></b></div>
+   <div><span data-en="Size range">粒径范围</span><b>20–600<small>µm</small></b></div>
+   <div><span data-en="Deposition grid">沉积网格</span><b>400 × 267</b></div>
+   <div><span data-en="Mass conservation">守恒校验</span><b>0.999973</b></div>
+  </div>
+  <p class="caveat" data-en="<b>Note:</b> these checks confirm the model is implemented consistently — not yet its real-world effect, which the field pilot will test."><b>说明：</b>校核验证的是模型实现一致性，不等同于田间效果验证，后者将由田间试点检验。</p>
+ </div>
+ <div class="reveal d1">
+  <div class="chain">
+   <div class="link"><b data-en="Droplet size">粒径</b><span data-en="→ terminal velocity vₜ">→ 终端速度 vₜ</span></div>
+   <div class="link"><b data-en="Spray height">高度</b><span>t = H / vₜ</span></div>
+   <div class="link"><b data-en="Wind speed">风速</b><span data-en="drift ≈ U × t">漂移 ≈ U × t</span></div>
+   <div class="link"><b data-en="Landing points">落点</b><span data-en="→ deposition field">→ 沉积场</span></div>
+   <div class="link"><b data-en="Coverage">覆盖</b><span data-en="0.3 m grid · 3 m blocks">0.3 m 网格 · 3 m 方块</span></div>
+  </div>
+  <div class="cards">
+   <div class="card"><span class="tag">Model</span><h3 data-en="Parametric droplet model">参数化液滴模型</h3><p data-en="Size, release time and gusts each use an independent random stream.">粒径、发射时刻与阵风各用一条独立随机流抽样。</p></div>
+   <div class="card"><span class="tag">Route</span><h3 data-en="Routes &amp; deposition">航线与沉积场</h3><p data-en="10 back-and-forth passes, 6 m apart; landing points mapped onto the grid.">10 趟往复航线、间距 6 m，落点映射到沉积网格。</p></div>
+   <div class="card"><span class="tag">Check</span><h3 data-en="Cross-checked 26 / 26">交叉核对 26 / 26</h3><p data-en="The simulator and an independent calculator agree on every reading.">仿真模型与独立计算器的 26 项读数全部一致。</p></div>
+  </div>
+ </div>
+</div></section>
+
+<!-- 04 结果 -->
+<section class="panel" id="results" data-no="04"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="04 · Results">04 · 结果</div>
+  <h2 data-en="The baseline passes — <em>with room to improve.</em>">基线达标，<em>仍有优化空间</em></h2>
+  <p class="lead" data-en="2.0 m/s crosswind, 2.5 m height, 3.0 m/s flight speed, 8 m swath. Targets: in-field deposition ≥ 85%, low-deposition blocks &lt; 25%.">2.0 m/s 横风、2.5 m 高度、3.0 m/s 航速、8 m 喷幅。判据：田内沉积 ≥ 85%，低沉积方块 &lt; 25%。</p>
+  <div class="callout" data-en="<b>The tipping point:</b> at 3.0 m/s, in-field deposition falls to 84.40% — exactly the industry’s “fly with caution” line. That is the window AeroGuard aims to widen."><b>临界点：</b>风速升至 3.0 m/s 时，田内落点降至 84.40%，恰好是行业“慎飞”边界——这正是 AeroGuard 要拓宽的作业窗口。</div>
+   <div class="specs two">
+    <div><span data-en="Peak deposition">峰值沉积</span><b>0.3207<small>g/m²</small></b></div>
+    <div><span data-en="In-field total">田内沉积总量</span><b>73.44<small>g</small></b></div>
+    <div><span data-en="Spray band width">药带宽度</span><b>51.3<small>m</small></b></div>
+    <div><span data-en="Uniformity P95/P50">均匀度 P95/P50</span><b>4.36</b></div>
+   </div>
+ </div>
+ <div class="meters reveal d1">
+  <div class="meter"><div><div class="num">88.98<small>%</small></div></div><div><h3><span data-en="In-field deposition">田内沉积占比</span><span class="badge" data-en="Pass">达标</span></h3><p data-en="Computed on a 0.3 m deposition grid.">按 0.3 m 网格沉积量计算。</p><div class="gauge" style="--v:88.98%"><i></i><s style="--t:85%" data-l="85%"></s></div></div></div>
+  <div class="meter"><div><div class="num">12.69<small>%</small></div></div><div><h3><span data-en="Low-deposition blocks">漏喷块率</span><span class="badge" data-en="Pass">达标</span></h3><p data-en="33 of 260 blocks at the 3 m working scale.">3 m 作业方块中 33 / 260 块落药偏少。</p><div class="gauge" style="--v:12.69%"><i></i><s style="--t:25%" data-l="25%"></s></div></div></div>
+  <div class="meter warn"><div><div class="num">45.9<small>%</small></div></div><div><h3><span data-en="Coefficient of variation">变异系数 CV</span><span class="badge w" data-en="Focus">优化重点</span></h3><p data-en="Deposition is still uneven — the next thing to improve.">沉积仍不够均匀，是下一步优化的重点。</p><div class="gauge" style="--v:45.9%"><i></i></div></div></div>
+ </div>
+</div></section>
+
+<!-- 05 影响 -->
+<section class="panel alt" id="impact" data-no="05"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="05 · Impact">05 · 影响</div>
+  <h2 data-en="Less drift, <em>more protected.</em>">少一分飘移，<em>多一分守护</em></h2>
+  <p class="lead" data-en="Precision spraying links directly to five UN Sustainable Development Goals — each benefit maps to something measurable in the field.">精准植保直接关联五项联合国可持续发展目标，每项收益都对应可在田间测量的指标。</p>
+  <div class="sdgs">
+   <div class="sdg" style="--c:#dda63a"><b>2</b><span data-en="Zero hunger">零饥饿</span></div>
+   <div class="sdg" style="--c:#4c9f38"><b>3</b><span data-en="Good health">健康福祉</span></div>
+   <div class="sdg" style="--c:#26bde2"><b>6</b><span data-en="Clean water">清洁饮水</span></div>
+   <div class="sdg" style="--c:#bf8b2e"><b>12</b><span data-en="Responsible production">负责任生产</span></div>
+   <div class="sdg" style="--c:#56c02b"><b>15</b><span data-en="Life on land">陆地生物</span></div>
+  </div>
+ </div>
+ <div class="reveal d1">
+  <div class="paths">
+   <div class="path"><b data-en="SDG 2 · Food">SDG 2 · 粮食生产</b><p data-en="Measure: deposition on crops, missed areas, product per hectare.">观测：作物落药量、漏喷区域与每亩用药量。</p></div>
+   <div class="path"><b data-en="SDG 3 / 6 · Health &amp; water">SDG 3 / 6 · 健康与水</b><p data-en="Measure: off-field deposition, nearby water bodies, operator exposure.">观测：田外落药、邻近水体与作业人员暴露。</p></div>
+   <div class="path"><b data-en="SDG 12 / 15 · Production &amp; land">SDG 12 / 15 · 生产与生态</b><p data-en="Measure: product efficiency, drift volume, surrounding soil.">观测：药液利用率、飘移量与周边土壤。</p></div>
+  </div>
+  <div class="pilot"><span class="tag" data-en="Next step · 60 × 40 m field pilot">下一步 · 60 × 40 m 田间试点</span>
+   <div class="pilot-steps">
+    <div><b data-en="Pick the field">确定田块</b><span data-en="Location, crop, growth stage.">地点、作物与生育期。</span></div>
+    <div><b data-en="Log conditions">记录条件</b><span data-en="Wind, nozzle, height, speed.">风况、喷头、高度与航速。</span></div>
+    <div><b data-en="Measure deposition">测量沉积</b><span data-en="Grid sampling in and out of field.">网格布点，测田内外沉积。</span></div>
+    <div><b data-en="Recalibrate">回校模型</b><span data-en="Compare, adjust, repeat.">比较误差，调参再验证。</span></div>
+   </div>
+  </div>
+  <p class="caveat" data-en="Environmental, health and savings benefits will be reported from controlled field trial data.">环境、健康与减药收益将以对照田间试验数据为准进行报告。</p>
+ </div>
+</div></section>
+
+<!-- 06 团队 -->
+<section class="panel" id="team" data-no="06"><div class="wrap cols">
+ <div class="reveal">
+  <div class="kicker" data-en="06 · Team">06 · 团队</div>
+  <h2 data-en="The people <em>behind AeroGuard.</em>">AeroGuard <em>背后的团队</em></h2>
+  <p class="lead" data-en="It started as a spray-parameter calculator and grew into a full tool for droplets, routes, drift and coverage.">项目从一个喷洒参数计算器起步，逐步扩展为涵盖液滴、航线、飘移与覆盖分析的完整工具。</p>
+  <blockquote data-en="Protect every inch of green;<br>make every spray accountable.">护住每一寸绿意，<br>让每一次喷洒更有据可依。</blockquote>
+  <div class="phases">
+   <div><span>PHASE 01</span><b data-en="Verify the model">核对模型与问题定义</b></div>
+   <div><span>PHASE 02</span><b data-en="Compare options">比较可执行方案</b></div>
+   <div><span>PHASE 03</span><b data-en="Design the field test">设计小范围验证</b></div>
+   <div><span>PHASE 04</span><b data-en="Review &amp; iterate">复盘并迭代</b></div>
+  </div>
+ </div>
+ <div class="reveal d1">
+  <div class="team">
+   <div class="member"><div class="avatar" aria-hidden="true">01</div><b data-en="Name">姓名</b><span data-en="Role TBD">职责待定</span></div>
+   <div class="member"><div class="avatar" aria-hidden="true">02</div><b data-en="Name">姓名</b><span data-en="Role TBD">职责待定</span></div>
+   <div class="member"><div class="avatar" aria-hidden="true">03</div><b data-en="Name">姓名</b><span data-en="Role TBD">职责待定</span></div>
+   <div class="member"><div class="avatar" aria-hidden="true">04</div><b data-en="Name">姓名</b><span data-en="Role TBD">职责待定</span></div>
+   <div class="member"><div class="avatar" aria-hidden="true">05</div><b data-en="Name">姓名</b><span data-en="Role TBD">职责待定</span></div>
+  </div>
+  <div class="streams">
+   <div><b data-en="01 · Droplet physics">01 · 液滴物理</b><span data-en="Size sampling, terminal velocity">粒径抽样与终端速度</span></div>
+   <div><b data-en="02 · Route planning">02 · 航线规划</b><span data-en="Swath, overlap, boundary">喷幅、重叠与边界保护</span></div>
+   <div><b data-en="03 · Deposition">03 · 沉积分析</b><span data-en="Drift mass, uniformity">漂移质量与覆盖均匀性</span></div>
+   <div><b data-en="04 · Verification">04 · 模型校核</b><span data-en="Readouts, dual-path checks">显示读数与双路径核验</span></div>
+  </div>
+  <p class="foot" data-en="AeroGuard · Conrad Challenge · Simulation-based research">AeroGuard · 康莱德挑战赛 · 仿真研究 · 精准农业</p>
+ </div>
+</div></section>
+
 </main>
-<footer class="footer"><div class="footerin"><span>康莱德挑战赛 · 植保无人机</span><span>绿色生态科技 · 精准农业仿真</span></div></footer>
+
+<div class="dock"><div class="wrap">
+ <div class="count"><b id="cur">01</b> / <span id="tot">07</span></div>
+ <div class="prog"><i id="prog"></i></div>
+ <div class="arrows"><button type="button" id="prev" aria-label="上一页">←</button><button type="button" id="next" aria-label="下一页">→</button></div>
+</div></div>
+
 <script>
-const englishText={"最后 1% 的药液来自极细液滴，要飘 200 秒以上才落地。":"The last 1% of spray comes from the finest droplets, which stay airborne for over 200 seconds.","航线自东向西推进，首末趟压住田界、喷洒不越界，两端各留 3 m 掉头。":"Passes run east to west; the first and last hug the boundary with no overspray, leaving 3 m at each end to turn.","漂移距离 = 风速 × 下落时间（不计蒸发）；高亮行接近平均粒径。":"Drift distance = wind speed × fall time (no evaporation); the highlighted row is closest to the mean droplet size.","风越大，留在田内的药液越少、飘得越远；3.0 m/s 时跌破 85% 达标线，恰好是 DB37/T 3940-2020 的“慎飞”边界。":"The stronger the wind, the less spray stays in the field and the farther it drifts. At 3.0 m/s it drops below the 85% line—right at the DB37/T 3940-2020 “fly with caution” limit.",
-"康莱德挑战赛 · 植保无人机":"Conrad Challenge · Plant Protection Drone","康莱德挑战赛":"Conrad Challenge","植保无人机":"Plant Protection Drone","首页":"Home","问题":"Problem","创新":"Innovation","科学":"Science","影响":"Impact","团队":"Team","模型读数校验通过":"Model outputs cross-checked",
-"让每一滴药液，":"Every drop,","精准落在田间":"precisely where it belongs.","AeroGuard 帮植保无人机对抗风的干扰：先算出药液会飘到哪里，再主动把它引回田里——目标是少浪费、少污染，扩大可安全作业的风速窗口。":"AeroGuard helps crop-spraying drones fight the wind: it predicts where spray will drift, then actively steers it back onto the field—aiming to cut waste and pollution and widen the range of wind conditions that are safe to spray in.","查看核心仿真数据":"Explore simulation data","项关键读数经独立计算复核一致":"key readouts verified by independent calculation","基线工况仿真 · 12,000 颗代表液滴 · 结果以模型设定为准":"Baseline simulation · 12,000 representative droplets · Model-based results",
-"基线作业场景":"Baseline scenario","路线规划示意":"Route-planning illustration","60 × 40 m 模拟田块":"60 × 40 m simulated field","10 趟往复航线 · 6 m 间距":"10 back-and-forth passes · 6 m spacing","往复喷洒轨迹":"Back-and-forth spray path","计划航线":"Planned route","喷幅 8.0 m":"Swath width 8.0 m",
-"核心仿真结果":"Key simulation results","覆盖判据：田内沉积占比":"Coverage criteria: in-field deposition share","，漏喷块率":", low-deposition block rate","。以下为 2.0 m/s 基线工况的模型输出。":". Results below use the 2.0 m/s baseline scenario.","田内沉积占比":"In-field deposition share","达到设定判据":"Meets project criteria","· 目标 ≥85%":"· Target ≥85%","按 0.3 m 网格沉积量计算":"Calculated on a 0.3 m deposition grid","漏喷块率":"Low-deposition block rate","低于设定上限":"Below project limit","· 33 / 260 块":"· 33 of 260 blocks","按 3 m 作业尺度方块判定":"Assessed on 3 m work-scale blocks","出田质量占比":"Off-field mass share","模型估算的田外落点质量":"Model-estimated mass landing outside the field","飘移风险随风速上升而增加":"Drift risk rises with wind speed","剂量变异系数 CV":"Dose coefficient of variation (CV)","3 m 方块剂量离散程度":"Dose variability across 3 m blocks","下一轮均匀性优化的重点":"Key target for the next uniformity optimization",
-"风速变化如何影响田内落点":"How wind speed changes in-field deposition","风速扫描口径：田内落点质量占比（与上方网格沉积占比为不同指标）":"Wind-scan metric: share of droplet mass landing in-field. This differs from the grid-based deposition share above.","田内落点":"In-field landed mass","85%经验线":"85% project threshold","85% 经验线":"85% project threshold","模型显示，风速升至 3.0 m/s 时，田内落点质量占比降至":"At 3.0 m/s, the model shows in-field landed mass falls to","，首次低于项目设定的 85% 经验判据。":", below the project’s 85% working threshold for the first time.","基线工况参数":"Baseline parameters","本项目仿真模型采用的参考工况":"Reference settings used in our simulation model","田块尺寸":"Field size","定常横风":"Steady crosswind","喷洒高度":"Spray height","喷幅 / 航线":"Swath / passes","m / 趟":"m / passes","航线间距":"Route spacing","代表液滴数":"Representative droplets","颗":"droplets","仿真结果，非田间实测":"Simulation results, not field measurements","数据来源：团队自研喷洒仿真模型。仿真用于方案分析，实际效果仍需田间试验验证。":"Source: our in-house spray simulation model. Simulations support planning; real-world performance still needs field trials.",
-"喷出去的药液，未必留在目标田块":"Sprayed liquid does not always stay within the target field","风会把细小液滴吹离作物，落进土壤、水体和周边植物——既污染环境，又白白浪费药液。液滴越细，越容易被吹走。":"Wind blows fine droplets off the crop and onto soil, water, and nearby plants—polluting the environment and wasting pesticide. The finer the droplet, the easier it drifts.","风速升高，出田质量随之增加":"Higher wind speed increases off-field mass","模拟田块外的落点质量占总落点质量比例":"Share of total deposited mass landing outside the simulated field","风速扫描":"Wind-speed scan","风速从 2.0 升到 3.0 m/s，飘出田外的药液从 10.12% 增至 15.60%。":"As wind rises from 2.0 to 3.0 m/s, off-field spray grows from 10.12% to 15.60%.","极细液滴滞空更久，更容易受风影响":"Very fine droplets remain airborne longer and are more wind-sensitive","落下 2.5 m":"Fall distance: 2.5 m","按液滴下落模型计算，最细液滴为理论值。":"From our droplet-fall model; the finest-droplet time is theoretical.","出田滴数占比，不等于出田质量占比":"Off-field droplet count is not the same as off-field mass","田外液滴数量占比":"Share of droplets landing outside the field","田外液滴质量占比":"Share of droplet mass landing outside the field","飘出去的多是细小液滴：数量多，药量却少，两者要分开看。":"Drifting droplets are mostly tiny: many in number but little in mass, so the two are reported separately.","问题核心：":"Core issue:","飘移有三重代价：污染水体、伤害野生动植物；推高农户药费；只能等无风天作业。AeroGuard 正为解决这些问题而来。":"Drift costs three ways: it pollutes water and harms wildlife, raises farmers' chemical bills, and limits spraying to calm days. AeroGuard is built to fix this.",
-"AeroGuard：主动把药液拉回田里":"AeroGuard: actively pulling spray back onto the field","加装在植保无人机上的轻量模块：感知风向 → 计算修正 → 偏转喷嘴 → 液滴回到目标。目前已完成仿真与航线规划，用来量化飘移、指导修正。":"A lightweight drone add-on: sense the wind → calculate the correction → tilt the nozzle → droplets land on target. Simulation and route planning are complete and guide the correction.","作业环节":"Operation","方案方法":"Method","基线工况输出":"Baseline output","航线规划":"Route planning","根据喷幅自动算出最少趟数，均匀铺设往复航线。":"Automatically finds the fewest passes for the swath and spaces routes evenly.","喷幅 8 m · 10 趟 · 实际间距 6 m · 实际重叠 25%":"8 m swath · 10 passes · 6 m actual spacing · 25% actual overlap","液滴与风漂":"Droplets and wind drift","模拟上万颗液滴在风中的下落与飘移。":"Simulates how thousands of droplets fall and drift in the wind.","12,000 颗代表液滴 · 横风 2.0 m/s · 出田质量 10.124%":"12,000 representative droplets · 2.0 m/s crosswind · 10.124% off-field mass","沉积评估":"Deposition assessment","统计田内落药量，找出漏喷区域，检查喷得是否均匀。":"Measures how much spray lands in the field, finds missed spots, and checks evenness.","田内沉积 88.98% · 漏喷块率 12.69% · CV 45.9%":"88.98% in-field deposition · 12.69% low-deposition blocks · 45.9% CV","结果校核":"Output checks","两种独立方法交叉核对，26 项读数按显示精度一致。":"Two independent methods cross-check the results—all 26 readouts agree at display precision.","26 / 26 项显示值一致 · 两种路径出田质量均为 10.124%":"All 26 displayed values match · Both methods give 10.124% off-field mass","贴近真实":"True to life","液滴大小、阵风、喷杆晃动分别建模，可逐项分析误差来源。":"Droplet size, gusts, and boom sway are modeled separately, so each error source can be analyzed on its own.","漏喷看得见":"Gaps made visible","细网格看落药，大方块找漏喷，结果直接对应田间作业。":"A fine grid shows deposition, larger blocks reveal gaps—matching real field work.","标准清晰":"Clear standards","项目达标线与行业风速标准分开标注，一目了然。":"Our coverage target and industry wind limits are shown separately at a glance.","已完成：仿真模型与参数计算器。下一阶段：导流件样机与实机挂载测试。":"Done: simulation model and parameter calculator. Next: airflow-guide prototype and on-drone testing.",
-"从液滴物理到田间沉积":"From droplet physics to field deposition","用连续的物理因果链解释飘移，再用沉积网格和独立核算路径检查模型输出。":"Trace drift through a connected physical model, then check outputs with a deposition grid and an independent calculation path.","粒径决定终端速度":"Droplet size determines terminal velocity","阻力模型求解 vₜ":"Solved with a drag model","高度决定滞空时间":"Height determines time in the air","风速推动水平位移":"Wind drives horizontal displacement","漂移距离 ≈ U × t":"Drift distance ≈ U × t","落点累积为沉积场":"Landing points form a deposition field","单滴质量 ∝ D³":"Mass per droplet ∝ D³","按作业尺度检查覆盖":"Assess coverage at work scale","0.3 m 网格 / 3 m 方块":"0.3 m grid / 3 m blocks","参数化液滴模型":"Parameterized droplet model","固定随机种子和独立随机流，抽样粒径、发射时刻与阵风，形成可重复的基线模拟。":"A fixed random seed and independent random streams make the baseline simulation reproducible across droplet sizes, release times, and gusts.","航线与沉积场":"Routes and deposition field","喷幅和重叠率自动生成往复航线，再把液滴落点映射到沉积网格。":"Generate back-and-forth routes from swath width and overlap, then map droplet landing points onto the deposition grid.","计算口径交叉核对":"Cross-check model outputs","仿真模型与参数计算器的 26 项读数按显示精度一致；粒子法和网格法的出田质量互相吻合。":"All 26 readouts from the simulation model and parameter calculator match at display precision; particle and grid methods agree on off-field mass.","校核说明：数值复现与代码路径核对验证的是模型实现一致性，":"Numerical reproduction and code-path checks verify implementation consistency,","不等同于田间效果验证":"not field-performance validation","。田间效果将通过第 05 章的试点方案检验。":". Field performance will be tested through the pilot plan in Chapter 05.",
-"把精准植保连接到可持续发展":"Connect precision crop protection with sustainable development","精准植保直接关联多项联合国可持续发展目标，每项收益都对应可在田间测量的指标。":"Precision spraying ties directly to several UN SDGs, and each benefit maps to an indicator we can measure in the field.","17 项可持续发展目标":"The 17 Sustainable Development Goals","高亮为本项目直接关联的 5 项目标。":"Highlighted: the 5 goals this project directly addresses.","无贫穷":"No Poverty","零饥饿":"Zero Hunger","健康福祉":"Good Health","优质教育":"Quality Education","性别平等":"Gender Equality","清洁饮水":"Clean Water","清洁能源":"Clean Energy","体面工作":"Decent Work","产业创新":"Industry and Innovation","减少不平等":"Reduced Inequalities","可持续城市":"Sustainable Cities","负责任生产":"Responsible Production","气候行动":"Climate Action","水下生物":"Life Below Water","陆地生物":"Life on Land","和平正义":"Peace and Justice","伙伴关系":"Partnerships","直接关联：":"Direct alignment:","SDG 2 粮食生产、SDG 3 健康、SDG 6 水资源、SDG 12 负责任生产、SDG 15 陆地生态。":"SDG 2 food production · SDG 3 health · SDG 6 water · SDG 12 responsible production · SDG 15 terrestrial ecosystems.",
-"从仿真走向田间验证":"From simulation to field validation","田间试点方案 · 四步闭环验证":"Field pilot plan · four-step validation loop","下一阶段":"Next phase","确定田块与作物":"Select a field and crop","记录地点、作物类型、生育期与田块边界。":"Record location, crop type, growth stage, and field boundaries.","同步记录作业条件":"Record operating conditions","记录风速风向、喷头、飞行高度、速度和航线参数。":"Record wind speed and direction, nozzle, flight height, speed, and route settings.","测量田内外沉积":"Measure in-field and off-field deposition","按网格布点，比较田内覆盖、漏喷区域与边界外飘移。":"Place sampling points on a grid to compare field coverage, gaps, and drift beyond the boundary.","用实测结果回校模型":"Recalibrate the model with measurements","比较模拟与测量误差，再调整参数并重复验证。":"Compare simulation and measurement error, adjust parameters, and repeat validation.","试点沿用 60 × 40 m 田块尺寸，测量结果可与仿真逐项对比。":"The pilot reuses the 60 × 40 m field size so measurements can be compared with the simulation item by item.",
-"让每一滴药液，都更有依据地落下":"Make every drop land with better evidence","共同目标：让植保喷洒更透明、可复核，并经得起田间检验。":"Our shared goal: crop spraying that is transparent, checkable, and proven in the field.","OUR SLOGAN · 项目口号":"OUR SLOGAN","护住每一寸绿意，":"Protect every patch of green,","让每一次喷洒更有据可依。":"make every spray decision evidence-based.","用透明的模型把液滴、风和航线连起来，让每次喷洒都能看见覆盖、比较风险。":"A transparent model links droplets, wind, and routes so every spray shows its coverage and risk.","项目从哪里开始":"How the project started","项目从一个喷洒参数计算器起步，逐步扩展为涵盖液滴、航线、飘移与覆盖分析的完整工具，并用独立计算交叉核对。":"We began with a spray calculator and grew it into a full tool covering droplets, routes, drift, and coverage, cross-checked by independent calculation.","01 · 液滴物理":"01 · Droplet physics","粒径抽样与终端速度":"Size sampling and terminal velocity","02 · 航线规划":"02 · Route planning","喷幅、重叠和边界保护":"Swath, overlap, and boundary protection","03 · 沉积分析":"03 · Deposition analysis","漂移质量与覆盖均匀性":"Drift mass and coverage uniformity","04 · 模型校核":"04 · Model checks","显示读数与双路径核验":"Displayed values and dual-method checks","可追踪的项目指标 · 基线仿真":"Trackable project indicators · simulation baseline","来源：项目仿真模型 · 模型输出，非田间实测":"Source: project simulation model · modeled outputs, not field measurements","超过 85% 达标线。":"Above the 85% target.","低沉积作业块率":"Low-deposition block rate","260 块中仅 33 块落药偏少。":"Only 33 of 260 blocks received too little spray.","2.0 m/s 风速下飘出田外的药液比例。":"Share of spray drifting off the field at 2.0 m/s.","观测指标：作物落药量、漏喷区域与每亩用药量。":"Indicators: spray on crops, missed areas, and chemical use per acre.","观测指标：田外落药、邻近水体与作业人员暴露。":"Indicators: off-field spray, nearby water, and operator exposure.","观测指标：药液利用率、飘移量与周边土壤。":"Indicators: spray efficiency, drift, and surrounding soil.","环境、健康与减药收益将以对照田间试验数据为准进行报告。":"Environmental, health, and chemical-saving benefits will be reported from controlled field-trial data.","核心工作分工":"Core workstreams","团队成员":"Team members","5 名成员 · 信息待补充":"5 members · details coming soon","姓名":"Name","职责待定":"Role TBD","按项目工作流划分的四项核心职能":"Four core functions organized by project workflow","项目统筹与作物场景":"Project coordination and crop context","明确作物、目标问题、试验边界、合作方和阶段交付。":"Define the crop, problem, trial boundaries, partners, and milestone deliverables.","仿真与数据分析":"Simulation and data analysis","维护模型参数、沉积指标、风速扫描和结果复核记录。":"Maintain model parameters, deposition metrics, wind scans, and output-check records.","航线与作业验证":"Routes and operation validation","整理喷幅、航线间距、飞行参数及合规安全的试验流程。":"Document swath, route spacing, flight parameters, and a compliant, safe trial procedure.","影响评估与展示":"Impact assessment and communications","维护试点记录、SDG 证据链、双语材料和阶段汇报。":"Maintain pilot records, SDG evidence, bilingual materials, and milestone updates.","项目推进路线":"Project roadmap","分阶段推进 · 每阶段完成后复盘":"Phase-based · reviewed after each stage","核对模型与问题定义":"Review the model and define the problem","确认基线参数、指标口径和当前证据边界。":"Confirm baseline parameters, metric definitions, and current evidence limits.","比较可执行方案":"Compare feasible approaches","围绕风速、粒径和航线参数做敏感性分析。":"Run sensitivity analysis on wind speed, droplet size, and route parameters.","设计小范围验证":"Design a small-scale validation","完善安全、采样、对照与数据记录方案后再开展试验。":"Finalize safety, sampling, controls, and data logging before running a trial.","复盘并迭代":"Review and iterate","用实测误差更新模型，汇报效果与未解决问题。":"Use measured error to update the model and report results and open questions." ,"绿色生态科技 · 精准农业仿真":"Eco-Tech · Precision Agriculture Simulation","从仿真结果到作业界面":"From simulation results to an operator console","以 2.0 m/s 风速为例，把航线、飘移预测和达标判断放进一块飞手一眼看懂的面板。":"Using a 2.0 m/s wind example, routes, drift forecasts, and pass/fail checks fit on one panel pilots read at a glance.","作业监控台":"Operations console","作业监控":"Monitoring","喷头标定":"Nozzle calibration","历史记录":"History","仿真模式":"Simulation mode","模型在线":"Model online","基线工况":"Baseline case","任务":"Task","SIM-01 · 田块 A":"SIM-01 · Field A","回放中":"Replaying","航程回放":"Flight replay","沉积预测":"Deposition","航线":"Route","田界":"Boundary","风向：西风 → 东":"Wind: west → east","预测漂移区":"Predicted drift zone","下风侧边界":"Downwind edge","水渠":"Ditch","机耕路":"Farm road","相邻田块":"Adjacent field","预测沉积 · 相对值":"Predicted deposition · relative","低":"Low","高":"High","预测不代表实测结果。":"Predictions are not field measurements.","仿真":"Sim","风速":"Wind","作业速度":"Speed","喷洒高度":"Height","出田质量":"Off-field mass","田内沉积":"In-field deposition","风速扫描 · 仿真":"Wind sweep · simulated","田内落点质量 (%)":"In-field landed mass (%)","出田质量 (%)":"Off-field mass (%)","DB37/T 3940-2020：>3 m/s 慎飞，>5 m/s 不宜作业":"DB37/T 3940-2020: fly with caution above 3 m/s, avoid above 5 m/s","风速 (m/s)":"Wind (m/s)","85% 经验线":"85% criterion","慎飞":"Caution","不宜作业":"Avoid","基线 2.0 m/s":"Baseline 2.0 m/s","作业参数":"Operating parameters","26/26 读数已校核":"26/26 readouts checked","喷幅":"Swath","已设定":"Set","10 趟 · 间距 6.0 m":"10 passes · 6.0 m apart","自动规划":"Auto-planned","重叠":"Overlap","实际值":"Actual","高度":"Height","速度":"Speed","手动输入":"Manual","作业时长":"Spray time","计算值":"Computed","查看核心仿真数据":"View core simulation data","风险提示（预测）":"Risk alert (predicted)","仿真预警":"Sim alert","下风侧（东）为相邻田块与机耕路":"The downwind (east) side borders an adjacent field and a farm road","基线出田质量 10.12%":"Baseline off-field mass 10.12%","风速升至 3.0 m/s 时，田内落点降至 84.40%，低于 85% 经验线":"At 3.0 m/s wind, in-field landing drops to 84.40%, below the 85% criterion","查看漂移区":"Show drift zone","比较风速方案":"Compare wind scenarios","调整方案需人工确认。":"Plan changes require manual confirmation.","作业评估":"Coverage check","仿真判定":"Simulated","田内沉积 ≥ 85%":"In-field deposition ≥ 85%","低沉积方块 < 25%":"Low-deposition blocks < 25%","变异系数 CV":"Coefficient of variation (CV)","达标":"Pass","优化重点":"Focus area","概念效果图 · 数据来自项目仿真模型基线工况 · 底图：":"Concept mock-up · data from the project's baseline simulation · basemap: "
-};
-Object.assign(englishText,{"沉积场完整读数":"Full deposition-field readouts","田内沉积场":"In-field deposition","8 项读数":"8 readouts","峰值沉积":"Peak deposition","田内沉积总量":"In-field deposited mass","沉积均匀度 P95/P50":"Uniformity P95/P50","越接近 1 越均匀":"Closer to 1 = more uniform","药带宽度":"Deposit band width","沉积剖面半高宽":"Profile FWHM","出田滴数":"Off-field droplet count","按液滴个数统计":"By droplet count","出田质量":"Off-field mass","按液滴质量统计":"By droplet mass","最远漂移":"Farthest drift","20 µm、无蒸发假设上限":"20 µm, no-evaporation upper bound","守恒校验":"Mass conservation","差值为视窗边缘截断":"Gap = window-edge truncation","药液质量去向":"Where the spray mass goes","田内 73.443 g · 田外 8.278 g":"In field 73.443 g · off field 8.278 g","田内落点 89.88%":"Landed in field 89.88%","漂移沉积总量":"Drift deposit mass","粒子法统计":"Particle method","漂移占施药量":"Drift share of applied mass","与网格法 10.124% 一致":"Matches grid method 10.124%","漂移最远点":"Farthest drift point","由谱截断下限 20 µm 决定":"Set by the 20 µm spectrum floor","漂移覆盖面积":"Drift footprint area","漂移落点 5,017 颗（41.81%）":"5,017 drift landings (41.81%)","风速扫描与液滴滞空：完整模型输出":"Wind sweep and droplet airtime: full model output","风速扫描":"Wind sweep","高亮行为 2.0 m/s 基线":"Highlighted row = 2.0 m/s baseline","风速":"Wind","田内落点质量":"In-field landed mass","最远落点":"Farthest landing","峰值 g/m²":"Peak g/m²","合规":"Compliant","临界":"Borderline","慎飞":"Caution","超国标":"Exceeds standard","超部分标准":"Exceeds some standards","液滴粒径与滞空时间":"Droplet size and airtime","喷洒高度 2.5 m":"Spray height 2.5 m","粒径":"Size","终端速度":"Terminal velocity","落下 2.5 m 用时（对数刻度）":"Time to fall 2.5 m (log scale)","2.0 m/s 风下漂移":"Drift at 2.0 m/s","作业条件合规判定":"Operating-condition compliance","航线规划明细":"Route plan details","趟号":"Pass","横向位置 x":"Lateral position x","田块内位置（西 → 东）":"Position in field (W → E)","飞行方向":"Direction","喷洒长度":"Spray length","近端 → 远端":"Near → far","远端 → 近端":"Far → near","航线参数":"Route parameters","喷幅 + 目标重叠率 → 趟数与间距":"Swath + target overlap → passes and spacing","几何覆盖率":"Geometric coverage","喷洒里程":"Spray distance","飞行里程":"Flight distance","作业时间轴":"Operation timeline","作业速度 3.0 m/s":"Flight speed 3.0 m/s","作业时长 tTask":"Task time tTask","99% 质量落地 t99":"99% mass landed t99","最后一颗落地 t100":"Last droplet landed t100","滴谱、随机流与网格设定":"Droplet spectrum, random streams and grid","滴谱均值 μ":"Spectrum mean μ","滴谱变异系数 CV":"Spectrum CV","粒径范围":"Size range","单颗质量":"Single-droplet mass","发射时刻均值":"Release-time mean","阵风序列":"Gust series","沉积网格":"Deposition grid","高斯核":"Gaussian kernel","26 项读数逐项核对":"26 readouts checked one by one","读数":"Readout","独立计算":"Independent calc","页面显示":"Displayed","判定":"Result"});
-Object.assign(englishText,{"探索 AeroGuard 方案":"Explore AeroGuard","查看作业监控界面":"View the operations dashboard","以下为 2.0 m/s 横风基线仿真 · 作为衡量 AeroGuard 效果的参照组":"Below: 2.0 m/s crosswind baseline simulation · the reference case for measuring AeroGuard’s effect","AeroGuard 导流件 3D 概念图":"AeroGuard airflow guide · 3D concept render","导流件结构设计方案":"Airflow-guide structural design","拖动中线对比沉积效果":"Drag the divider to compare deposition","无导流（基线仿真）：出田 10.12%":"No guide (baseline sim): 10.12% off-field","加装后（设计目标）：引导回田":"With AeroGuard (design goal): spray steered back","关键读数独立复核":"Readouts independently verified","向下查看核心仿真结果":"Scroll to key results"});
-const textNodes=[];
-const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-while(walker.nextNode()){
- const node=walker.currentNode;
- if(!node.parentElement||node.parentElement.closest('script,style'))continue;
- const key=node.nodeValue.trim();
- if(Object.prototype.hasOwnProperty.call(englishText,key))textNodes.push([node,node.nodeValue,key]);
-}
-let isEnglish=false;
-const languageButton=document.getElementById('language-toggle');
-function setLanguage(toEnglish){
- isEnglish=Boolean(toEnglish);
- for(const [node,original,key] of textNodes){
-  const leading=original.match(/^\s*/)[0],trailing=original.match(/\s*$/)[0];
-  node.nodeValue=leading+(isEnglish?englishText[key]:key)+trailing;
- }
- document.documentElement.lang=isEnglish?'en':'zh-CN';
- document.title=isEnglish?'Conrad Challenge · Plant Protection Drone':'康莱德挑战赛 · 植保无人机';
- const nav=document.querySelector('.nav');
- if(nav)nav.setAttribute('aria-label',isEnglish?'Website categories':'网站分类');
- const chart=document.querySelector('.chart');
- if(chart)chart.setAttribute('aria-label',isEnglish?'At 2 m/s, in-field landed mass is 89.88%; at 3 m/s it is 84.40%, below the 85% criterion.':'风速2米每秒时田内落点质量占比89.88%，3米每秒时84.40%，低于85%经验线');
- const riskList=document.querySelector('.risk-list');
- if(riskList)riskList.setAttribute('aria-label',isEnglish?'Off-field mass is 3.322% at 0.5 m/s, 10.124% at 2 m/s, 15.600% at 3 m/s, and 39.550% at 8 m/s.':'风速0.5米每秒时出田质量3.322%，2米每秒时10.124%，3米每秒时15.600%，8米每秒时39.550%');
- const description=document.querySelector('meta[name="description"]');
- if(description)description.content=isEnglish?'Conrad Challenge plant-protection drone project: simulation of field coverage and spray drift using droplet, route, and wind-field models.':'康莱德挑战赛植保无人机项目：以液滴、航线与风场仿真评估田间覆盖和飘移风险。';
- if(languageButton){
-  languageButton.textContent=isEnglish?'中文':'EN';
-  languageButton.setAttribute('aria-label',isEnglish?'Switch to Chinese':'Switch to English');
-  languageButton.setAttribute('aria-pressed',String(isEnglish));
- }
-}
-if(languageButton)languageButton.addEventListener('click',()=>setLanguage(!isEnglish));
-document.querySelectorAll('.nav a').forEach(link=>link.addEventListener('click',()=>{
- document.querySelectorAll('.nav a').forEach(item=>{item.classList.remove('current');item.removeAttribute('aria-current')});
- link.classList.add('current');
- link.setAttribute('aria-current','page');
-}));</script>
-<script>
-(()=>{const h=document.querySelector('.header');const onS=()=>h.classList.toggle('scrolled',scrollY>20);addEventListener('scroll',onS,{passive:true});onS();
-const groups='.metrics,.lower,.problem-grid,.problem-side,.science-chain,.process-wall,.innovation-callout,.impact-layout,.impact-metrics,.impact-pathways,.team-layout,.team-roles-grid,.team-roadmap,.workstreams,.sdg-grid';
-const singles='.section-title,.problem-head,.chapter-head,.feature-table-wrap,.source,.problem-foot,.innovation-note,.ops-head,.ops-console,.dpanel,.science-proof,.impact-outcomes,.team-roles,.impact-caveat';
-const els=[];document.querySelectorAll(singles).forEach(e=>els.push(e));
-document.querySelectorAll(groups).forEach(g=>[...g.children].forEach((c,i)=>{c.style.setProperty('--d',Math.min(i,8)*0.08+'s');els.push(c)}));
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-[...new Set(els)].forEach(e=>{if(!e.closest('.hero')){if(!/title|head/.test(e.className))e.classList.add('reveal');io.observe(e)}});
-const links=[...document.querySelectorAll('.nav a')];const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(s=>s&&s.tagName!=='MAIN');addEventListener('scroll',()=>{if(scrollY<300)links.forEach((a,i)=>a.classList.toggle('current',i===0))},{passive:true});
-const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('current',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});secs.forEach(s=>so.observe(s));
-})();
-</script>
-<script>
-(()=>{const main=document.querySelector('main#home'),header=document.querySelector('.header');
-const setH=()=>document.documentElement.style.setProperty('--hh',header.offsetHeight+'px');setH();addEventListener('resize',setH);
-const kids=[...main.children],footer=document.querySelector('body>.footer');
-const groups=[{id:'home',els:kids.filter(e=>e.matches('.hero,#results'))}];
-kids.filter(e=>!e.matches('.hero,#results')).forEach(e=>groups.push({id:e.id,els:[e]}));
-const track=document.createElement('div');track.className='h-track';
-const panels=groups.map(g=>{const p=document.createElement('div');p.className='h-panel';p.dataset.id=g.id;g.els.forEach(e=>p.appendChild(e));track.appendChild(p);return p});
-if(footer)panels[panels.length-1].appendChild(footer);main.appendChild(track);
-const links=[...document.querySelectorAll('.nav a')];
-const dots=document.createElement('div');dots.className='h-dots';
-panels.forEach((p,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','第'+(i+1)+'屏');b.onclick=()=>go(i);dots.appendChild(b)});
-const prev=document.createElement('button'),next=document.createElement('button');
-prev.className='h-arrow h-prev';prev.innerHTML='&#8592;';prev.setAttribute('aria-label','上一屏');next.className='h-arrow h-next';next.innerHTML='&#8594;';next.setAttribute('aria-label','下一屏');
-prev.onclick=()=>go(cur-1);next.onclick=()=>go(cur+1);
-const bar=document.createElement('div');bar.className='h-progress';
-document.body.append(dots,prev,next,bar);
-let cur=0,lock=false;
-function go(i,instant){i=Math.max(0,Math.min(panels.length-1,i));if(i===cur&&!instant&&panels[i].classList.contains('active'))return;cur=i;
-if(instant){track.style.transition='none';requestAnimationFrame(()=>track.style.transition='')}
-track.style.transform=`translate3d(${-i*100}vw,0,0)`;
-panels.forEach((p,k)=>p.classList.toggle('active',k===i));
-[...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i));
-links.forEach(a=>{const on=a.getAttribute('href')==='#'+panels[i].dataset.id;a.classList.toggle('current',on);on?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
-prev.disabled=i===0;next.disabled=i===panels.length-1;bar.style.width=((i+1)/panels.length*100)+'%';
-header.classList.toggle('scrolled',panels[i].scrollTop>20);
-history.replaceState(null,'','#'+panels[i].dataset.id);lock=true;setTimeout(()=>lock=false,900)}
-const idx=id=>!id?-1:panels.findIndex(p=>p.dataset.id===id||p.querySelector('#'+CSS.escape(id)));
-document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);const i=idx(id);if(i<0)return;e.preventDefault();
-const t=document.getElementById(id),p=panels[i];go(i);p.scrollTo({top:t&&t!==main&&t!==p.firstElementChild?t.offsetTop:0,behavior:'smooth'})},true);
-panels.forEach(p=>p.addEventListener('scroll',()=>{if(p.classList.contains('active'))header.classList.toggle('scrolled',p.scrollTop>20)},{passive:true}));
-addEventListener('wheel',e=>{if(lock)return;const p=panels[cur];
-if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){if(Math.abs(e.deltaX)>30)go(cur+(e.deltaX>0?1:-1));return}
-const atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-2,atTop=p.scrollTop<=0;
-if(e.deltaY>40&&atBot)go(cur+1);else if(e.deltaY<-40&&atTop)go(cur-1)},{passive:true});
-addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;
-if(e.key==='ArrowRight'||e.key==='PageDown')go(cur+1);else if(e.key==='ArrowLeft'||e.key==='PageUp')go(cur-1);else if(e.key==='Home')go(0);else if(e.key==='End')go(panels.length-1)});
-let sx=0,sy=0;main.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
-main.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.3)go(cur+(dx<0?1:-1))},{passive:true});
-addEventListener('resize',()=>go(cur,true));
-const start=idx(location.hash.slice(1));go(start<0?0:start,true);
-})();
-</script><script>
-(()=>{const h=document.querySelector('.header'),nav=h.querySelector('.nav'),L=['c1','c2','c3','c4','c5'];
-const over=()=>nav.scrollWidth>nav.clientWidth+1;
-const fit=()=>{h.classList.remove(...L);for(const c of L){if(!over())break;h.classList.add(c)}document.documentElement.style.setProperty('--hh',h.offsetHeight+'px')};
-let raf;const q=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(fit)};
-addEventListener('resize',q);new MutationObserver(fit).observe(h,{subtree:true,characterData:true,childList:true});
-document.fonts&&document.fonts.ready.then(q);fit();
-})();
-</script><script>
-(()=>{const map=document.getElementById('ops-map');if(!map)return;const svg=map.querySelector('svg');
-map.querySelectorAll('.ops-layers button').forEach(b=>b.addEventListener('click',()=>{const on=!b.classList.contains('on');b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));svg.querySelector('.ops-layer[data-layer="'+b.dataset.layer+'"]').classList.toggle('off',!on)}));
-const db=document.getElementById('ops-drift-btn');db.addEventListener('click',()=>{const on=map.classList.toggle('focus');db.classList.toggle('on',on);db.setAttribute('aria-pressed',String(on));map.querySelectorAll('.ops-layers button').forEach(b=>{if(b.dataset.layer==='dep'&&!b.classList.contains('on'))b.click()});if(on)map.scrollIntoView({behavior:'smooth',block:'center'})});
-if(matchMedia('(prefers-reduced-motion: reduce)').matches){svg.pauseAnimations();svg.setCurrentTime(20)}
-const clock=document.getElementById('ops-clock');const tick=()=>{const s=Math.floor((svg.getCurrentTime()%46)/46*153.3);clock.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};tick();setInterval(tick,500);
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
-<script>
-(()=>{const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-// 数字滚动：只改写数字所在的文本节点，保留 <small> 单位与双语字典节点
-const fmt=(v,dec,comma)=>{let s=v.toFixed(dec);if(comma){const [i,d]=s.split('.');s=i.replace(/\B(?=(\d{3})+(?!\d))/g,',')+(d?'.'+d:'')}return s};
-const counters=[...document.querySelectorAll('.metric .value,.impact-metric b,.count-mass strong,.hero-stat b')].map(el=>{
- const node=[...el.childNodes].find(c=>c.nodeType===3&&/\d/.test(c.nodeValue));if(!node)return null;
- const raw=node.nodeValue,m=raw.match(/\d[\d,]*(?:\.\d+)?/);if(!m)return null;
- const num=m[0],dec=(num.split('.')[1]||'').length;
- return{el,node,raw,pre:raw.slice(0,m.index),post:raw.slice(m.index+num.length),to:parseFloat(num.replace(/,/g,'')),dec,comma:num.includes(',')};
-}).filter(Boolean);
-if(!reduce&&'IntersectionObserver'in window){
- counters.forEach(c=>{c.el.classList.add('count-up');c.node.nodeValue=c.pre+fmt(0,c.dec,c.comma)+c.post});
- const run=c=>{const t0=performance.now(),dur=1600;const step=t=>{const p=Math.min((t-t0)/dur,1),e=1-Math.pow(1-p,4);
-  c.node.nodeValue=p<1?c.pre+fmt(c.to*e,c.dec,c.comma)+c.post:c.raw;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)};
- const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const c=counters.find(x=>x.el===e.target);if(c)run(c);io.unobserve(e.target)}}),{threshold:.5});
- counters.forEach(c=>io.observe(c.el));
-}
-// 3D 倾斜 + 高光：仅桌面精确指针设备启用
-if(!reduce&&window.VanillaTilt&&matchMedia('(hover:hover) and (pointer:fine)').matches){
- const opts={max:6,speed:600,perspective:1100,scale:1.02,glare:true,'max-glare':.22,gyroscope:false};
- const map=document.querySelector('.hero .map');
- if(map){const ready=()=>map.classList.add('tilt-on');map.addEventListener('animationend',ready,{once:true});setTimeout(ready,1800);VanillaTilt.init(map,{...opts,max:4,scale:1.01})}
- const cards=[...document.querySelectorAll('.metric')];cards.forEach(c=>c.classList.add('tilt-on'));VanillaTilt.init(cards,opts);
-}
-// 概念区入场
-const vis=[...document.querySelectorAll('.visual-row>.visual-card')];
-if('IntersectionObserver'in window){vis.forEach((v,i)=>{v.classList.add('reveal');v.style.setProperty('--d',i*0.1+'s')});
- const vo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');vo.unobserve(e.target)}}),{threshold:.15});vis.forEach(v=>vo.observe(v))}
+(()=>{
+const track=document.getElementById('track'),panels=[...track.querySelectorAll('.panel')],links=[...document.querySelectorAll('.nav a')];
+const cur=document.getElementById('cur'),prog=document.getElementById('prog'),prev=document.getElementById('prev'),next=document.getElementById('next');
+const pad=n=>String(n).padStart(2,'0');
+document.getElementById('tot').textContent=pad(panels.length);
+
+// 语言切换
+const btn=document.getElementById('lang'),els=[...document.querySelectorAll('[data-en]')];
+els.forEach(e=>e.dataset.zh=e.innerHTML);
+const setLang=en=>{els.forEach(e=>e.innerHTML=en?e.dataset.en:e.dataset.zh);document.documentElement.lang=en?'en':'zh-CN';btn.textContent=en?'中文':'EN';btn.setAttribute('aria-label',en?'切换到中文':'Switch to English');try{localStorage.setItem('lang',en?'en':'zh')}catch(_){}};
+btn.addEventListener('click',()=>setLang(document.documentElement.lang!=='en'));
+try{if(localStorage.getItem('lang')==='en')setLang(true)}catch(_){}
+
+// 横向翻页
+const idx=()=>Math.round(track.scrollLeft/track.clientWidth);
+let active=0,st;
+const go=i=>{i=Math.max(0,Math.min(panels.length-1,i));active=i;track.scrollTo({left:i*track.clientWidth,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})};
+const update=()=>{const max=track.scrollWidth-track.clientWidth,i=idx();
+ prog.style.width=(max>0?track.scrollLeft/max*100:0)+'%';cur.textContent=pad(i+1);
+ prev.disabled=i===0;next.disabled=i===panels.length-1;
+ links.forEach((a,k)=>a.classList.toggle('current',k===i));
+ const n=links[i];if(n&&n.parentNode.scrollWidth>n.parentNode.clientWidth)n.parentNode.scrollTo({left:n.offsetLeft-40,behavior:'smooth'});
+ document.body.classList.toggle('on-dark',panels[i].classList.contains('dark'))};
+track.addEventListener('scroll',()=>{requestAnimationFrame(update);clearTimeout(st);st=setTimeout(()=>active=idx(),150)},{passive:true});
+prev.addEventListener('click',()=>go(idx()-1));
+next.addEventListener('click',()=>go(idx()+1));
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const p=panels.findIndex(s=>'#'+s.id===a.getAttribute('href'));if(p>-1){e.preventDefault();go(p);history.replaceState(null,'',a.getAttribute('href'))}}));
+
+// 鼠标滚轮：竖向滚动转为横向翻页（面板内有可滚内容时先滚内容）
+let locked=false,lockUntil=0,last=0;
+track.addEventListener('wheel',e=>{
+ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||e.ctrlKey)return;
+ const p=panels[idx()],dir=e.deltaY>0?1:-1;
+ if(dir>0?p.scrollTop+p.clientHeight<p.scrollHeight-2:p.scrollTop>0)return;
+ e.preventDefault();
+ const now=performance.now(),gap=now-last;last=now;
+ if(Math.abs(e.deltaY)<4||(locked&&(gap<200||now<lockUntil)))return;
+ locked=true;lockUntil=now+700;go(idx()+dir);
+},{passive:false});
+
+// 键盘
+addEventListener('keydown',e=>{if(e.target.closest('input,textarea,[role=slider]'))return;
+ const k=e.key;if(k==='ArrowRight'||k==='PageDown')go(idx()+1);else if(k==='ArrowLeft'||k==='PageUp')go(idx()-1);else if(k==='Home')go(0);else if(k==='End')go(panels.length-1);else return;e.preventDefault()});
+addEventListener('resize',()=>{clearTimeout(st);track.scrollLeft=active*track.clientWidth;update()});
+
+// 入场动画
+const rv=[...document.querySelectorAll('.reveal')],anim=[...document.querySelectorAll('.bars,.meters,.hero-img')];
+if('IntersectionObserver'in window){
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.2});
+ rv.concat(anim).forEach(r=>io.observe(r));
+}else rv.concat(anim).forEach(r=>r.classList.add('in'));
+
+// 打开时定位到 hash
+const h=panels.findIndex(s=>'#'+s.id===location.hash);
+if(h>0)requestAnimationFrame(()=>{active=h;track.scrollLeft=h*track.clientWidth;update()});
+update();
+
 // Before / After 拖拽对比
-const ba=document.getElementById('ba-compare');
-if(ba){const h=ba.querySelector('.ba-handle');let drag=false,pos=50;
- const set=p=>{pos=Math.max(0,Math.min(100,p));ba.style.setProperty('--pos',pos+'%');h.setAttribute('aria-valuenow',String(Math.round(pos)))};
+const ba=document.getElementById('ba');
+if(ba){const hd=ba.querySelector('.ba-handle');let drag=false,pos=50;
+ const set=p=>{pos=Math.max(0,Math.min(100,p));ba.style.setProperty('--pos',pos+'%');hd.setAttribute('aria-valuenow',Math.round(pos))};
  const fromX=x=>{const r=ba.getBoundingClientRect();set((x-r.left)/r.width*100)};
- ba.addEventListener('pointerdown',e=>{drag=true;ba.setPointerCapture(e.pointerId);ba.classList.add('dragging');fromX(e.clientX);h.focus({preventScroll:true})});
+ ba.addEventListener('pointerdown',e=>{drag=true;ba.setPointerCapture(e.pointerId);ba.classList.add('dragging');fromX(e.clientX)});
  ba.addEventListener('pointermove',e=>{if(drag)fromX(e.clientX)});
  ['pointerup','pointercancel','lostpointercapture'].forEach(t=>ba.addEventListener(t,()=>{drag=false;ba.classList.remove('dragging')}));
- // 阻止横向翻页手势/方向键与对比拖拽冲突
- ['touchstart','touchend'].forEach(t=>ba.addEventListener(t,e=>e.stopPropagation(),{passive:true}));
- h.addEventListener('keydown',e=>{const s=e.shiftKey?10:2,k=e.key;
+ hd.addEventListener('keydown',e=>{const s=e.shiftKey?10:2,k=e.key;
   if(k==='ArrowLeft'||k==='ArrowDown')set(pos-s);else if(k==='ArrowRight'||k==='ArrowUp')set(pos+s);else if(k==='Home')set(0);else if(k==='End')set(100);else return;
-  e.preventDefault();e.stopPropagation()});
+  e.preventDefault()});
 }
 })();
 </script>
-<script>
-// 首页 Hero：风场液滴粒子 + 鼠标聚光
-(()=>{
-const hero=document.querySelector('.hero'),cv=hero&&hero.querySelector('.hero-fx');
-if(!cv||!cv.getContext)return;
-const ctx=cv.getContext('2d'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W=0,H=0,dpr=1,ps=[],raf=0,visible=true,t=0;
-const spawn=(p,init)=>{p.x=init?Math.random()*W:-20-Math.random()*W*.2;p.y=Math.random()*H;p.r=Math.random()*1.6+.5;p.v=Math.random()*.7+.35;p.ph=Math.random()*6.28;p.a=Math.random()*.3+.12;p.gold=Math.random()<.3;return p};
-const resize=()=>{const r=hero.getBoundingClientRect();dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
- const n=Math.min(90,Math.round(W*H/14000));while(ps.length<n)ps.push(spawn({},true));ps.length=n;if(reduce)draw()};
-const draw=()=>{ctx.clearRect(0,0,W,H);
- for(const p of ps){const c=p.gold?'184,154,94':'62,122,98',dx=p.v*7,dy=Math.sin(p.ph)*1.2+1.4;
-  const g=ctx.createLinearGradient(p.x-dx*2.4,p.y-dy*2.4,p.x,p.y);g.addColorStop(0,`rgba(${c},0)`);g.addColorStop(1,`rgba(${c},${p.a*.6})`);
-  ctx.strokeStyle=g;ctx.lineWidth=p.r;ctx.beginPath();ctx.moveTo(p.x-dx*2.4,p.y-dy*2.4);ctx.lineTo(p.x,p.y);ctx.stroke();
-  ctx.fillStyle=`rgba(${c},${p.a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fill()}};
-const step=()=>{t+=.016;for(const p of ps){p.ph+=.012;p.x+=p.v*(1+.35*Math.sin(t*.6));p.y+=Math.sin(p.ph)*.25+.18;if(p.x>W+30||p.y>H+20)spawn(p,false)}
- draw();raf=requestAnimationFrame(step)};
-const run=()=>{cancelAnimationFrame(raf);raf=0;if(!reduce&&visible&&!document.hidden)raf=requestAnimationFrame(step)};
-resize();
-if('ResizeObserver'in window)new ResizeObserver(resize).observe(hero);else addEventListener('resize',resize);
-if('IntersectionObserver'in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;run()}).observe(hero);
-document.addEventListener('visibilitychange',run);
-run();
-if(!reduce&&matchMedia('(hover:hover) and (pointer:fine)').matches){let pending=0,mx=0,my=0;
- hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*100;my=(e.clientY-r.top)/r.height*100;
-  if(!pending)pending=requestAnimationFrame(()=>{pending=0;hero.style.setProperty('--mx',mx.toFixed(1)+'%');hero.style.setProperty('--my',my.toFixed(1)+'%')})})}
-})();
-</script></body></html>
+</body>
+</html>
